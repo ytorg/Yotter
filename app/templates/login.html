@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h2 class="ui centered header">Login</h2>
+    <div class="ui grid">
+    <div class="ui one column stackable center aligned page grid" id="container">
+        <div class="row">
+            <form class="ui form" action="" method="post" novalidate>
+                {{ form.hidden_tag() }}
+                <p>
+                    {{ form.username.label }}<br>
+                    {{ form.username(size=32) }}<br>
+                    {% for error in form.username.errors %}
+                    <span style="color: red;">[{{ error }}]</span>
+                    {% endfor %}
+                </p>
+                <p>
+                    {{ form.password.label }}<br>
+                    {{ form.password(size=32) }}<br>
+                    {% for error in form.password.errors %}
+                    <span style="color: red;">[{{ error }}]</span>
+                    {% endfor %}
+                </p>
+                <p>{{ form.remember_me() }} {{ form.remember_me.label }}</p>
+                <p>{{ form.submit() }}</p>
+            </form>
+        </div>
+        <div class="row">
+            <div class="ui compact centered message">
+                <p>New user? <a href="{{ url_for('register') }}">Click to Register!</a></p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

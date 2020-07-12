@@ -1,0 +1,24 @@
+<div class="column"> <!--Start tweet-->
+    <div class="ui centered card">
+        <div class="content">
+            <div class="extra content">
+                <div class="left floated author">
+                    <img class="ui avatar image" src="{{ url_for('static',filename='img/avatars/')}}{{range(1, 10) | random}}.png">
+                </div>
+            </div>
+            <div class="header" id="author"><a href="{{ post.urlToPost }}">{{ post.op }}</a></div>
+            <div class="meta">
+                <span class="category" id="time"><i class="clock icon"></i> {{post.date}} </span>
+                <span class="category"><i class="retweet icon"></i> {{post.twitterAt}} retwitted</span>      
+            </div>
+            <div class="description">
+                <p>{{post.content}}</p>
+            </div>
+        </div>
+        <!--<div class="extra content">
+        <i class="like icon"></i> 1000
+        <span> ·  · </span>
+        <i class="retweet icon"></i> 20
+        </div>-->
+    </div>
+</div> <!--End tweet--> 

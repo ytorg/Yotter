@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <div class="blue ui centered card">
+        <div class="content">
+            <div class="center aligned author">
+                <img class="ui avatar image" src="{{ profilePic }}"> {{ posts[0].twitterAt }}
+            </div>
+            <div style="margin: .1em" class="center aligned header"><a href="https://nitter.net/{{ posts[0].twitterAt.replace('@','') }}/">{{ posts[0].twitterName }}</a></div>
+        <div class="center aligned description">
+            <a>
+                <i class="users icon"></i>
+                {{ user.followers.count() }}
+            </a>
+        </div>
+        </div>
+        <div class="extra content">
+            <div class="ui one column centered grid">
+            {% if user == current_user %}
+                <p><a>This is your profile</a></p>
+            {% elif not current_user.is_following(user) %}
+                <p>
+                    <form action="{{ url_for('follow', username=user.username) }}" method="post">
+                        {{ form.hidden_tag() }}
+                        {{ form.submit(value='Follow') }}
+                    </form>
+                </p>
+            {% else %}
+                <p>
+                    <form action="{{ url_for('unfollow', username=user.username) }}" method="post">
+                        {{ form.hidden_tag() }}
+                        {{ form.submit(value='Unfollow') }}
+                    </form>
+                </p>
+            {% endif %}
+        </div>
+        </div>
+    </div>
+
+    <div class="ui one column grid" id="card-container">
+    {% for post in posts %}
+        {% if post.isRT %}
+            {% include '_post.html' %}
+        {% else %}
+            {% include '_post_nort.html' %}
+        {% endif %}
+    {% endfor %}
+    </div>
+{% endblock %}

@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        {% if title %}
+        <title>{{ title }} - Parassiter</title>
+        {% else %}
+        <title>Welcome to Parasitter</title>
+        {% endif %}
+        <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='semantic/semantic.min.css') }}">
+    </head>
+    <body>
+        <div class="ui stackable menu">
+            <div class="item">
+            <img src="{{ url_for('static',filename='img/logo.png') }}">
+            </div>
+            <a href="{{ url_for('index') }}" class="item">Home</a>
+            {% if current_user.is_anonymous %}
+            <a href="{{ url_for('login') }}" class="item">Login</a>
+            {% else %}
+            <a href="{{ url_for('logout') }}" class="item">Logout</a>
+            {% endif %}
+        </div>
+
+        {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            <div class="ui message">
+                <div class="header">
+                    Information
+                </div>
+                <ul class="list">
+                    {% for message in messages %}
+                        <li>{{ message }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+            </ul>
+        {% endif %}
+        {% endwith %}
+        
+        {% block content %}{% endblock %}
+
+        <script src="https://code.jquery.com/jquery-3.1.1.min.js" integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8=" crossorigin="anonymous"></script>
+    </body>
+</html>

@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <div style="padding: 1.3em;" class="ui one column centered grid">
+        <h2 class="ui blue header">
+            Hi, {{ current_user.username }}
+            <div class="sub header">Following: {{ followedCount }}</div>
+        </h2>
+    </div>
+    <hr>
+    <div class="ui one column grid" id="card-container">
+        {% for post in posts %}
+            {% if post.isRT %}
+                {% include '_post.html' %}
+            {% else %}
+                {% include '_post_nort.html' %}
+            {% endif %}
+        {% endfor %}
+    </div>
+{% endblock %}
