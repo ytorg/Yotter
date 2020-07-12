@@ -115,6 +115,14 @@ ENV/
 env.bak/
 venv.bak/
 
+# Migrations
+migrations/
+.migrations/
+
+# Database
+app.db
+*.db
+
 # Spyder project settings
 .spyderproject
 .spyproject
