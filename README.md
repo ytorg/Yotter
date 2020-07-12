@@ -9,11 +9,11 @@ Parasitter is written with Python and Flask and uses Semantic-UI as its CSS fram
 
 
 ## Security
-Only the hash of your password is stored on the database. Also no personal information of any kind is kept on the app itself, so if a hackers gets access to it only thing they could do would be to follow/unfollow some accounts.
+Only the hash of your password is stored on the database. Also no personal information of any kind is kept on the app itself, if a hacker gets access to it only thing they could do would be to follow/unfollow some accounts.
 
 I always recommend self-hosting, as you will be the only person with access to the data.
 
-## Self hosting (2 min!)
+## Self hosting (2 min set-up)
 1. Install `python3`, `pip3` and `git`.
 2. Clone this repository:
     - `git clone https://github.com/pluja/Parasitter.git`
