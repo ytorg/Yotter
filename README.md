@@ -1,5 +1,6 @@
 # Parasitter
-> Twitter via RSS with privacy
+<p align="center"> <img width="150" src="app/static/img/logo.png"> </img></p> 
+<p align="center"> Twitter via RSS with privacy </p>
 
 Rssitter allows you to follow your favourite twitters without Twitter even knowing it. Rssitter uses [Nitter's](nitter.net) rss feed in order to gather the latest tweets from your favourite accounts and builds a *twitter-like* feed so you can read them. We will never connect you to Twitter so your privacy is safe when using Parasitter.
 
@@ -21,3 +22,9 @@ Rssitter allows you to follow your favourite twitters without Twitter even knowi
 6. [env] Run the application.
     - `flask run`
 7. Go to "http://localhost:5000/" and enjoy.
+
+
+### Powered by:
+* [Nitter](https://nitter.net)
+* [Flask](https://flask.palletsprojects.com/)
+* [SQLAlchemy](https://docs.sqlalchemy.org/en/13/)
