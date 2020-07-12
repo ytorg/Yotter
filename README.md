@@ -4,6 +4,8 @@
 <br>
 Parasitter allows you to follow your favourite twitters without Twitter even knowing it. Rssitter uses [Nitter's](nitter.net) rss feed in order to gather the latest tweets from your favourite accounts and builds a *twitter-like* feed so you can read them. We will never connect you to Twitter so your privacy is safe when using Parasitter.
 
+Parasitter is written with Python and Flask and uses Semantic-UI as its CSS framework.
+
 ### Self hosting
 1. Install `python3`, `pip3` and `git`.
 2. Clone this repository:
@@ -32,3 +34,4 @@ Parasitter allows you to follow your favourite twitters without Twitter even kno
 * [Nitter](https://nitter.net)
 * [Flask](https://flask.palletsprojects.com/)
 * [SQLAlchemy](https://docs.sqlalchemy.org/en/13/)
+* [Semantic-UI](https://semantic-ui.com)
