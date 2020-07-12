@@ -5,16 +5,20 @@
 Parasitter allows you to follow your favourite twitters without Twitter even knowing it. Rssitter uses [Nitter's](nitter.net) rss feed in order to gather the latest tweets from your favourite accounts and builds a *twitter-like* feed so you can read them. We will never connect you to Twitter so your privacy is safe when using Parasitter.
 
 ### Self hosting
-1. Install `python3`, `pip` and `virtualenv`.
-2. Prepare a virtual environment:
+1. Install `python3`, `pip3` and `git`.
+2. Clone this repository:
+    - `git clone https://github.com/pluja/Parasitter.git`
+3. Navigate to the project folder:
+    - `cd Parasitter`
+4. Prepare a virtual environment and activate it:
     - `python3 -m venv venv`
     - `source venv/bin/activate`
-  > Now you are inside of the virtual environment for python.
+    > Now you are inside of the virtual environment for python. All instructions wiht [env] indicate that must be done inside the env.
 3. [env] Update pip
     - `pip install --upgrade pip`
 4. [env] Install the dependencies:
     - `pip3 install flask flask-sqlalchemy flask-migrate python-dotenv flask-wtf flask-login email-validator feedparser`
-    > It may require you to use *sudo*
+        > It may require you to use *sudo*
 5. [env] Initialize and prepare the database.
     - `flask db init`
     - `flask db migrate`
