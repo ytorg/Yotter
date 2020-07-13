@@ -11,9 +11,9 @@ Parasitter is written with Python and Flask and uses Semantic-UI as its CSS fram
 * [Security](#security)
 * [Privacy](#privacy)
 * [Self hosting](#self-hosting)
-    * [Install]
-    * [Update]
-    * [Go online]
+    * [Install](#install)
+    * [Update](#upgrading-to-new-versions)
+    * [External access](#external-access)
 * [Powered by](#powered-by)
 
 ## Security
@@ -65,6 +65,9 @@ It is always recommended to set up a self-hosted instance. It is quite easy and 
 2. Pull new changes:
     - `git pull`
 3. Done! You are on latest version.
+
+### External access:
+> Coming soon..
 
 ### Powered by:
 * [Nitter](https://nitter.net)
