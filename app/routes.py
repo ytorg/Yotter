@@ -13,6 +13,7 @@ import requests
 
 nitterInstance = "https://nitter.net/"
 nitterInstanceII = "https://nitter.mastodont.cat"
+print("[ATTENTION]: New version. You will need to install BeautifulSoup: 'pip install bs4'")
 
 @app.route('/')
 @app.route('/index')
