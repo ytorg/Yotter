@@ -13,7 +13,7 @@ Only the hash of your password is stored on the database. Also no personal infor
 
 I always recommend self-hosting, as you will be the only person with access to the data.
 
-## Self hosting (2 min set-up)
+## Self hosting
 1. Install `python3`, `pip3` and `git`.
 2. Clone this repository:
     - `git clone https://github.com/pluja/Parasitter.git`
