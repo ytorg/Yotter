@@ -49,6 +49,12 @@ It is always recommended to set up a self-hosted instance. It is quite easy and 
     - `flask run`
 9. Go to "http://localhost:5000/" and enjoy.
 
+### Upgrading to new versions:
+> This will never delete your database.
+1. Navigate to the git repository (the one you cloned when installing).
+2. Pull new changes:
+    - `git pull`
+3. Done! You are on latest version.
 
 ### Powered by:
 * [Nitter](https://nitter.net)
