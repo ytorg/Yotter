@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <div style="margin-top: 2em;" class="ui one column centered grid">
+        <img class="ui medium circular image" src="{{ url_for('static',filename='img/404.png') }}">
+    </div>
+    <div style="margin: 1.5em;" class="ui one column centered grid">
+        <h2 class="ui header">This page is not on the map.</h2>
+    </div>
+{% endblock %}

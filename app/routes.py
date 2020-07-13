@@ -1,6 +1,6 @@
 from flask_login import login_user, logout_user, current_user, login_required
 from flask import render_template, flash, redirect, url_for, request
-from app.forms import LoginForm, RegistrationForm, EmptyForm
+from app.forms import LoginForm, RegistrationForm, EmptyForm, SearchForm
 from app.models import User, twitterPost
 from werkzeug.urls import url_parse
 from flask import Markup
@@ -132,22 +132,75 @@ def unfollow(username):
             return redirect(url_for('user', username=username))
         current_user.unfollow(user)
         db.session.commit()
-        flash('You are not following {}.'.format(username))
+        flash('You are no longer following {}.'.format(username))
         return redirect(url_for('user', username=username))
     else:
         return redirect(url_for('index'))
+
+@app.route('/unfollowList/<username>', methods=['POST'])
+@login_required
+def unfollowList(username):
+    form = EmptyForm()
+    if form.validate_on_submit():
+        user = User.query.filter_by(username=username).first()
+        if user is None:
+            flash('User {} not found.'.format(username))
+            return redirect(url_for('index'))
+        if user == current_user:
+            flash('You cannot unfollow yourself!')
+            return redirect(url_for('user', username=username))
+        current_user.unfollow(user)
+        db.session.commit()
+        flash('You are no longer following {}!'.format(username))
+        return redirect(url_for('following'))
+    else:
+        return redirect(url_for('index'))
+
+@app.route('/following')
+@login_required
+def following():
+    form = EmptyForm()
+    following = current_user.following_list()
+    followed = current_user.followed.count()
+    return render_template('following.html', accounts = following, count = followed, form = form)
+
+@app.route('/search', methods=['GET', 'POST'])
+@login_required
+def search():
+    form = SearchForm()
+    if form.validate_on_submit():
+        user = form.username.data
+        if isTwitterUser(user):
+            return redirect(url_for('user', username=user))
+        else:
+            flash("User {} does not exist!".format(user))
+            return render_template('search.html', form = form)
+    else:
+        return render_template('search.html', form = form)
+
+
+
+@app.route('/notfound')
+def notfound():
+    return render_template('404.html')
 
 @app.route('/user/<username>')
 @login_required
 def user(username):
     user = User.query.filter_by(username=username).first()
     isTwitter = True
+    rssFeed = feedparser.parse('https://nitter.net/{}/rss'.format(username))
+    if rssFeed.entries == []:
+        isTwitter = False
     if user is None and isTwitter:
         x = ''.join(random.choice(string.ascii_uppercase + string.ascii_lowercase + string.digits) for _ in range(16))
         newUser = User(username=username, email="{}@person.is".format(x))
         db.session.add(newUser)
         db.session.commit()
         #flash('User {} not found.'.format(username))
+    
+    elif not isTwitter and user is None:
+        return redirect(url_for('notfound'))
     
     #Gather profile info.
     rssFeed = feedparser.parse('https://nitter.net/{}/rss'.format(username))
@@ -177,6 +230,7 @@ def user(username):
         posts.append(newPost)
 
     form = EmptyForm()
+    user = User.query.filter_by(username=username).first()
     return render_template('user.html', user=user, posts=posts, form=form, profilePic=rssFeed.channel.image.url)
 
 def getTimeDiff(t):
@@ -195,3 +249,9 @@ def getTimeDiff(t):
     else:
         timeString = "{}d".format(diff.days)
     return timeString
+
+def isTwitterUser(username):
+    rssFeed = feedparser.parse('https://nitter.net/{}/rss'.format(username))
+    if rssFeed.entries == []:
+        return False
+    return True
