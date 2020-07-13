@@ -46,7 +46,7 @@ It is always recommended to set up a self-hosted instance. It is quite easy and 
 5. [env] Update pip
     - `pip install --upgrade pip`
 6. [env] Install the dependencies:
-    - `pip3 install flask flask-sqlalchemy flask-migrate python-dotenv flask-wtf flask-login email-validator feedparser bs4`
+    - `pip3 install flask flask-sqlalchemy flask-migrate python-dotenv flask-wtf flask-login email-validator feedparser bs4 requests`
         > It may require you to use *sudo*
 7. [env] Initialize and prepare the database.
     - `flask db init`
