@@ -19,22 +19,25 @@ I always recommend self-hosting, as you will be the only person with access to t
     - `git clone https://github.com/pluja/Parasitter.git`
 3. Navigate to the project folder:
     - `cd Parasitter`
-4. Prepare a virtual environment and activate it:
+4. [Optional] Prepare a virtual environment and activate it:
+
+   > Python lets you create virtual environments. This allows you to avoid installing all the `pip` packages on your system.   
+   If you don't mind about that, you can jump to step **5.** and ignore everything about "[env]".
     - `python3 -m venv venv`
     - `source venv/bin/activate`
-    > Now you are inside of the virtual environment for python. All instructions wiht [env] indicate that must be done inside the env.
-3. [env] Update pip
+    > Now you are inside of the virtual environment for python. All instructions wiht [env] indicate that must be done inside the env if you decided to create one.
+5. [env] Update pip
     - `pip install --upgrade pip`
-4. [env] Install the dependencies:
+6. [env] Install the dependencies:
     - `pip3 install flask flask-sqlalchemy flask-migrate python-dotenv flask-wtf flask-login email-validator feedparser`
         > It may require you to use *sudo*
-5. [env] Initialize and prepare the database.
+7. [env] Initialize and prepare the database.
     - `flask db init`
     - `flask db migrate`
     - `flask db upgrade`
-6. [env] Run the application.
+8. [env] Run the application.
     - `flask run`
-7. Go to "http://localhost:5000/" and enjoy.
+9. Go to "http://localhost:5000/" and enjoy.
 
 
 ### Powered by:
