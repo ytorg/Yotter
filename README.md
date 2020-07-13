@@ -46,7 +46,7 @@ It is always recommended to set up a self-hosted instance. It is quite easy and 
 5. [env] Update pip
     - `pip install --upgrade pip`
 6. [env] Install the dependencies:
-    - `pip3 install flask flask-sqlalchemy flask-migrate python-dotenv flask-wtf flask-login email-validator feedparser`
+    - `pip3 install flask flask-sqlalchemy flask-migrate python-dotenv flask-wtf flask-login email-validator feedparser bs4`
         > It may require you to use *sudo*
 7. [env] Initialize and prepare the database.
     - `flask db init`
@@ -58,6 +58,7 @@ It is always recommended to set up a self-hosted instance. It is quite easy and 
 
 ### Upgrading to new versions:
 > This will never delete your database.
+#### New versions may require new Python modules. You will se this displayed as an "execution error". Just install the new package. Also, you will see the new needed packages on the [CHANGELOG](CHANGELOG.md)
 1. Navigate to the git repository (the one you cloned when installing).
 2. Pull new changes:
     - `git pull`
