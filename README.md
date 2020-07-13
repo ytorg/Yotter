@@ -13,6 +13,16 @@ Only the hash of your password is stored on the database. Also no personal infor
 
 I always recommend self-hosting, as you will be the only person with access to the data.
 
+## Privacy
+Parasitter cares about your privacy, and for this it will never make any connection to Twitter. We use [Nitter's](https://nitter.net) rss feed to fetch all the tweets from your followed users. Images are also loaded from nitter. If you want to use a specific Nitter instance you can replace it on the file `app/routes.py`.
+
+It is always recommended to set up a self-hosted instance. It is quite easy and conveninent and will give you full control over your data. The only data that is stored on the Database is:
+* Hashed password
+* Username
+* Email (we won't send you any mails so you can make up the mail) - This is for future versions.
+* List of followed users
+* List of saved posts
+
 ## Self hosting
 1. Install `python3`, `pip3` and `git`.
 2. Clone this repository:
@@ -25,7 +35,7 @@ I always recommend self-hosting, as you will be the only person with access to t
    If you don't mind about that, you can jump to step **5.** and ignore everything about "[env]".
     - `python3 -m venv venv`
     - `source venv/bin/activate`
-    > Now you are inside of the virtual environment for python. All instructions wiht [env] indicate that must be done inside the env if you decided to create one.
+    > Now you are inside of the virtual environment for python. All instructions wiht [env] indicate that must be done inside the env if you decided to create one. From now on, you will always need to start the application from within the virtual env.
 5. [env] Update pip
     - `pip install --upgrade pip`
 6. [env] Install the dependencies:
