@@ -1,5 +1,5 @@
 # v0.0.2a
-> New module needed! Run: `pip install bs4`
+> New modules needed! Run: `pip install bs4 requests`
 * Efficiency improvements
 * First implementation of saved posts (Not working yet)
 * Search user by username and list related users.
