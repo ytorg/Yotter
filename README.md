@@ -7,6 +7,14 @@ Parasitter allows you to follow your favourite twitters without Twitter even kno
 
 Parasitter is written with Python and Flask and uses Semantic-UI as its CSS framework.
 
+## Index:
+* [Security](#security)
+* [Privacy](#privacy)
+* [Self hosting](#self-hosting)
+    * [Install]
+    * [Update]
+    * [Go online]
+* [Powered by](#powered-by)
 
 ## Security
 Only the hash of your password is stored on the database. Also no personal information of any kind is kept on the app itself, if a hacker gets access to it only thing they could do would be to follow/unfollow some accounts.
@@ -23,7 +31,9 @@ It is always recommended to set up a self-hosted instance. It is quite easy and 
 * List of followed users
 * List of saved posts
 
-## Self hosting
+# Self hosting
+
+## Install
 1. Install `python3`, `pip3` and `git`.
 2. Clone this repository:
     - `git clone https://github.com/pluja/Parasitter.git`
