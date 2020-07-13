@@ -6,12 +6,21 @@
                     <img class="ui avatar image" src="{{ post.profilePic }}">
                 </div>
             </div>
-            <div class="header" id="author"><a href="{{ post.urlToPost }}">{{ post.op }}</a></div>
+            <div class="header" id="author"><a href="{{post.op.replace('@','')}}">{{ post.op }}</a></div>
             <div class="meta">
                 <span class="category" id="time"><i class="clock icon"></i> {{post.date}} </span>
             </div>
             <div class="description">
                 <p>{{post.content}}</p>
+            </div>
+            <div class="extra content">
+                <p>
+                    <form class="ui form" action="{{ url_for('savePost', url=post.urlToPost.replace('/', '~')) }}" method="post">
+                        <button type="submit" class="ui icon button">
+                            <i class="bookmark outline icon"></i>
+                          </button>
+                    </form>
+                </p>
             </div>
         </div>
         <!--<div class="extra content">

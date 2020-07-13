@@ -3,11 +3,16 @@ from flask import render_template, flash, redirect, url_for, request
 from app.forms import LoginForm, RegistrationForm, EmptyForm, SearchForm
 from app.models import User, twitterPost
 from werkzeug.urls import url_parse
+from bs4 import BeautifulSoup
 from flask import Markup
 from app import app, db
 import time, datetime
 import random, string
 import feedparser
+import requests
+
+nitterInstance = "https://nitter.net/"
+nitterInstanceII = "https://nitter.mastodont.cat"
 
 @app.route('/')
 @app.route('/index')
@@ -17,20 +22,19 @@ def index():
     followed = current_user.followed.count()
     posts = []
     avatarPath = "img/avatars/1.png"
+    form = EmptyForm()
     for fwd in following:
         avatarPath = "img/avatars/{}.png".format(str(random.randint(1,12)))
         
         #Gather profile info.
-        rssFeed = feedparser.parse('https://nitter.net/{}/rss'.format(fwd.username))
+        rssFeed = feedparser.parse('{instance}{user}/rss'.format(instance=nitterInstance, user=fwd.username))
+        twitterAt = rssFeed.feed.title.split("/")[1].replace(" ", "")
+        twitterName = rssFeed.feed.title.split("/")[0]
 
         #Gather posts
         if rssFeed.entries != []:
             for post in rssFeed.entries:
                 newPost = twitterPost()
-
-                newPost.profilePic = rssFeed.channel.image.url
-                newPost.twitterAt = rssFeed.feed.title.split("/")[1].replace(" ", "")
-                newPost.twitterName = rssFeed.feed.title.split("/")[0]
 
                 newPost.username = rssFeed.feed.title.split("/")[0]
                 newPost.date = getTimeDiff(post.published_parsed)
@@ -41,11 +45,16 @@ def index():
 
                 if "RT by" in post.title:
                     newPost.isRT = True
+                    newPost.profilePic = ""
                 else:
                     newPost.isRT = False
+                    try:
+                        newPost.profilePic = rssFeed.channel.image.url
+                    except:
+                        newPost.profilePic = avatarPath
                 posts.append(newPost)
-        posts.sort(key=lambda x: x.timeStamp, reverse=True)
-    return render_template('index.html', title='Home', posts=posts, avatar=avatarPath, followedCount = followed)
+            posts.sort(key=lambda x: x.timeStamp, reverse=True)
+    return render_template('index.html', title='Home', posts=posts, avatar=avatarPath, followedCount=followed, twitterAt=twitterAt, twitterName=twitterName, form=form)
 
 
 @app.route('/login', methods=['GET', 'POST'])
@@ -76,20 +85,26 @@ def logout():
 def register():
     if current_user.is_authenticated:
         return redirect(url_for('index'))
+
     form = RegistrationForm()
     if form.validate_on_submit():
-        rssFeed = feedparser.parse('https://nitter.net/{}/rss'.format(form.username.data))
-
-        if rssFeed.entries == []:
+        if isTwitterUser(form.username.data):
+            flash('This is username is taken! Choose a different one.')
+        else:
             user = User(username=form.username.data, email=form.email.data)
             user.set_password(form.password.data)
             db.session.add(user)
             db.session.commit()
             flash('Congratulations, you are now a registered user!')
             return redirect(url_for('login'))
-        else:
-            flash('This is username is taken! Choose a different one.')
     return render_template('register.html', title='Register', form=form)
+
+@app.route('/savePost/<url>', methods=['POST'])
+@login_required
+def savePost(url):
+    print("SAVEPOST")
+    print("Saved {}.".format(url.replace('~', '/')))
+    return redirect(url_for('index'))
 
 @app.route('/follow/<username>', methods=['POST'])
 @login_required
@@ -97,11 +112,10 @@ def follow(username):
     form = EmptyForm()
     if form.validate_on_submit():
         user = User.query.filter_by(username=username).first()
-        isTwitter = True
+        isTwitter = isTwitterUser(username)
         if user is None and isTwitter:
             x = ''.join(random.choice(string.ascii_uppercase + string.ascii_lowercase + string.digits) for _ in range(16))
             newUser = User(username=username, email="{}@person.is".format(x))
-            print(x)
             db.session.add(newUser)
             db.session.commit()
             flash('You are now following {}!'.format(username))
@@ -168,13 +182,20 @@ def following():
 @login_required
 def search():
     form = SearchForm()
+    parsedResults = []
     if form.validate_on_submit():
         user = form.username.data
         if isTwitterUser(user):
-            return redirect(url_for('user', username=user))
+            r = requests.get("{instance}search?f=users&q={usern}".format(instance=nitterInstance, usern=user))
+            html = BeautifulSoup(str(r.content), features="lxml")
+            results = html.body.find_all('a', attrs={'class':'tweet-link'})
+
+            parsedResults = [s['href'].replace("/", "") for s in results]
+
+            return render_template('search.html', form = form, results = parsedResults)
         else:
             flash("User {} does not exist!".format(user))
-            return render_template('search.html', form = form)
+            return render_template('search.html', form = form, results = parsedResults)
     else:
         return render_template('search.html', form = form)
 
@@ -188,32 +209,30 @@ def notfound():
 @login_required
 def user(username):
     user = User.query.filter_by(username=username).first()
-    isTwitter = True
-    rssFeed = feedparser.parse('https://nitter.net/{}/rss'.format(username))
-    if rssFeed.entries == []:
-        isTwitter = False
-    if user is None and isTwitter:
+    isTwitter = isTwitterUser(username)
+
+    if isTwitter and user is None:
         x = ''.join(random.choice(string.ascii_uppercase + string.ascii_lowercase + string.digits) for _ in range(16))
         newUser = User(username=username, email="{}@person.is".format(x))
         db.session.add(newUser)
         db.session.commit()
-        #flash('User {} not found.'.format(username))
     
     elif not isTwitter and user is None:
         return redirect(url_for('notfound'))
     
     #Gather profile info.
-    rssFeed = feedparser.parse('https://nitter.net/{}/rss'.format(username))
+    rssFeed = feedparser.parse('{instance}{user}/rss'.format(instance=nitterInstance,user=username))
+    try:
+        profilePicture = rssFeed.channel.image.url
+    except:
+        profilePicture = ""
+    twitterAt = rssFeed.feed.title.split("/")[1].replace(" ", "")
+    twitterName = rssFeed.feed.title.split("/")[0]
 
     #Gather posts
     posts = []
     for post in rssFeed.entries:
         newPost = twitterPost()
-
-        newPost.profilePic = rssFeed.channel.image.url
-        newPost.twitterAt = rssFeed.feed.title.split("/")[1].replace(" ", "")
-        newPost.twitterName = rssFeed.feed.title.split("/")[0]
-
         newPost.username = rssFeed.feed.title.split("/")[0]
         newPost.date = getTimeDiff(post.published_parsed)
         newPost.timeStamp = datetime.datetime(*post.published_parsed[:6])
@@ -223,35 +242,37 @@ def user(username):
 
         if "RT by" in post.title:
             newPost.isRT = True
+            newPost.profilePic = ""
         else:
             newPost.isRT = False
+            try:
+                newPost.profilePic = rssFeed.channel.image.url
+            except:
+                newPost.profilePic = avatarPath
 
         #validPost = True
         posts.append(newPost)
 
     form = EmptyForm()
     user = User.query.filter_by(username=username).first()
-    return render_template('user.html', user=user, posts=posts, form=form, profilePic=rssFeed.channel.image.url)
+    return render_template('user.html', user=user, posts=posts, form=form, profilePic=profilePicture, twitterAt=twitterAt, twitterName=twitterName)
 
 def getTimeDiff(t):
-    today = datetime.datetime.now()
     tweetTime = datetime.datetime(*t[:6])
-    diff = today - tweetTime
-    timeString = "0m"
+    diff = datetime.datetime.now() - tweetTime
 
     if diff.days == 0:
-        minutes = diff.seconds/60
-        if minutes > 60:
-            hours = minutes/60
-            timeString = "{}h".format(hours)
+        if diff.seconds > 3599:
+            timeString = "{}h".format(int((diff.seconds/60)/60))
         else:
-            timeString = "{}m".format(minutes)
+            timeString = "{}m".format(int(diff.seconds/60))
     else:
         timeString = "{}d".format(diff.days)
     return timeString
 
 def isTwitterUser(username):
-    rssFeed = feedparser.parse('https://nitter.net/{}/rss'.format(username))
-    if rssFeed.entries == []:
+    request = requests.get('https://nitter.net/{}'.format(username), timeout=1)
+    print("User {name} is {boo} twitter.".format(name=username, boo=request.status_code == 404))
+    if request.status_code == 404:
         return False
     return True

@@ -4,9 +4,9 @@
     <div class="blue ui centered card">
         <div class="content">
             <div class="center aligned author">
-                <img class="ui avatar image" src="{{ profilePic }}"> {{ posts[0].twitterAt }}
+                <img class="ui avatar image" src="{{ profilePic }}"> {{ twitterAt }}
             </div>
-            <div style="margin: .1em" class="center aligned header"><a href="https://nitter.net/{{ posts[0].twitterAt.replace('@','') }}/">{{ posts[0].twitterName }}</a></div>
+            <div style="margin: .1em" class="center aligned header"><a href="https://nitter.net/{{ twitterAt.replace('@','') }}/">{{ twitterName }}</a></div>
         <div class="center aligned description">
             <a>
                 <i class="users icon"></i>
@@ -38,12 +38,25 @@
     </div>
 
     <div class="ui one column grid" id="card-container">
-    {% for post in posts %}
-        {% if post.isRT %}
-            {% include '_post.html' %}
-        {% else %}
-            {% include '_post_nort.html' %}
-        {% endif %}
-    {% endfor %}
+    
+    {% if not posts %}
+        <div style="margin-top: 2em;" class="ui one column centered grid">
+            <div style="margin: 1.5em;" class="ui row">
+                <img class="ui medium circular image" src="{{ url_for('static',filename='img/empty.png') }}">
+            </div>
+        
+            <div style="margin: 1.5em;" class="ui row">
+                <h2 class="ui header">This feed is empty.</h2>
+            </div>
+        </div>
+    {% else %}
+        {% for post in posts %}
+            {% if post.isRT %}
+                {% include '_post.html' %}
+            {% else %}
+                {% include '_post_nort.html' %}
+            {% endif %}
+        {% endfor %}
+    {% endif %}
     </div>
 {% endblock %}

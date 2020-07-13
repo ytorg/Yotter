@@ -62,7 +62,6 @@ class twitterPost():
     validPost = True
     content = "El gato siguió a la liebre. Esto es un texto de ejemplo."
     profilePic = "url"
-    twitterAt = "@error"
     twitterName = "Error Name"
     timeStamp = "error"
 

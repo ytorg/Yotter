@@ -13,6 +13,21 @@
         </p>
         <p>{{ form.submit() }}</p>
     </form>
+
+    {% if results %}
+    <div style="margin: 0em;" class="ui one column centered grid">
+        <div class="ui center aligned divided list">
+            {% for res in results %}
+            <div class="item">
+              <img class="ui avatar image" src="{{ url_for('static',filename='img/avatars/')}}{{range(1, 12) | random}}.png">
+              <div class="content">
+                <a href="/user/{{res}}">{{res}}</a>
+              </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    {% endif %}
 </div>
 
 {% endblock %}
