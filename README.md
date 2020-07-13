@@ -17,7 +17,7 @@ I always recommend self-hosting, as you will be the only person with access to t
 Parasitter cares about your privacy, and for this it will never make any connection to Twitter. We use [Nitter's](https://nitter.net) rss feed to fetch all the tweets from your followed users. Images are also loaded from nitter. If you want to use a specific Nitter instance you can replace it on the file `app/routes.py`.
 
 It is always recommended to set up a self-hosted instance. It is quite easy and conveninent and will give you full control over your data. The only data that is stored on the Database is:
-* Hashed password
+* Hash of the password
 * Username
 * Email (we won't send you any mails so you can make up the mail) - This is for future versions.
 * List of followed users
