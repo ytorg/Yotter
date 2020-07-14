@@ -24,7 +24,7 @@ Parasitter is possible thanks to several open-source projects that are listed on
 * 0 connections to Twitter.
 * Uses RSS feeds (could be expanded to more social networks)
 * Follow Twitter accounts.
-* Save your favourite Tweets.
+* Save your favourite Tweets. (Coming soon)
 * Tor-friendly.
 * Terminal-friendly.
 * Easy 1 minute self-hosting deploy.
