@@ -4,9 +4,9 @@
     <div class="blue ui centered card">
         <div class="content">
             <div class="center aligned author">
-                <img class="ui avatar image" src="{{ profilePic }}"> {{ twitterAt }}
+                <img class="ui avatar image" src="{{ posts[0].userProfilePic }}"> {{ twitterAt }}
             </div>
-            <div style="margin: .1em" class="center aligned header"><a href="https://nitter.net/{{ twitterAt.replace('@','') }}/">{{ twitterName }}</a></div>
+            <div style="margin: .1em" class="center aligned header"><a href="https://nitter.net/{{ posts[0].op.replace('@','') }}/">{{ posts[0].twitterName }}</a></div>
         <div class="center aligned description">
             <a>
                 <i class="users icon"></i>

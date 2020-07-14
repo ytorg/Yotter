@@ -13,7 +13,6 @@ import requests
 
 nitterInstance = "https://nitter.net/"
 nitterInstanceII = "https://nitter.mastodont.cat"
-print("[ATTENTION]: New version. You will need to install BeautifulSoup: 'pip install bs4'")
 
 @app.route('/')
 @app.route('/index')
@@ -24,39 +23,9 @@ def index():
     posts = []
     avatarPath = "img/avatars/1.png"
     form = EmptyForm()
-    for fwd in following:
-        avatarPath = "img/avatars/{}.png".format(str(random.randint(1,12)))
-        
-        #Gather profile info.
-        rssFeed = feedparser.parse('{instance}{user}/rss'.format(instance=nitterInstance, user=fwd.username))
-        twitterAt = rssFeed.feed.title.split("/")[1].replace(" ", "")
-        twitterName = rssFeed.feed.title.split("/")[0]
-
-        #Gather posts
-        if rssFeed.entries != []:
-            for post in rssFeed.entries:
-                newPost = twitterPost()
-
-                newPost.username = rssFeed.feed.title.split("/")[0]
-                newPost.date = getTimeDiff(post.published_parsed)
-                newPost.timeStamp = datetime.datetime(*post.published_parsed[:6])
-                newPost.op = post.author
-                newPost.urlToPost = post.link
-                newPost.content = Markup(post.description)
-
-                if "RT by" in post.title:
-                    newPost.isRT = True
-                    newPost.profilePic = ""
-                else:
-                    newPost.isRT = False
-                    try:
-                        newPost.profilePic = rssFeed.channel.image.url
-                    except:
-                        newPost.profilePic = avatarPath
-                posts.append(newPost)
-            posts.sort(key=lambda x: x.timeStamp, reverse=True)
-    return render_template('index.html', title='Home', posts=posts, avatar=avatarPath, followedCount=followed, twitterAt=twitterAt, twitterName=twitterName, form=form)
-
+    [posts.extend(getPosts(fwd.username)) for fwd in following]
+    posts.sort(key=lambda x: x.timeStamp, reverse=True)
+    return render_template('index.html', title='Home', posts=posts, avatar=avatarPath, followedCount=followed, form=form)
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
@@ -188,7 +157,7 @@ def search():
         user = form.username.data
         if isTwitterUser(user):
             r = requests.get("{instance}search?f=users&q={usern}".format(instance=nitterInstance, usern=user))
-            html = BeautifulSoup(str(r.content), features="lxml")
+            html = BeautifulSoup(str(r.content), "lxml")
             results = html.body.find_all('a', attrs={'class':'tweet-link'})
 
             parsedResults = [s['href'].replace("/", "") for s in results]
@@ -221,42 +190,11 @@ def user(username):
     elif not isTwitter and user is None:
         return redirect(url_for('notfound'))
     
-    #Gather profile info.
-    rssFeed = feedparser.parse('{instance}{user}/rss'.format(instance=nitterInstance,user=username))
-    try:
-        profilePicture = rssFeed.channel.image.url
-    except:
-        profilePicture = ""
-    twitterAt = rssFeed.feed.title.split("/")[1].replace(" ", "")
-    twitterName = rssFeed.feed.title.split("/")[0]
-
-    #Gather posts
     posts = []
-    for post in rssFeed.entries:
-        newPost = twitterPost()
-        newPost.username = rssFeed.feed.title.split("/")[0]
-        newPost.date = getTimeDiff(post.published_parsed)
-        newPost.timeStamp = datetime.datetime(*post.published_parsed[:6])
-        newPost.op = post.author
-        newPost.urlToPost = post.link
-        newPost.content = Markup(post.description)
-
-        if "RT by" in post.title:
-            newPost.isRT = True
-            newPost.profilePic = ""
-        else:
-            newPost.isRT = False
-            try:
-                newPost.profilePic = rssFeed.channel.image.url
-            except:
-                newPost.profilePic = avatarPath
-
-        #validPost = True
-        posts.append(newPost)
-
+    posts.extend(getPosts(username))
     form = EmptyForm()
     user = User.query.filter_by(username=username).first()
-    return render_template('user.html', user=user, posts=posts, form=form, profilePic=profilePicture, twitterAt=twitterAt, twitterName=twitterName)
+    return render_template('user.html', user=user, posts=posts, form=form)
 
 def getTimeDiff(t):
     tweetTime = datetime.datetime(*t[:6])
@@ -273,7 +211,43 @@ def getTimeDiff(t):
 
 def isTwitterUser(username):
     request = requests.get('https://nitter.net/{}'.format(username), timeout=1)
-    print("User {name} is {boo} twitter.".format(name=username, boo=request.status_code == 404))
     if request.status_code == 404:
         return False
     return True
+
+def getPosts(account):
+    avatarPath = "img/avatars/{}.png".format(str(random.randint(1,12)))
+    posts = []
+        
+    #Gather profile info.
+    rssFeed = feedparser.parse('{instance}{user}/rss'.format(instance=nitterInstance, user=account))
+    #Gather posts
+    if rssFeed.entries != []:
+        for post in rssFeed.entries:
+            newPost = twitterPost()
+            newPost.username = rssFeed.feed.title.split("/")[1].replace(" ", "")
+            newPost.twitterName = rssFeed.feed.title.split("/")[0]
+            newPost.date = getTimeDiff(post.published_parsed)
+            newPost.timeStamp = datetime.datetime(*post.published_parsed[:6])
+            newPost.op = post.author
+            try:
+                newPost.userProfilePic = rssFeed.channel.image.url
+            except:
+                newPost.profilePicture = ""
+            newPost.urlToPost = post.link
+            newPost.content = Markup(post.description)
+            
+            if "Pinned" in post.title.split(":")[0]:
+                newPost.isPinned = True
+
+            if "RT by" in post.title:
+                newPost.isRT = True
+                newPost.profilePic = ""
+            else:
+                newPost.isRT = False
+                try:
+                    newPost.profilePic = rssFeed.channel.image.url
+                except:
+                    newPost.profilePic = avatarPath
+            posts.append(newPost)
+    return posts

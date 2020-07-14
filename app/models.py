@@ -56,14 +56,16 @@ def load_user(id):
 class twitterPost():
     date = 0
     username = 'Error'
+    twitterName = "Error Name"
+    isPinned = False
     op = 'Error'
     isRT = True
     urlToPost = ""
     validPost = True
     content = "El gato siguió a la liebre. Esto es un texto de ejemplo."
     profilePic = "url"
-    twitterName = "Error Name"
     timeStamp = "error"
+    userProfilePic = "1.png"
 
 class Post(db.Model):
     id = db.Column(db.Integer, primary_key=True)
