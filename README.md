@@ -14,9 +14,9 @@ Parasitter is possible thanks to several open-source projects that are listed on
 * [Security](#security)
 * [Privacy](#privacy)
 * [Self hosting](#self-hosting)
-    * [Install](#install)
+    * [Local](#local)
     * [Update](#updating-to-new-versions)
-    * [External access](#external-access)
+    * [Server](#server)
 * [Powered by](#powered-by)
 
 ## Features:
@@ -48,7 +48,9 @@ It is always recommended to set up a self-hosted instance. It is quite easy and 
 
 # Self hosting
 
-### Install
+### Local
+You don't need a server to run Parasitter. You can run it on your computer locally and own your (little) data. The installation process is done on a GNU/Linux environment, but should be pretty similar on other platforms.
+
 1. Install `python3`, `pip3` and `git`.
 2. Clone this repository:
     - `git clone https://github.com/pluja/Parasitter.git`
@@ -85,7 +87,9 @@ It is always recommended to set up a self-hosted instance. It is quite easy and 
    > It may be that there are no new packages to install. In that case, all requirements will be satisfied.
 5. Done! You are on latest version.
 
-### External access:
+### Server
+Another option is to host a Parasitter server so you can access it from anywhere or give access to your beloved friends/community. Installation is a little bit more complex than the [local](#local), but should be easy if you follow the steps.
+
 > WARNING: This section is under construction.
 ##### Installing the app:
 1. Install base dependencies:
