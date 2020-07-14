@@ -6,7 +6,7 @@
                     <img class="ui avatar image" src="{{ post.profilePic }}">
                 </div>
             </div>
-            <div class="header" id="author"><a href="user/{{post.op.replace('@','')}}">{{ post.op }}</a></div>
+            <div class="header" id="author"><a href="/{{post.op.replace('@','')}}">{{ post.op }}</a></div>
             <div class="meta">
                 <span class="category" id="time"><i class="clock icon"></i> {{post.date}} </span>
                 {% if post.isPinned %}
