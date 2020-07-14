@@ -1,4 +1,6 @@
+aiohttp==3.6.2
 alembic==1.4.2
+async-timeout==3.0.1
 attrs==19.3.0
 beautifulsoup4==4.9.1
 bs4==0.0.1
@@ -15,6 +17,9 @@ Flask-Migrate==2.5.3
 Flask-SQLAlchemy==2.4.3
 Flask-WTF==0.14.3
 future==0.18.2
+gevent==20.6.2
+greenlet==0.4.16
+grequests==0.6.0
 idna==2.10
 itsdangerous==1.1.0
 Jinja2==2.11.2
@@ -22,14 +27,19 @@ llvmlite==0.33.0
 lxml==4.5.2
 Mako==1.1.3
 MarkupSafe==1.1.1
+multidict==4.7.6
 numpy==1.19.0
 python-dateutil==2.8.1
 python-dotenv==0.14.0
 python-editor==1.0.4
 requests==2.24.0
+requests-futures==1.0.0
 six==1.15.0
 soupsieve==2.0.1
 SQLAlchemy==1.3.18
 urllib3==1.25.9
 Werkzeug==1.0.1
 WTForms==2.3.1
+yarl==1.4.2
+zope.event==4.4
+zope.interface==5.1.0

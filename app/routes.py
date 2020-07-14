@@ -1,6 +1,8 @@
 from flask_login import login_user, logout_user, current_user, login_required
 from flask import render_template, flash, redirect, url_for, request
 from app.forms import LoginForm, RegistrationForm, EmptyForm, SearchForm
+from requests_futures.sessions import FuturesSession
+from concurrent.futures import as_completed
 from app.models import User, twitterPost
 from werkzeug.urls import url_parse
 from bs4 import BeautifulSoup
@@ -18,14 +20,20 @@ nitterInstanceII = "https://nitter.mastodont.cat"
 @app.route('/index')
 @login_required
 def index():
+    start_time = time.time()
     following = current_user.following_list()
     followed = current_user.followed.count()
     posts = []
     avatarPath = "img/avatars/1.png"
     form = EmptyForm()
-    [posts.extend(getPosts(fwd.username)) for fwd in following]
+    posts.extend(getFeed(following))
     posts.sort(key=lambda x: x.timeStamp, reverse=True)
-    return render_template('index.html', title='Home', posts=posts, avatar=avatarPath, followedCount=followed, form=form)
+    if not posts:
+        profilePic = avatarPath
+    else:
+        profilePic = posts[0].userProfilePic
+    print("--- {} seconds fetching feed---".format(time.time() - start_time))
+    return render_template('index.html', title='Home', posts=posts, avatar=avatarPath, profilePic = profilePic, followedCount=followed, form=form)
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
@@ -194,7 +202,11 @@ def user(username):
     posts.extend(getPosts(username))
     form = EmptyForm()
     user = User.query.filter_by(username=username).first()
-    return render_template('user.html', user=user, posts=posts, form=form)
+    if not posts:
+        profilePic = avatarPath
+    else:
+        profilePic = posts[0].userProfilePic
+    return render_template('user.html', user=user, posts=posts, profilePic = profilePic, form=form)
 
 def getTimeDiff(t):
     tweetTime = datetime.datetime(*t[:6])
@@ -210,10 +222,49 @@ def getTimeDiff(t):
     return timeString
 
 def isTwitterUser(username):
-    request = requests.get('https://nitter.net/{}'.format(username), timeout=1)
+    request = requests.get('https://nitter.net/{}/rss'.format(username), timeout=5)
     if request.status_code == 404:
         return False
     return True
+
+def getFeed(urls):
+    avatarPath = "img/avatars/{}.png".format(str(random.randint(1,12)))
+    feedPosts = []
+    with FuturesSession() as session:
+        futures = [session.get('https://nitter.net/{}/rss'.format(u.username)) for u in urls]
+        for future in as_completed(futures):
+            resp = future.result()
+            rssFeed=feedparser.parse(resp.content)
+            if rssFeed.entries != []:
+                    for post in rssFeed.entries:
+                        newPost = twitterPost()
+                        newPost.username = rssFeed.feed.title.split("/")[1].replace(" ", "")
+                        newPost.twitterName = rssFeed.feed.title.split("/")[0]
+                        newPost.date = getTimeDiff(post.published_parsed)
+                        newPost.timeStamp = datetime.datetime(*post.published_parsed[:6])
+                        newPost.op = post.author
+                        try:
+                            newPost.userProfilePic = rssFeed.channel.image.url
+                        except:
+                            newPost.profilePicture = ""
+                        newPost.urlToPost = post.link
+                        newPost.content = Markup(post.description)
+                        
+                        if "Pinned" in post.title.split(":")[0]:
+                            newPost.isPinned = True
+
+                        if "RT by" in post.title:
+                            newPost.isRT = True
+                            newPost.profilePic = ""
+                        else:
+                            newPost.isRT = False
+                            try:
+                                newPost.profilePic = rssFeed.channel.image.url
+                            except:
+                                newPost.profilePic = avatarPath
+                        feedPosts.append(newPost)
+    time.sleep(1)
+    return feedPosts
 
 def getPosts(account):
     avatarPath = "img/avatars/{}.png".format(str(random.randint(1,12)))
