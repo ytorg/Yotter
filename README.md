@@ -46,7 +46,7 @@ It is always recommended to set up a self-hosted instance. It is quite easy and 
 
 # Self hosting
 
-## Install
+### Install
 1. Install `python3`, `pip3` and `git`.
 2. Clone this repository:
     - `git clone https://github.com/pluja/Parasitter.git`
@@ -85,7 +85,7 @@ It is always recommended to set up a self-hosted instance. It is quite easy and 
 
 ### External access:
 > WARNING: This section is under construction.
-#### Installing the app:
+##### Installing the app:
 1. Install base dependencies:
    - `sudo apt-get -y update`
    - `sudo apt-get -y install python3 python3-venv python3-dev`
@@ -99,14 +99,14 @@ It is always recommended to set up a self-hosted instance. It is quite easy and 
    - `source venv/bin/activate`
    - (venv) $ `pip install -r requirements.txt`
 4. Install deployment packages:
-   - `pip install gunicorn pymysql`
+   - (venv) `pip install gunicorn pymysql`
 5. Edit the *.env* SECRET_KEY:
    - `nano .env`
    > This will open an editor. Make sure to change the SECRET_KEY to a string of your like. Make it random and long enough.
 6. Set up FLASK_APP environment variable:
    - `echo "export FLASK_APP=parasitter.py" >> ~/.profile`
 
-#### Database configuration:
+##### Database configuration:
 1. Enter the MySQL command prompt:
    - `mysql -u root -p`
    > It will prompt for the "root" password. This password is the one you set on the MySQL installation.
