@@ -163,16 +163,14 @@ def search():
     parsedResults = []
     if form.validate_on_submit():
         user = form.username.data
-        if isTwitterUser(user):
-            r = requests.get("{instance}search?f=users&q={usern}".format(instance=nitterInstance, usern=user))
-            html = BeautifulSoup(str(r.content), "lxml")
-            results = html.body.find_all('a', attrs={'class':'tweet-link'})
-
+        r = requests.get("{instance}search?f=users&q={usern}".format(instance=nitterInstance, usern=user.replace(" ", "+")))
+        html = BeautifulSoup(str(r.content), "lxml")
+        results = html.body.find_all('a', attrs={'class':'tweet-link'})
+        if results:
             parsedResults = [s['href'].replace("/", "") for s in results]
-
             return render_template('search.html', form = form, results = parsedResults)
         else:
-            flash("User {} does not exist!".format(user))
+            flash("User {} not found...".format(user))
             return render_template('search.html', form = form, results = parsedResults)
     else:
         return render_template('search.html', form = form)
