@@ -2,7 +2,10 @@
 <p align="center"> <img width="150" src="app/static/img/logo.png"> </img></p> 
 <p align="center"> Twitter via RSS with privacy </p>
 <br>
-Parasitter allows you to follow your favourite twitters without Twitter even knowing it. Parasitter uses Nitter's rss feed in order to gather the latest tweets from your favourite accounts and builds a *twitter-like* feed so you can read them. We will never connect you to Twitter so your privacy is safe when using Parasitter. Parasitter is written in Python and Flask and uses Semantic-UI as its CSS framework.
+
+Parasitter allows you to follow your favourite twitters without Twitter even knowing it. Parasitter uses [Nitter's](https://nitter.net/) rss feed in order to gather the latest tweets from your favourite accounts and builds a *twitter-like* feed so you can read them. We will never connect you to Twitter so your privacy is safe when using Parasitter. Parasitter is written in Python and Flask and uses Semantic-UI as its CSS framework.
+
+Parasitter doesn't try to compete with Nitter. It is a complement of it, as it beneficiates from it. Parasitter is possible thanks to several open-source projects that are listed on the [Powered by](#powered-by) section. Make sure to check out those awesome projects!
 
 ## Index:
 * [Features](#features)
@@ -88,3 +91,4 @@ It is always recommended to set up a self-hosted instance. It is quite easy and 
 * [Flask](https://flask.palletsprojects.com/)
 * [SQLAlchemy](https://docs.sqlalchemy.org/en/13/)
 * [Semantic-UI](https://semantic-ui.com)
+* [requests-futures](https://github.com/ross/requests-futures)
