@@ -60,7 +60,7 @@ It is always recommended to set up a self-hosted instance. It is quite easy and 
     - `pip install --upgrade pip`
 6. [env] Install the required libraries:
     - `pip3 install -r requirements.txt`
-       > It may require you to use `sudo` or `--user`
+       > Use `sudo` or, preferably `--user`, if not working.
 7. [env] Initialize and prepare the database.
     - `flask db init`
     - `flask db migrate`
