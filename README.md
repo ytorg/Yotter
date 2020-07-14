@@ -84,7 +84,43 @@ It is always recommended to set up a self-hosted instance. It is quite easy and 
 5. Done! You are on latest version.
 
 ### External access:
-> Coming soon..
+> WARNING: This section is under construction.
+#### Installing the app:
+1. Install base dependencies:
+   - `sudo apt-get -y update`
+   - `sudo apt-get -y install python3 python3-venv python3-dev`
+   - `sudo apt-get -y install mysql-server postfix supervisor nginx git`
+   > Installation of MySQL will require you to enter a *database root* password.
+2. Install the application:
+   - `git clone https://github.com/pluja/Parasitter.git`
+   - `cd Parasitter`
+3. Prepare the environment:
+   - `python3 -m venv venv`
+   - `source venv/bin/activate`
+   - (venv) $ `pip install -r requirements.txt`
+4. Install deployment packages:
+   - `pip install gunicorn pymysql`
+5. Edit the *.env* SECRET_KEY:
+   - `nano .env`
+   > This will open an editor. Make sure to change the SECRET_KEY to a string of your like. Make it random and long enough.
+6. Set up FLASK_APP environment variable:
+   - `echo "export FLASK_APP=parasitter.py" >> ~/.profile`
+
+#### Database configuration:
+1. Enter the MySQL command prompt:
+   - `mysql -u root -p`
+   > It will prompt for the "root" password. This password is the one you set on the MySQL installation.
+2. Create the database:
+   - mysql> `create database parasitter character set utf8 collate utf8_bin;`
+   - mysql> `create user 'parasitter'@'localhost' identified by '<db-password>';`
+   > Replace `<db-password>` as the password for the database *parasitter* user. This one needs to match the password set on the DATABASE_URL in the *.env* file (See Step 5 of [App installation](installing-the-app))
+   - mysql> `grant all privileges on parasitter.* to 'parasitter'@'localhost';`
+   - mysql> `flush privileges;`
+   - mysql> `quit;`
+3. Upgrade the database:
+   - (venv) `flask db upgrade`
+
+#### TO BE CONTINUED!
 
 ### Powered by:
 * [Nitter](https://nitter.net)
