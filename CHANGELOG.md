@@ -1,3 +1,6 @@
+# v0.1.0a
+* BIG efficiency improvements making Parasitter much more cool to use.
+
 # v0.0.2a
 * Efficiency improvements
 * First implementation of saved posts (Not working yet)
