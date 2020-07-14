@@ -58,7 +58,7 @@ It is always recommended to set up a self-hosted instance. It is quite easy and 
 
 ### Updating to new versions:
 ##### See [CHANGELOG](CHANGELOG.md) for the list of changes.
-> Updating will never delete your database, so your following list will not be erased.
+##### NOTE: Updating will never delete your database, your following list will not be erased.
 1. Navigate to the git repository (the one you cloned when installing).
 2. Pull new changes:
     - `git pull`
