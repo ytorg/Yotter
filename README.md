@@ -57,7 +57,7 @@ It is always recommended to set up a self-hosted instance. It is quite easy and 
     - `source venv/bin/activate`
     > Now you are inside of the virtual environment for python. All instructions wiht [env] indicate that must be done inside the env if you decided to create one. From now on, you will always need to start the application from within the virtual env.
 5. [env] Update pip
-    - `pip install --upgrade pip`
+    - `pip3 install --upgrade pip`
 6. [env] Install the required libraries:
     - `pip3 install -r requirements.txt`
        > Use `sudo` or, preferably `--user`, if not working.
