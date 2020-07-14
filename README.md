@@ -45,9 +45,9 @@ It is always recommended to set up a self-hosted instance. It is quite easy and 
     > Now you are inside of the virtual environment for python. All instructions wiht [env] indicate that must be done inside the env if you decided to create one. From now on, you will always need to start the application from within the virtual env.
 5. [env] Update pip
     - `pip install --upgrade pip`
-6. [env] Install the dependencies:
-    - `pip3 install flask flask-sqlalchemy flask-migrate python-dotenv flask-wtf flask-login email-validator feedparser bs4 requests`
-        > It may require you to use *sudo*
+6. [env] Install the required libraries:
+    - `pip3 install -r requirements.txt`
+       > It may require you to use `sudo` or `--user`
 7. [env] Initialize and prepare the database.
     - `flask db init`
     - `flask db migrate`
@@ -62,7 +62,10 @@ It is always recommended to set up a self-hosted instance. It is quite easy and 
 1. Navigate to the git repository (the one you cloned when installing).
 2. Pull new changes:
     - `git pull`
-3. Done! You are on latest version.
+4. Install new packages (if any):
+   - `pip install -r requirements.txt`
+   > It may be that there are no new packages to install. In that case, all requirements will be satisfied.
+5. Done! You are on latest version.
 
 ### External access:
 > Coming soon..
