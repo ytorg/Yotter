@@ -130,3 +130,4 @@ It is always recommended to set up a self-hosted instance. It is quite easy and 
 * [SQLAlchemy](https://docs.sqlalchemy.org/en/13/)
 * [Semantic-UI](https://semantic-ui.com)
 * [requests-futures](https://github.com/ross/requests-futures)
+* [microblog](https://github.com/miguelgrinberg/microblog)
