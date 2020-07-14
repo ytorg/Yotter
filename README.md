@@ -9,7 +9,7 @@ Parasitter allows you to follow your favourite twitters without Twitter even kno
 * [Privacy](#privacy)
 * [Self hosting](#self-hosting)
     * [Install](#install)
-    * [Update](#upgrading-to-new-versions)
+    * [Update](#updating-to-new-versions)
     * [External access](#external-access)
 * [Powered by](#powered-by)
 
@@ -56,9 +56,9 @@ It is always recommended to set up a self-hosted instance. It is quite easy and 
     - `flask run`
 9. Go to "http://localhost:5000/" and enjoy.
 
-### Upgrading to new versions:
-> This will never delete your database.
-#### New versions may require new Python modules. You will se this displayed as an "execution error". Just install the new package. Also, you will see the new needed packages on the [CHANGELOG](CHANGELOG.md)
+### Updating to new versions:
+##### See [CHANGELOG](CHANGELOG.md) for the list of changes.
+> Updating will never delete your database, so your following list will not be erased.
 1. Navigate to the git repository (the one you cloned when installing).
 2. Pull new changes:
     - `git pull`
