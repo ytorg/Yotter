@@ -9,7 +9,7 @@ Parasitter allows you to follow your favourite twitters without Twitter even kno
 * [Privacy](#privacy)
 * [Self hosting](#self-hosting)
     * [Install](#install)
-    * [Update](#upgrading-to-new-versions)
+    * [Update](#updating-to-new-versions)
     * [External access](#external-access)
 * [Powered by](#powered-by)
 
@@ -45,9 +45,9 @@ It is always recommended to set up a self-hosted instance. It is quite easy and 
     > Now you are inside of the virtual environment for python. All instructions wiht [env] indicate that must be done inside the env if you decided to create one. From now on, you will always need to start the application from within the virtual env.
 5. [env] Update pip
     - `pip install --upgrade pip`
-6. [env] Install the dependencies:
-    - `pip3 install flask flask-sqlalchemy flask-migrate python-dotenv flask-wtf flask-login email-validator feedparser bs4 requests`
-        > It may require you to use *sudo*
+6. [env] Install the required libraries:
+    - `pip3 install -r requirements.txt`
+       > It may require you to use `sudo` or `--user`
 7. [env] Initialize and prepare the database.
     - `flask db init`
     - `flask db migrate`
@@ -56,13 +56,16 @@ It is always recommended to set up a self-hosted instance. It is quite easy and 
     - `flask run`
 9. Go to "http://localhost:5000/" and enjoy.
 
-### Upgrading to new versions:
-> This will never delete your database.
-#### New versions may require new Python modules. You will se this displayed as an "execution error". Just install the new package. Also, you will see the new needed packages on the [CHANGELOG](CHANGELOG.md)
+### Updating to new versions:
+**See [CHANGELOG](CHANGELOG.md) for the list of changes.**<br>
+**NOTE: Updating will never delete your database, your following list will not be erased.**
 1. Navigate to the git repository (the one you cloned when installing).
 2. Pull new changes:
     - `git pull`
-3. Done! You are on latest version.
+4. Install new packages (if any):
+   - `pip install -r requirements.txt`
+   > It may be that there are no new packages to install. In that case, all requirements will be satisfied.
+5. Done! You are on latest version.
 
 ### External access:
 > Coming soon..
