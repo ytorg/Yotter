@@ -14,7 +14,7 @@
 
 ### Changed
 - Significant improvement on fetching feed efficiency - Parallelism applied.
-- Changelogs are now kept using [Keep a changelog](https://keepachangelog.com/en/1.0.0/) style.
+- Changelogs now using [Keep a changelog](https://keepachangelog.com/en/1.0.0/) style.
 
 ### Fixed
 - "Saved" menu element logged out instead of showing saved posts.
