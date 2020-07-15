@@ -1,11 +1,11 @@
-# v0.1.0a
+# 15.07.2020 - v0.1.0a
 * BIG efficiency improvements making Parasitter much more cool to use.
 * Improved user search
 * Ability to save posts
 * Ability to remove saved posts
 * Better error handling: Error pages.
 
-# v0.0.2a
+# 14.07.2020 - v0.0.2a
 * Efficiency improvements
 * First implementation of saved posts (Not working yet)
 * Search user by username and list related users.
@@ -17,7 +17,7 @@
 * Several efficiency and code improvements.
 * Minor UI fixes.
 
-# v0.0.1a
+# 13.07.2020 - v0.0.1a
 * Follow accounts
 * Create users
 * Visit a user profile
