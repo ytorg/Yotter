@@ -1,6 +1,9 @@
 # v0.1.0a
 * BIG efficiency improvements making Parasitter much more cool to use.
 * Improved user search
+* Ability to save posts
+* Ability to remove saved posts
+* Better error handling: Error pages.
 
 # v0.0.2a
 * Efficiency improvements
