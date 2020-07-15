@@ -77,7 +77,6 @@ You don't need a server to run Parasitter. You can run it on your computer local
 9. Go to "http://localhost:5000/" and enjoy.
 
 ### Updating to new versions:
-**See [CHANGELOG](CHANGELOG.md) for the list of changes.**<br>
 **NOTE: Updating will never delete your database, your following list will not be erased.**
 1. Navigate to the git repository (the one you cloned when installing).
 2. Pull new changes:
@@ -85,7 +84,12 @@ You don't need a server to run Parasitter. You can run it on your computer local
 4. Install new packages (if any):
    - `pip install -r requirements.txt`
    > It may be that there are no new packages to install. In that case, all requirements will be satisfied.
-5. Done! You are on latest version.
+
+5. This next step is only needed if you are running a version previous to `r15.07.2020`. Then you will need to update the database:
+    - `flask db migrate`
+    - `flask db upgrade`
+6. Done! You are on latest version.
+> **See [CHANGELOG](CHANGELOG.md) for a list of changes.**
 
 ### Server
 Another option is to host a Parasitter server so you can access it from anywhere or give access to your beloved friends/community. Installation is a little bit more complex than the [local](#local), but should be easy if you follow the steps.
