@@ -51,7 +51,7 @@ It is always recommended to set up a self-hosted instance. It is quite easy and 
 ### Local
 You don't need a server to run Parasitter. You can run it on your computer locally and own your (little) data. The installation process is done on a GNU/Linux environment, but should be pretty similar on other platforms.
 
-1. Install `python3`, `pip3` and `git`.
+1. Install `python3`, `pip3`, `python3-venv` (optional) and `git`.
 2. Clone this repository:
     - `git clone https://github.com/pluja/Parasitter.git`
 3. Navigate to the project folder:
