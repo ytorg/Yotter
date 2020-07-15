@@ -1,5 +1,6 @@
 # v0.1.0a
 * BIG efficiency improvements making Parasitter much more cool to use.
+* Improved user search
 
 # v0.0.2a
 * Efficiency improvements
