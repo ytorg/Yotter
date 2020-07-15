@@ -1,0 +1,35 @@
+<div class="column"> <!--Start tweet-->
+    <div class="ui centered card">
+        <div class="content">
+            <div class="extra content">
+                <div class="left floated author">
+                    <img class="ui avatar image" src="{{ url_for('static',filename='img/avatars/')}}{{range(1, 12) | random}}.png">
+                </div>
+            </div>
+            <div class="header" id="author"><a href="user/{{post.username}}">@{{ post.username }}</a></div>
+            <div class="meta">
+                <span class="category" id="time"><i class="clock icon"></i> {{post.timestamp.replace("\xc2\xb7", "")}} </span>
+            </div>
+            <div class="description">
+                <p>{{post.body}}</p>
+            </div>
+            <div class="extra center aligned content">
+                <p>
+                    <form class="ui form" action="{{ url_for('deleteSaved', id=post.id) }}" method="post">
+                        <a href="{{ post.url }}"><button type="button" class="ui blue left aligned icon button">
+                            <i class="share icon"></i>
+                        </button></a>
+                        <button type="submit" class="ui red right aligned icon button">
+                            <i class="trash icon"></i>
+                        </button>
+                    </form>
+                </p>
+            </div>
+        </div>
+        <!--newPost.url = savedUrl
+    newPost.body = html.body.find_all('div', attrs={'class':'main-tweet'})[0].find_all('div', attrs={'class':'tweet-content'})[0].text
+    newPost.username = html.body.find('a','username').text.replace("@","")
+    newPost.timestamp = html.body.find_all('p', attrs={'class':'tweet-published'})[0].text
+    newPost.user_id = current_user.id-->
+    </div>
+</div> <!--End tweet-->

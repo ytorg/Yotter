@@ -39,9 +39,10 @@ class User(UserMixin, db.Model):
     def following_list(self):
         return self.followed.all()
 
-    def followed_posts(self):
-        return "Soon.."
-    
+    def saved_posts(self):
+        return Post.query.filter_by(user_id=self.id)
+
+        
     followed = db.relationship(
         'User', secondary=followers,
         primaryjoin=(followers.c.follower_id == id),
@@ -70,7 +71,9 @@ class twitterPost():
 class Post(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     body = db.Column(db.String(140))
-    timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow)
+    timestamp = db.Column(db.String(100))
+    url = db.Column(db.String(100), unique=True)
+    username = db.Column(db.String(24))
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
 
     def __repr__(self):

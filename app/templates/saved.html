@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <div style="padding: 1.3em;" class="ui one column centered grid">
+        <h2 class="ui blue header">
+            Your saved posts
+        </h2>
+    </div>
+    <hr>
+    <div class="ui one column grid" id="card-container">    
+    {% if not savedPosts %}
+        <div style="margin-top: 2em;" class="ui one column centered grid">
+            <div style="margin: 1.5em;" class="ui row">
+                <img class="ui medium circular image" src="{{ url_for('static',filename='img/empty.png') }}">
+            </div>
+        
+            <div style="margin: 1.5em;" class="ui row">
+                <h2 class="ui header">No saved posts yet.</h2>
+            </div>
+        </div>
+    {% else %}
+        {% for post in savedPosts %}
+            {% include '_post_saved.html' %}
+        {% endfor %}
+    {% endif %}
+    </div>
+{% endblock %}

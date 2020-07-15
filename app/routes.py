@@ -3,7 +3,7 @@ from flask import render_template, flash, redirect, url_for, request
 from app.forms import LoginForm, RegistrationForm, EmptyForm, SearchForm
 from requests_futures.sessions import FuturesSession
 from concurrent.futures import as_completed
-from app.models import User, twitterPost
+from app.models import User, twitterPost, Post
 from werkzeug.urls import url_parse
 from bs4 import BeautifulSoup
 from flask import Markup
@@ -80,9 +80,37 @@ def register():
 @app.route('/savePost/<url>', methods=['POST'])
 @login_required
 def savePost(url):
-    print("SAVEPOST")
-    print("Saved {}.".format(url.replace('~', '/')))
+    savedUrl = url.replace('~', '/')
+    r = requests.get(savedUrl)
+    html = BeautifulSoup(str(r.content), "lxml")
+    post = html.body.find_all('div', attrs={'class':'tweet-content'})
+
+    newPost = Post()
+    newPost.url = savedUrl
+    newPost.body = html.body.find_all('div', attrs={'class':'main-tweet'})[0].find_all('div', attrs={'class':'tweet-content'})[0].text
+    newPost.username = html.body.find('a','username').text.replace("@","")
+    newPost.timestamp = html.body.find_all('p', attrs={'class':'tweet-published'})[0].text
+    newPost.user_id = current_user.id
+    try:
+        db.session.add(newPost)
+        db.session.commit()
+    except:
+        flash("Post could not be saved. Either it was already saved or there was an error.")
     return redirect(url_for('index'))
+
+@app.route('/saved')
+@login_required
+def saved():
+    savedPosts = current_user.saved_posts().all()
+    return render_template('saved.html', title='Saved', savedPosts=savedPosts)
+
+@app.route('/deleteSaved/<id>', methods=['POST'])
+@login_required
+def deleteSaved(id):
+    savedPost = Post.query.filter_by(id=id).first()
+    db.session.delete(savedPost)
+    db.session.commit()
+    return redirect(url_for('saved'))
 
 @app.route('/follow/<username>', methods=['POST'])
 @login_required
@@ -108,7 +136,6 @@ def follow(username):
         return redirect(url_for('user', username=username))
     else:
         return redirect(url_for('index'))
-
 
 @app.route('/unfollow/<username>', methods=['POST'])
 @login_required
@@ -177,9 +204,9 @@ def search():
 
 
 
-@app.route('/notfound')
-def notfound():
-    return render_template('404.html')
+@app.route('/error/<errno>')
+def error(errno):
+    return render_template('{}.html'.format(str(errno)))
 
 @app.route('/user/<username>')
 @login_required
@@ -194,7 +221,7 @@ def user(username):
         db.session.commit()
     
     elif not isTwitter and user is None:
-        return redirect(url_for('notfound'))
+        return redirect( url_for('error', errno="404"))
     
     posts = []
     posts.extend(getPosts(username))
