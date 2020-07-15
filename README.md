@@ -85,7 +85,7 @@ You don't need a server to run Parasitter. You can run it on your computer local
    - `pip install -r requirements.txt`
    > It may be that there are no new packages to install. In that case, all requirements will be satisfied.
 
-5. This next step is only needed if you are running a version previous to `r15.07.2020`. Then you will need to update the database:
+5. [opt] This next step is only needed if you are running a version previous to [15.07.2020](CHANGELOG.md). Then you will need to update the database:
     - `flask db migrate`
     - `flask db upgrade`
 6. Done! You are on latest version.
