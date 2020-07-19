@@ -6,11 +6,12 @@
   * Disable loading of media content (show links instead)
 * Create following lists.
 
-## [0.1.0] - 2020-07-15
+## [0.1.0] - 2020-07-19
 ### Added
 - Ability to save posts.
 - Ability to remove a saved post.
 - Error pages: Error 500, Error 405
+- Ability to open the original post on Nitter.
 
 ### Changed
 - Significant improvement on fetching feed efficiency - Parallelism applied.
