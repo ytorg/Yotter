@@ -12,7 +12,7 @@
 - Ability to save posts.
 - Ability to remove a saved post.
 - Error pages: Error 500, Error 405
-- Ability to open the original post on Nitter.
+- Open the original post on Nitter.
 
 ### Changed
 - Significant improvement on fetching feed efficiency - Parallelism applied.
