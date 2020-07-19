@@ -272,7 +272,7 @@ def getFeed(urls):
                             newPost.userProfilePic = rssFeed.channel.image.url
                         except:
                             newPost.profilePicture = ""
-                        newPost.urlToPost = post.link
+                        newPost.url = post.link
                         newPost.content = Markup(post.description)
                         
                         if "Pinned" in post.title.split(":")[0]:
@@ -310,7 +310,7 @@ def getPosts(account):
                 newPost.userProfilePic = rssFeed.channel.image.url
             except:
                 newPost.profilePicture = ""
-            newPost.urlToPost = post.link
+            newPost.url = post.link
             newPost.content = Markup(post.description)
             
             if "Pinned" in post.title.split(":")[0]:
