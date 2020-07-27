@@ -19,7 +19,7 @@
 - [x] Export your followed accounts to a JSON file
 
 ### Changed
-- [x] Efficiency improvements - 1s reduction on fetching time.
+- [x] Efficiency improvements. ~1s reduction on fetching time.
 - [x] Minor UI changes.
 
 ## [0.1.0] - 2020-07-19
