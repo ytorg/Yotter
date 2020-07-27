@@ -21,15 +21,17 @@ Parasitter is possible thanks to several open-source projects that are listed on
 
 ## Features:
 * No JavaScript.
-* 0 connections to Twitter.
+* 0 connections to Twitter or Youtube.
 * Uses RSS feeds (could be expanded to more social networks)
 * Follow Twitter accounts.
-* Save your favourite Tweets. (Coming soon)
+* Follow Youtube accounts.
+* Save your favourite Tweets.
+* Save your favourite Youtube videos [Coming soon!]
 * Tor-friendly.
 * Terminal-friendly.
 * Easy 1 minute self-hosting deploy.
 * No need for domain, runs locally.
-* And many more to come.
+And many more to come!
 
 ## Security
 Only the hash of your password is stored on the database. Also no personal information of any kind is kept on the app itself, if a hacker gets access to it only thing they could do would be to follow/unfollow some accounts.
