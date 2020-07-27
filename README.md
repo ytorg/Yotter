@@ -31,7 +31,7 @@ Parasitter is possible thanks to several open-source projects that are listed on
 * Terminal-friendly.
 * Easy 1 minute self-hosting deploy.
 * No need for domain, runs locally.
-And many more to come!
+> And many more to come!
 
 ## Security
 Only the hash of your password is stored on the database. Also no personal information of any kind is kept on the app itself, if a hacker gets access to it only thing they could do would be to follow/unfollow some accounts.
