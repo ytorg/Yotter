@@ -74,7 +74,7 @@ def export():
     if a:
         return send_from_directory('.', 'data_export.json', as_attachment=True)
     else:
-        return redirect(url_for('/error/405'))
+        return redirect(url_for('error/405'))
 
 def exportData():
     twitterFollowing = current_user.following_list()
