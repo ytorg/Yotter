@@ -1,7 +1,8 @@
 ## Unreleased
 - [ ] Import data from JSON file.
-- [ ] Manage Youtube suscriptions
 - [ ] Make all usernames available.
+- [ ] Youtube: Manage suscriptions
+- [ ] Youtube: Show video time duration
 - [ ] Configuration page: Disable retweets.
 - [ ] Configuration page: Disable loading media content.
 - [ ] Configuration page: Dark mode
@@ -15,9 +16,11 @@
 ## [0.1.1] - 2020-07-27
 ### Added
 - [x] Ability to follow Youtube accounts.
-- [x] Minor UI changes.
-- [x] Efficiency improvements - 1s reduction on fetching time.
 - [x] Export your followed accounts to a JSON file
+
+### Changed
+- [x] Efficiency improvements - 1s reduction on fetching time.
+- [x] Minor UI changes.
 
 ## [0.1.0] - 2020-07-19
 ### Added
