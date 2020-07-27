@@ -3,9 +3,9 @@
 <p align="center"> Twitter via RSS with privacy </p>
 <br>
 
-Parasitter allows you to follow your favorite Twitter accounts with full privacy. Parasitter uses [Nitter's](https://nitter.net/) rss feed in order to gather the latest tweets from your favourite accounts and builds a *twitter-like* feed so you can read them. We will never connect you to Twitter so your privacy is safe when using Parasitter. Parasitter is written in Python and Flask and uses Semantic-UI as its CSS framework.
+Parasitter allows you to follow your favorite Twitter and YouTube accounts with full privacy. Parasitter uses [Nitter's](https://nitter.net/) and [Invidious](invidio.us) rss feeds in order to gather the latest content from your favourite accounts and builds a *beautiful* feed so you can read them. We will never connect you to Twitter or YouTube in any way, so your privacy is safe when using Parasitter. Parasitter is written in Python and Flask and uses Semantic-UI as its CSS framework.
 
-Parasitter doesn't try to compete with Nitter. It is a complement of it, as it beneficiates from it. Parasitter is not a Twitter viewer as Nitter is. Main difference between Parasitter and Nitter, apart from UI, is that Parasitter allows you to follow users, save Tweets and set up some configuration for your feed. 
+Parasitter doesn't try to compete with Nitter nor Invidious. It serves as a complement, as it beneficiates from them. Parasitter is not a Twitter viewer as Nitter is or a YouTube frontend as Invidious. Instead Parasitter gathers all your accounts in one place so you can stay tuned with their latest content. 
 
 Parasitter is possible thanks to several open-source projects that are listed on the [Powered by](#powered-by) section. Make sure to check out those awesome projects!
 
@@ -134,6 +134,7 @@ Another option is to host a Parasitter server so you can access it from anywhere
 
 ### Powered by:
 * [Nitter](https://nitter.net)
+* [Invidious](https://invidio.us)
 * [Flask](https://flask.palletsprojects.com/)
 * [SQLAlchemy](https://docs.sqlalchemy.org/en/13/)
 * [Semantic-UI](https://semantic-ui.com)
