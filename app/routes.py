@@ -72,7 +72,7 @@ def settings():
 def export():
     a = exportData()
     if a:
-        return send_from_directory('data_export.json', as_attachment=True)
+        return send_from_directory('.', 'data_export.json', as_attachment=True)
     else:
         return redirect(url_for('/error/405'))
 
