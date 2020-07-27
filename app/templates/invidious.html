@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <br>
+  <div class="ui one column centered grid">
+    <form class="ui form" action="" method="post" novalidate>
+      {{ form.hidden_tag() }}
+      <p>
+          {{ form.channelId.label }}<br>
+          {{ form.channelId(size=32) }}<br>
+          {% for error in form.channelId.errors %}
+          <span style="color: red;">[{{ error }}]</span>
+          {% endfor %}
+      </p>
+      <p>{{ form.submit() }}</p>
+    </form>
+  </div>
+  <br>
+  <br>
+
+    {% if videos %}
+      <div class="ui centered cards">
+        {% for video in videos %}
+          {% include '_video.html' %}
+        {% endfor %}
+      </div>
+    {% else %}
+      {% include '_empty_feed.html' %}
+    {% endif %}
+{% endblock %}

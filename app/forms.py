@@ -14,6 +14,10 @@ class SearchForm(FlaskForm):
     username = StringField('Username')
     submit = SubmitField('Search')
 
+class ChannelForm(FlaskForm):
+    channelId = StringField('Channel ID')
+    submit = SubmitField('Follow')
+
 
 class RegistrationForm(FlaskForm):
     username = StringField('Username', validators=[DataRequired()])

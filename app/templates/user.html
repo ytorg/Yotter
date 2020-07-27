@@ -6,7 +6,7 @@
             <div class="center aligned author">
                 <img class="ui avatar image" src="{{ posts[0].userProfilePic }}"> {{ twitterAt }}
             </div>
-            <div style="margin: .1em" class="center aligned header"><a href="https://nitter.net/{{ posts[0].op.replace('@','') }}/">{{ posts[0].twitterName }}</a></div>
+            <div style="margin: .1em" class="center aligned header"><a href="https://nitter.net/{{ user.username }}">{{ posts[0].twitterName }}</a></div>
         <div class="center aligned description">
             <a>
                 <i class="users icon"></i>
@@ -40,15 +40,7 @@
     <div class="ui one column grid" id="card-container">
     
     {% if not posts %}
-        <div style="margin-top: 2em;" class="ui one column centered grid">
-            <div style="margin: 1.5em;" class="ui row">
-                <img class="ui medium circular image" src="{{ url_for('static',filename='img/empty.png') }}">
-            </div>
-        
-            <div style="margin: 1.5em;" class="ui row">
-                <h2 class="ui header">This feed is empty.</h2>
-            </div>
-        </div>
+        {% include '_empty_feed.html' %}
     {% else %}
         {% for post in posts %}
             {% if post.isRT %}

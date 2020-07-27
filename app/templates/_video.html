@@ -1,0 +1,26 @@
+<div class="card">
+    <div class="image">
+        <img src="{{video.videoThumb}}">
+    </div>
+    <div class="content">
+        <a class="video-title" target="_blank" href="{{video.videoUrl}}">{{video.videoTitle}}</a>
+        <div class="meta">
+            <a href="{{video.channelUrl}}">{{video.channelName}}</a>
+        </div>
+        <div class="description">
+            {{video.description}}
+        </div>
+    </div>
+    <div class="extra content">
+        <span class="right floated">
+            <i class="clock icon"></i>
+            {{video.timeStamp}}
+        </span>
+        <span>
+        <a href="{{video.videoUrl}}">
+            <i class="eye icon"></i>
+            Open
+        </a>
+        </span>
+    </div>
+</div>

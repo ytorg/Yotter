@@ -6,23 +6,40 @@
         {% if title %}
         <title>{{ title }} - Parassiter</title>
         {% else %}
-        <title>Welcome to Parasitter</title>
+        <title>Parasitter</title>
         {% endif %}
         <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='semantic/semantic.min.css') }}">
+
+        <style>
+            .twitter{
+                color: rgb(0, 166, 196) !important;
+            }
+
+            .youtube{
+                color: rgb(224, 32, 32) !important;
+            }
+
+            .video-title{
+                font-weight: bold;
+                font-size: 1.15em;
+            }
+        </style>
     </head>
     <body>
         <div class="ui stackable menu">
             <div class="item">
             <img src="{{ url_for('static',filename='img/logo.png') }}">
             </div>
-            <a href="{{ url_for('index') }}" class="item">Home</a>
+            <a href="{{ url_for('index') }}" class="twitter item">Twitter</a>
             {% if current_user.is_anonymous %}
             <a href="{{ url_for('login') }}" class="item">Login</a>
             {% else %}
-            <a href="{{ url_for('search') }}" class="item">Search</a>
-            <a href="{{ url_for('following') }}" class="item">Following</a>
-            <a href="{{ url_for('saved') }}" class="item">Saved</a>
-            <a href="{{ url_for('logout') }}" class="item">Logout</a>
+                <a href="{{ url_for('search') }}" class="twitter item">Search</a>
+                <a href="{{ url_for('following') }}" class="twitter item">Following</a>
+                <a href="{{ url_for('saved') }}" class="twitter item">Saved</a>
+                <a href="{{ url_for('invidious') }}" class="youtube item">Youtube</a>
+                <a href="{{ url_for('logout') }}" class="item">Logout</a>
+                <a href="{{ url_for('settings') }}" class="item"><i class="cog icon"></i></a>
             {% endif %}
         </div>
 

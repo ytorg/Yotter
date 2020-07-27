@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+
+{% block content %}
+<br>
+<div class="ui one column centered grid">
+    <h2 class="ui icon header">
+        <i class="settings icon"></i>
+        <div class="content">
+            Settings
+            <div class="sub header">Manage your settings.</div>
+        </div>
+    </h2>
+</div>
+<hr>
+<br>
+
+<div class="ui one column centered grid">
+    <div class="ui relaxed divided list">
+        <div class="item">
+            <i class="large download middle aligned icon"></i>
+            <div class="content">
+            <a href="{{ url_for('export') }}" class="header">Export Data</a>
+            <div class="description">Export data into JSON file</div>
+            </div>
+        </div>
+        <div class="item">
+            <i class="large moon middle aligned icon"></i>
+            <div class="content">
+                <div class="ui slider checkbox">
+                    <input type="checkbox" name="newsletter">
+                    <label>Dark mode</label>
+                </div>
+            </div>
+        </div>
+        <div class="item">
+            <i class="large weight middle aligned icon"></i>
+            <div class="content">
+                <div class="ui slider checkbox">
+                    <input type="checkbox" name="newsletter">
+                    <label>Disable images</label>
+                    <div class="description">Show links instead</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

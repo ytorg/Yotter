@@ -1,9 +1,9 @@
+from flask import render_template, flash, redirect, url_for, request, send_from_directory
+from app.forms import LoginForm, RegistrationForm, EmptyForm, SearchForm, ChannelForm
+from app.models import User, twitterPost, invidiousPost, Post, invidiousFollow
 from flask_login import login_user, logout_user, current_user, login_required
-from flask import render_template, flash, redirect, url_for, request
-from app.forms import LoginForm, RegistrationForm, EmptyForm, SearchForm
 from requests_futures.sessions import FuturesSession
 from concurrent.futures import as_completed
-from app.models import User, twitterPost, Post
 from werkzeug.urls import url_parse
 from bs4 import BeautifulSoup
 from flask import Markup
@@ -12,6 +12,8 @@ import time, datetime
 import random, string
 import feedparser
 import requests
+import json
+import re
 
 nitterInstance = "https://nitter.net/"
 nitterInstanceII = "https://nitter.mastodont.cat"
@@ -20,7 +22,7 @@ nitterInstanceII = "https://nitter.mastodont.cat"
 @app.route('/index')
 @login_required
 def index():
-    start_time = time.time()
+    #start_time = time.time()
     following = current_user.following_list()
     followed = current_user.followed.count()
     posts = []
@@ -32,8 +34,9 @@ def index():
         profilePic = avatarPath
     else:
         profilePic = posts[0].userProfilePic
-    print("--- {} seconds fetching feed---".format(time.time() - start_time))
+    #print("--- {} seconds fetching feed---".format(time.time() - start_time))
     return render_template('index.html', title='Home', posts=posts, avatar=avatarPath, profilePic = profilePic, followedCount=followed, form=form)
+
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
@@ -58,6 +61,46 @@ def logout():
     logout_user()
     return redirect(url_for('index'))
 
+@app.route('/settings')
+@login_required
+def settings():
+    return render_template('settings.html')
+
+@app.route('/export')
+@login_required
+#Export data into a JSON file. Later you can import the data.
+def export():
+    a = exportData()
+    if a:
+        return send_from_directory('data_export.json', as_attachment=True)
+    else:
+        return redirect(url_for('/error/405'))
+
+def exportData():
+    twitterFollowing = current_user.following_list()
+    youtubeFollowing = current_user.youtube_following_list()
+    data = {}
+    data['twitter'] = []
+    data['youtube'] = []
+
+    for f in twitterFollowing:
+        data['twitter'].append({
+            'username': f.username
+        })
+    
+    for f in youtubeFollowing:
+        data['youtube'].append({
+            'channelId': f.channelId
+        })
+
+    try:
+        with open('app/data_export.json', 'w') as outfile:
+            json.dump(data, outfile)
+        return True
+    except:
+        return False
+
+    
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
@@ -76,6 +119,32 @@ def register():
             flash('Congratulations, you are now a registered user!')
             return redirect(url_for('login'))
     return render_template('register.html', title='Register', form=form)
+
+@app.route('/invidious', methods=['GET', 'POST'])
+@login_required
+def invidious():
+    form = ChannelForm()
+    if form.validate_on_submit():
+        channelId = form.channelId.data
+        if requests.get('https://invidio.us/feed/channel/{}'.format(channelId)).status_code == 200:
+            follow = invidiousFollow()
+            follow.channelId = channelId
+            follow.followers.append(current_user)
+            try:
+                db.session.add(follow)
+                db.session.commit()
+                flash("Added to list!")
+            except:
+                flash("Something went wrong. Try again!")
+                return redirect(url_for('invidious'))
+        else:
+            flash("Enter a valid Channel ID. Eg: UCJWCJCWOxBYSi5DhCieLOLQ")
+            return redirect(url_for('invidious'))
+    ids = current_user.youtube_following_list()
+    videos = getInvidiousPosts(ids)
+    if videos:
+        videos.sort(key=lambda x: x.date, reverse=True)
+    return render_template('invidious.html', videos=videos, form=form)
 
 @app.route('/savePost/<url>', methods=['POST'])
 @login_required
@@ -120,7 +189,7 @@ def follow(username):
         user = User.query.filter_by(username=username).first()
         isTwitter = isTwitterUser(username)
         if user is None and isTwitter:
-            x = ''.join(random.choice(string.ascii_uppercase + string.ascii_lowercase + string.digits) for _ in range(16))
+            x = ''.join(randomrandom.choice(string.ascii_uppercase + string.ascii_lowercase + string.digits) for _ in range(16))
             newUser = User(username=username, email="{}@person.is".format(x))
             db.session.add(newUser)
             db.session.commit()
@@ -288,7 +357,6 @@ def getFeed(urls):
                             except:
                                 newPost.profilePic = avatarPath
                         feedPosts.append(newPost)
-    time.sleep(1)
     return feedPosts
 
 def getPosts(account):
@@ -327,3 +395,24 @@ def getPosts(account):
                     newPost.profilePic = avatarPath
             posts.append(newPost)
     return posts
+
+def getInvidiousPosts(ids):
+    videos = []
+    with FuturesSession() as session:
+        futures = [session.get('https://invidio.us/feed/channel/{}'.format(id.channelId)) for id in ids]
+        for future in as_completed(futures):
+            resp = future.result()
+            rssFeed=feedparser.parse(resp.content)
+            for vid in rssFeed.entries:
+                video = invidiousPost()
+                video.date = vid.published_parsed
+                video.timeStamp = getTimeDiff(vid.published_parsed)
+                video.channelName = vid.author_detail.name
+                video.channelUrl = vid.author_detail.href
+                video.videoUrl = vid.link
+                video.videoTitle = vid.title
+                video.videoThumb = vid.media_thumbnail[0]['url']
+                video.description = vid.summary.split('<p style="word-break:break-word;white-space:pre-wrap">')[1]
+                video.description = re.sub(r'^https?:\/\/.*[\r\n]*', '', video.description[0:120]+"...", flags=re.MULTILINE)
+                videos.append(video)
+    return videos

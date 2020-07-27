@@ -8,6 +8,11 @@ followers = db.Table('followers',
     db.Column('followed_id', db.Integer, db.ForeignKey('user.id'))
 )
 
+channel_association = db.Table('channel_association',
+    db.Column('channel_id', db.String, db.ForeignKey('channel.id')),
+    db.Column('user_id', db.Integer, db.ForeignKey('user.id'))
+) # Association: CHANNEL --followed by--> [USERS]
+
 class User(UserMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(64), index=True, unique=True)
@@ -42,12 +47,19 @@ class User(UserMixin, db.Model):
     def saved_posts(self):
         return Post.query.filter_by(user_id=self.id)
 
+    def youtube_following_list(self):
+        return self.youtubeFollowed.all()
         
     followed = db.relationship(
         'User', secondary=followers,
         primaryjoin=(followers.c.follower_id == id),
         secondaryjoin=(followers.c.followed_id == id),
         backref=db.backref('followers', lazy='dynamic'), lazy='dynamic')
+
+    youtubeFollowed = db.relationship("invidiousFollow",
+        secondary=channel_association,
+        back_populates="followers",
+        lazy='dynamic')
 
 
 @login.user_loader
@@ -67,6 +79,27 @@ class twitterPost():
     profilePic = "url"
     timeStamp = "error"
     userProfilePic = "1.png"
+
+class invidiousPost():
+    channelName = 'Error'
+    channelUrl = '#'
+    videoUrl = '#'
+    videoTitle = '#'
+    videoThumb = '#'
+    description = "LOREM IPSUM"
+    date = 'None'
+
+
+class invidiousFollow(db.Model):
+    __tablename__ = 'channel'
+    id = db.Column(db.Integer, primary_key=True)
+    channelId = db.Column(db.String(30), nullable=False, unique=True)
+    followers = db.relationship('User', 
+                                secondary=channel_association,
+                                back_populates="youtubeFollowed")
+    
+    def __repr__(self):
+        return '<invidiousFollow {}>'.format(self.channelId)
 
 class Post(db.Model):
     id = db.Column(db.Integer, primary_key=True)
