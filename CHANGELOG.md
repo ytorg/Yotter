@@ -1,6 +1,6 @@
 ## Unreleased
 - [ ] Import data from JSON file.
-- [ ] Make all usernames available.
+- [ ] Database: Fix following logic.
 - [ ] Youtube: Manage suscriptions
 - [ ] Youtube: Show video time duration
 - [ ] Configuration page: Disable retweets.
@@ -8,10 +8,10 @@
 - [ ] Configuration page: Dark mode
 
 ##### Long term
-* See cited posts (if any).
-* Share a tweet.
-* Play media from Parasitter.
-* Create following lists.
+- See cited posts (if any).
+- Share a tweet.
+- Play media from Parasitter.
+- Create following lists.
 
 ## [0.1.1] - 2020-07-27
 ### Added
