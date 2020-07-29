@@ -22,6 +22,9 @@
 - [x] Efficiency improvements. ~1s reduction on fetching time.
 - [x] Minor UI changes.
 
+### Fixed
+- [x] Saving posts didn't work on 2020.07.24 update.
+
 ## [0.1.0] - 2020-07-19
 ### Added
 - [x] Ability to save posts.
