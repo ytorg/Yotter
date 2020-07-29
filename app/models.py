@@ -28,7 +28,8 @@ class User(UserMixin, db.Model):
 
     def check_password(self, password):
         return check_password_hash(self.password_hash, password)
-    
+
+    # TWITTER    
     def follow(self, user):
         if not self.is_following(user):
             self.followed.append(user)
@@ -46,9 +47,21 @@ class User(UserMixin, db.Model):
 
     def saved_posts(self):
         return Post.query.filter_by(user_id=self.id)
-
+    
+    # YOUTUBE
     def youtube_following_list(self):
         return self.youtubeFollowed.all()
+    
+    def is_following_yt(self, cid):
+        temp_cid = invidiousFollow.query.filter_by(channelId = cid).first()
+        if temp_cid is None:
+            return False
+        else:
+            following = self.youtube_following_list()
+            for f in following:
+                if f.channelId == cid:
+                    return True
+        return False
         
     followed = db.relationship(
         'User', secondary=followers,
@@ -88,6 +101,7 @@ class invidiousPost():
     videoThumb = '#'
     description = "LOREM IPSUM"
     date = 'None'
+    views = 'NaN'
 
 
 class invidiousFollow(db.Model):

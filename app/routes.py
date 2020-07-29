@@ -146,6 +146,29 @@ def invidious():
         videos.sort(key=lambda x: x.date, reverse=True)
     return render_template('invidious.html', videos=videos, form=form)
 
+@app.route('/ytsearch', methods=['GET', 'POST'])
+@login_required
+def ytsearch():
+    form = ChannelForm()
+    button_form = EmptyForm()
+    if form.validate_on_submit():
+        channelId = form.channelId.data
+        r = requests.get('https://invidio.us/api/v1/search?type=channel&q={}'.format(channelId))
+        if r.status_code == 200:
+            results = json.loads(r.content)
+            channels = []
+            for res in results:
+                channels.append({
+                    'username':res['author'],
+                    'channelId':res['authorId'],
+                    'thumbnail':res['authorThumbnails'][0]['url'],
+                    'subCount':letterify(res['subCount'])
+                })
+            
+            return render_template('ytsearch.html', form=form, btform=button_form, results=channels)
+    else:
+        return render_template('ytsearch.html', form=form)
+
 @app.route('/savePost/<url>', methods=['POST'])
 @login_required
 def savePost(url):
@@ -180,6 +203,43 @@ def deleteSaved(id):
     db.session.delete(savedPost)
     db.session.commit()
     return redirect(url_for('saved'))
+
+@app.route('/ytfollow/<channelId>', methods=['POST'])
+@login_required
+def ytfollow(channelId):
+    form = EmptyForm()
+    if form.validate_on_submit():
+        channel = invidiousFollow.query.filter_by(channelId=channelId).first()
+        if requests.get('https://invidio.us/feed/channel/{}'.format(channelId)).status_code == 200:
+            if channel is None:
+                follow = invidiousFollow()
+                follow.channelId = channelId
+                follow.followers.append(current_user)
+                try:
+                    db.session.add(follow)
+                    db.session.commit()
+                except:
+                    flash("Something went wrong. Try again!")
+                    return redirect(url_for('invidious'))
+            flash('You are following {}!'.format(channelId))
+        else:
+            flash("Something went wrong... try again")
+        return redirect(url_for('ytsearch'))
+    else:
+        return redirect(url_for('ytsearch'))
+
+@app.route('/ytunfollow/<channelId>', methods=['POST'])
+@login_required
+def ytunfollow(channelId):
+    form = EmptyForm()
+    channel = invidiousFollow.query.filter_by(channelId=channelId).first()
+    try:
+        db.session.delete(channel)
+        db.session.commit()
+        flash("User unfollowed!")
+    except:
+        flash("There was an error unfollowing the user. Try again.")
+    return redirect(url_for('ytsearch'))
 
 @app.route('/follow/<username>', methods=['POST'])
 @login_required
@@ -412,7 +472,27 @@ def getInvidiousPosts(ids):
                 video.videoUrl = vid.link
                 video.videoTitle = vid.title
                 video.videoThumb = vid.media_thumbnail[0]['url']
+                video.views = vid.media_statistics['views']
                 video.description = vid.summary.split('<p style="word-break:break-word;white-space:pre-wrap">')[1]
                 video.description = re.sub(r'^https?:\/\/.*[\r\n]*', '', video.description[0:120]+"...", flags=re.MULTILINE)
                 videos.append(video)
     return videos
+
+def letterify(number):
+    order = len(str(number))
+    if order == 4:
+        subCount = "{k}.{c}k".format(k=str(number)[0:1], c=str(number)[1:2])
+    elif order == 5:
+        subCount = "{k}.{c}k".format(k=str(number)[0:2], c=str(number)[2:3])
+    elif order == 6:
+        subCount = "{k}.{c}k".format(k=str(number)[0:3], c=str(number)[3:4])
+    elif order == 7:
+        subCount = "~{M}M".format(M=str(number)[0:1])
+    elif order == 8:
+        subCount = "~{M}M".format(M=str(number)[0:2])
+    elif order >= 8:
+        subCount = "{M}M".format(M=str(number)[0:3])
+    else:
+        subCount = str(number)
+
+    return subCount

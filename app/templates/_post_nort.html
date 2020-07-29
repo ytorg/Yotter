@@ -21,7 +21,7 @@
                 <p>{{post.content}}</p>
             </div>
             <div class="extra content">
-                <form class="ui form" action="{{ url_for('savePost', url=post.urlToPost.replace('/', '~')) }}" method="post">
+                <form class="ui form" action="{{ url_for('savePost', url=post.url.replace('/', '~')) }}" method="post">
                     <button type="submit" class="ui icon button">
                         <i class="bookmark outline icon"></i>
                     </button>

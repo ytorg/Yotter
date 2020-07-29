@@ -15,8 +15,8 @@ class SearchForm(FlaskForm):
     submit = SubmitField('Search')
 
 class ChannelForm(FlaskForm):
-    channelId = StringField('Channel ID')
-    submit = SubmitField('Follow')
+    channelId = StringField('')
+    submit = SubmitField('Search')
 
 
 class RegistrationForm(FlaskForm):

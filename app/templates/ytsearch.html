@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="ui one column centered grid">
+    <form class="ui form" action="" method="post" novalidate>
+        {{ form.hidden_tag() }}
+        <p>
+            {{ form.channelId.label }}<br>
+            {{ form.channelId(size=32) }}<br>
+            {% for error in form.channelId.errors %}
+            <span style="color: red;">[{{ error }}]</span>
+            {% endfor %}
+        </p>
+        <p>{{ form.submit() }}</p>
+    </form>
+
+    {% if results %}
+    <div class="ui one column centered grid">
+        <div class="ui middle aligned divided list">
+            {% for res in results %}
+            <div class="item">
+                <div class="right floated content">
+                    {% if not current_user.is_following_yt(res.channelId) %}
+                        <p>
+                            <form action="{{ url_for('ytfollow', channelId=res.channelId) }}" method="post">
+                                {{ btform.hidden_tag() }}
+                                {{ btform.submit(value='Follow') }}
+                            </form>
+                        </p>
+                    {% else %}
+                        <p>
+                            <form action="{{ url_for('ytunfollow', channelId=res.channelId) }}" method="post">
+                                {{ btform.hidden_tag() }}
+                                {{ btform.submit(value='Unfollow') }}
+                            </form>
+                        </p>
+                    {% endif %}
+                </div>
+                <img class="ui avatar image" src="{{ res.thumbnail }}">
+                <div class="content">
+                    {{res.username}}
+                    <div class="ui label">
+                        <i class="user icon"></i> {{res.subCount}}
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    {% endif %}
+</div>
+
+{% endblock %}
