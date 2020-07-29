@@ -18,7 +18,7 @@ Parasitter is possible thanks to several open-source projects that are listed on
     * [Update](#updating-to-new-versions)
     * [Server](#server)
 * [Powered by](#powered-by)
-* [Donate](#donate)
+* [Donate](#donate-)
 
 ## Features:
 * No JavaScript.
