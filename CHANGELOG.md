@@ -1,8 +1,6 @@
 ## Unreleased
 - [ ] Import data from JSON file.
 - [ ] Database: Fix following logic.
-- [ ] Youtube: Manage suscriptions
-- [ ] Youtube: Show video time duration
 - [ ] Configuration page: Disable retweets.
 - [ ] Configuration page: Disable loading media content.
 - [ ] Configuration page: Dark mode
@@ -13,10 +11,12 @@
 - Play media from Parasitter.
 - Create following lists.
 
-## [0.1.1] - 2020-07-27
+## [0.2.0] - 2020-07-29
 ### Added
 - [x] Ability to follow Youtube accounts.
 - [x] Export your followed accounts to a JSON file
+- [x] Youtube: Manage suscriptions
+- [x] Youtube: Show video time duration
 
 ### Changed
 - [x] Efficiency improvements. ~1s reduction on fetching time.
