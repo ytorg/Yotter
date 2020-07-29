@@ -13,8 +13,8 @@
 
 ## [0.2.0] - 2020-07-29
 ### Added
-- [x] Ability to follow Youtube accounts.
-- [x] Export your followed accounts to a JSON file
+- [x] Export your followed accounts (Youtube and Twitter) to a JSON file
+- [x] Youtube: follow Youtube accounts.
 - [x] Youtube: Manage suscriptions
 - [x] Youtube: Show video time duration
 
