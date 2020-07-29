@@ -1,11 +1,11 @@
 # Parasitter
 <p align="center"> <img width="150" src="app/static/img/logo.png"> </img></p> 
-<p align="center"> Twitter via RSS with privacy </p>
+<p align="center"> Twitter and Youtube via RSS with privacy </p>
 <br>
 
-Parasitter allows you to follow your favorite Twitter accounts with full privacy. Parasitter uses [Nitter's](https://nitter.net/) rss feed in order to gather the latest tweets from your favourite accounts and builds a *twitter-like* feed so you can read them. We will never connect you to Twitter so your privacy is safe when using Parasitter. Parasitter is written in Python and Flask and uses Semantic-UI as its CSS framework.
+Parasitter allows you to follow your favorite Twitter and YouTube accounts with full privacy. Parasitter uses [Nitter's](https://nitter.net/) and [Invidious](invidio.us) rss feeds in order to gather the latest content from your favourite accounts and builds a *beautiful* feed so you can read them. We will never connect you to Twitter or YouTube in any way, so your privacy is safe when using Parasitter. Parasitter is written in Python and Flask and uses Semantic-UI as its CSS framework.
 
-Parasitter doesn't try to compete with Nitter. It is a complement of it, as it beneficiates from it. Parasitter is not a Twitter viewer as Nitter is. Main difference between Parasitter and Nitter, apart from UI, is that Parasitter allows you to follow users, save Tweets and set up some configuration for your feed. 
+Parasitter doesn't try to compete with Nitter nor Invidious. It serves as a complement, as it beneficiates from them. Parasitter is not a Twitter viewer as Nitter is or a YouTube frontend as Invidious. Instead Parasitter gathers all your accounts in one place so you can stay tuned with their latest content. 
 
 Parasitter is possible thanks to several open-source projects that are listed on the [Powered by](#powered-by) section. Make sure to check out those awesome projects!
 
@@ -21,15 +21,17 @@ Parasitter is possible thanks to several open-source projects that are listed on
 
 ## Features:
 * No JavaScript.
-* 0 connections to Twitter.
+* 0 connections to Twitter or Youtube.
 * Uses RSS feeds (could be expanded to more social networks)
 * Follow Twitter accounts.
-* Save your favourite Tweets. (Coming soon)
+* Follow Youtube accounts.
+* Save your favourite Tweets.
+* Save your favourite Youtube videos [Coming soon!]
 * Tor-friendly.
 * Terminal-friendly.
 * Easy 1 minute self-hosting deploy.
 * No need for domain, runs locally.
-* And many more to come.
+> And many more to come!
 
 ## Security
 Only the hash of your password is stored on the database. Also no personal information of any kind is kept on the app itself, if a hacker gets access to it only thing they could do would be to follow/unfollow some accounts.
@@ -37,7 +39,7 @@ Only the hash of your password is stored on the database. Also no personal infor
 I always recommend self-hosting, as you will be the only person with access to the data.
 
 ## Privacy
-Parasitter cares about your privacy, and for this it will never make any connection to Twitter. We use [Nitter's](https://nitter.net) rss feed to fetch all the tweets from your followed users. Images are also loaded from nitter. If you want to use a specific Nitter instance you can replace it on the file `app/routes.py`.
+Parasitter cares about your privacy, and for this it will never make any connection to Twitter or Youtube. We make use pf rss feeds to fetch all the tweets from your followed accounts. If you want to use a specific Nitter or Invidious instance you can replace it on the file `app/routes.py`.
 
 It is always recommended to set up a self-hosted instance. It is quite easy and conveninent and will give you full control over your data. The only data that is stored on the Database is:
 * Hash of the password
@@ -134,6 +136,7 @@ Another option is to host a Parasitter server so you can access it from anywhere
 
 ### Powered by:
 * [Nitter](https://nitter.net)
+* [Invidious](https://invidio.us)
 * [Flask](https://flask.palletsprojects.com/)
 * [SQLAlchemy](https://docs.sqlalchemy.org/en/13/)
 * [Semantic-UI](https://semantic-ui.com)

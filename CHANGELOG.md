@@ -1,45 +1,60 @@
 ## Unreleased
-* See cited posts (if any).
-* Share a tweet.
-* Play media from Parasitter.
-* Configuration page.
-  * Disable retweets.
-  * Disable loading of media content (show links instead)
-* Create following lists.
+- [ ] Import data from JSON file.
+- [ ] Database: Fix following logic.
+- [ ] Youtube: Manage suscriptions
+- [ ] Youtube: Show video time duration
+- [ ] Configuration page: Disable retweets.
+- [ ] Configuration page: Disable loading media content.
+- [ ] Configuration page: Dark mode
+
+##### Long term
+- See cited posts (if any).
+- Share a tweet.
+- Play media from Parasitter.
+- Create following lists.
+
+## [0.1.1] - 2020-07-27
+### Added
+- [x] Ability to follow Youtube accounts.
+- [x] Export your followed accounts to a JSON file
+
+### Changed
+- [x] Efficiency improvements. ~1s reduction on fetching time.
+- [x] Minor UI changes.
 
 ## [0.1.0] - 2020-07-19
 ### Added
-- Ability to save posts.
-- Ability to remove a saved post.
-- Error pages: Error 500, Error 405
-- Open the original post on Nitter.
+- [x] Ability to save posts.
+- [x] Ability to remove a saved post.
+- [x] Error pages: Error 500, Error 405
+- [x] Open the original post on Nitter.
 
 ### Changed
-- Significant improvement on fetching feed efficiency - Parallelism applied.
-- Changelogs now using [Keep a changelog](https://keepachangelog.com/en/1.0.0/) style.
+- [x] Significant improvement on fetching feed efficiency - Parallelism applied.
+- [x] Changelogs now using [Keep a changelog](https://keepachangelog.com/en/1.0.0/) style.
 
 ### Fixed
-- "Saved" menu element logged out instead of showing saved posts.
+- [x] "Saved" menu element logged out instead of showing saved posts.
 
 ## [0.0.2] - 2020-07-14
 ### Added
-- First implementation of saved posts - Not working yet.
-- Error 404 page.
-- Empty feed now shows a notice.
-- Requirements.txt file for a better installation and update experience.
-- Pinned posts are now marked as it.
+- [x] First implementation of saved posts - Not working yet.
+- [x] Error 404 page.
+- [x] Empty feed now shows a notice.
+- [x] Requirements.txt file for a better installation and update experience.
+- [x] Pinned posts are now marked as it.
 
 ### Changed
-- More flexible user search. Search by username and show a list of possible results.
-- Minor UI fixes.
-- Fetching of accounts in a slightly more efficient way.
+- [x] More flexible user search. Search by username and show a list of possible results.
+- [x] Minor UI fixes.
+- [x] Fetching of accounts in a slightly more efficient way.
 
 
 
 ## [0.0.1] - 2020-07-13
 ### Added
-- Ability to follow accounts.
-- Ability to unfollow accounts.
-- Ability to register users.
-- Ability to visit a user profile.
-- Search a user by its exact username.
+- [x] Ability to follow accounts.
+- [x] Ability to unfollow accounts.
+- [x] Ability to register users.
+- [x] Ability to visit a user profile.
+- [x] Search a user by its exact username.
