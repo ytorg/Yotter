@@ -18,6 +18,7 @@ Parasitter is possible thanks to several open-source projects that are listed on
     * [Update](#updating-to-new-versions)
     * [Server](#server)
 * [Powered by](#powered-by)
+* [Donate](#donate)
 
 ## Features:
 * No JavaScript.
@@ -142,3 +143,10 @@ Another option is to host a Parasitter server so you can access it from anywhere
 * [Semantic-UI](https://semantic-ui.com)
 * [requests-futures](https://github.com/ross/requests-futures)
 * [microblog](https://github.com/miguelgrinberg/microblog)
+
+### Donate
+This project is completelly Open Source and is built on my own free time as a hobby. I am (almost) alone with it [one contributor helped me with a small thing but he's not an active contributor anymore].
+
+If you like it, you can buy me a coffee!
+**Bitcoin**: `3EjaWjtsHz4WpbVL5Wx8Xg6MfyRRnKYj4e`
+**Monero**: `83hinYmUkMH2ANgdhxRupmakzLwN26ddePrLQvZv4E3Q1CWjq7MDzsKRcPqLPQwTvG3DdujyaxbKbMsf9VKVAmphMhsfndc`
