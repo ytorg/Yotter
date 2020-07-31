@@ -3,7 +3,7 @@
 <p align="center"> Twitter and Youtube via RSS with privacy </p>
 <br>
 
-Parasitter allows you to follow your favorite Twitter and YouTube accounts with full privacy. Parasitter uses [Nitter's](https://nitter.net/) and [Invidious](invidio.us) rss feeds in order to gather the latest content from your favourite accounts and builds a *beautiful* feed so you can read them. We will never connect you to Twitter or YouTube in any way, so your privacy is safe when using Parasitter. Parasitter is written in Python and Flask and uses Semantic-UI as its CSS framework.
+Parasitter allows you to follow your favorite Twitter and YouTube accounts with full privacy. Parasitter uses [Nitter's](https://nitter.net/) and [Invidious](invidio.us) rss feeds in order to gather the latest content from your favourite accounts and builds a *beautiful* feed. We will never connect you to Twitter or YouTube in any way, so your privacy is safe when using Parasitter. Parasitter is written in Python and Flask and uses Semantic-UI as its CSS framework.
 
 Parasitter doesn't try to compete with Nitter nor Invidious. It serves as a complement, as it beneficiates from them. Parasitter is not a Twitter viewer as Nitter is or a YouTube frontend as Invidious. Instead Parasitter gathers all your accounts in one place so you can stay tuned with their latest content. 
 
@@ -26,6 +26,7 @@ Parasitter is possible thanks to several open-source projects that are listed on
 * Uses RSS feeds (could be expanded to more social networks)
 * Follow Twitter accounts.
 * Follow Youtube accounts.
+* Watch Youtube videos.
 * Save your favourite Tweets.
 * Save your favourite Youtube videos [Coming soon!]
 * Tor-friendly.
@@ -40,12 +41,12 @@ Only the hash of your password is stored on the database. Also no personal infor
 I always recommend self-hosting, as you will be the only person with access to the data.
 
 ## Privacy
-Parasitter cares about your privacy, and for this it will never make any connection to Twitter or Youtube. We make use pf rss feeds to fetch all the tweets from your followed accounts. If you want to use a specific Nitter or Invidious instance you can replace it on the file `app/routes.py`.
+Parasitter cares about your privacy, and for this it will never make any connection to Twitter or Youtube. We make use of rss feeds to fetch all the tweets and videos from your followed accounts. If you want to use a specific Nitter or Invidious instance you can replace it at the top of the file `app/routes.py`.
 
 It is always recommended to set up a self-hosted instance. It is quite easy and conveninent and will give you full control over your data. The only data that is stored on the Database is:
 * Hash of the password
 * Username
-* Email (we won't send you any mails so you can make up the mail) - This is for future versions.
+* Email (Will be deprecated soon!)
 * List of followed users
 * List of saved posts
 
