@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div style="margin-top: 2em;" class="ui one column centered grid">
+    <iframe id='ivplayer' width='640' height='360' src='https://{{video.instance}}/embed/{{video.id}}' style='border:none;'>
+    </iframe>
+
+</div>
+
+<div style="margin-top: 2em;" class="ui one column center aligned grid">
+    <a href="https://{{video.instance}}/watch?v={{video.id}}"><h2 class="ui header">{{video.title}}</h2></a>
+</div>
+
+<div style="margin-top: 2em;" class="ui one column center aligned grid">
+    <a target="_blank" href="https://{{video.instance}}{{video.authorUrl}}" class="ui image label">
+        <img src="{{video.authorThumb}}">
+        {%if video.author.__len__() > 8%}
+            {{video.author[0:8]+'...'}}
+        {%else%}
+            {{video.author}}
+        {%endif%}
+    </a>
+
+    <div class="ui label">
+        <i class="eye icon"></i> {{video.viewCount}}
+    </div>
+
+    <div class="ui label">
+        <i class="thumbs up green icon"></i> {{video.likeCount}}
+    </div>
+
+    <div class="ui label">
+        <i class="thumbs down red icon"></i> {{video.dislikeCount}}
+    </div>
+</div>
+
+<div style="margin-top: 2em;" class="ui one column center aligned grid">
+    <div style="margin-bottom: 2em;" class="ui comments">
+        <h3 class="ui dividing header">Description</h3>
+        {{video.description}}
+    </div>
+</div>
+{% endblock %}

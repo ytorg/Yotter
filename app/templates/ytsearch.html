@@ -14,9 +14,19 @@
         <p>{{ form.submit() }}</p>
     </form>
 
+    <div class="ui one column middle aligned grid">
+        <div class="ui message">
+            <div class="header">
+            Tip: Videos are shown below channels.
+            </div>
+            <p>Just scroll down!</p>
+        </div>
+    </div>
+
     {% if results %}
     <div class="ui one column centered grid">
         <div class="ui middle aligned divided list">
+            <h3 class="ui dividing header">Users</h3>
             {% for res in results %}
             <div class="item">
                 <div class="right floated content">
@@ -45,6 +55,20 @@
                 </div>
             </div>
             {% endfor %}
+        </div>
+
+
+        <div class="ui middle aligned divided list">
+            <h3 class="ui dividing header">Videos</h3>
+            {% if videos %}
+                <div class="ui centered cards">
+                    {% for video in videos %}
+                        {% include '_video_item.html' %}
+                    {% endfor %}
+                </div>
+            {% else %}
+                {% include '_empty_feed.html' %}
+            {% endif %}
         </div>
     </div>
     {% endif %}

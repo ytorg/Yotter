@@ -1,4 +1,4 @@
-from flask import render_template, flash, redirect, url_for, request, send_from_directory
+from flask import render_template, flash, redirect, url_for, request, send_from_directory, Markup
 from app.forms import LoginForm, RegistrationForm, EmptyForm, SearchForm, ChannelForm
 from app.models import User, twitterPost, invidiousPost, Post, invidiousFollow
 from flask_login import login_user, logout_user, current_user, login_required
@@ -6,23 +6,27 @@ from requests_futures.sessions import FuturesSession
 from concurrent.futures import as_completed
 from werkzeug.urls import url_parse
 from bs4 import BeautifulSoup
-from flask import Markup
 from app import app, db
-import time, datetime
 import random, string
+import time, datetime
 import feedparser
 import requests
 import json
 import re
 
+# Instances - Format must be instance.tld (No '/' and no 'https://')
 nitterInstance = "https://nitter.net/"
-nitterInstanceII = "https://nitter.mastodont.cat"
+nitterInstanceII = "https://nitter.mastodont.cat/"
+invidiousInstance = "invidious.snopyta.org"
 
+#########################
+#### Twitter Logic ######
+#########################
 @app.route('/')
 @app.route('/index')
 @login_required
 def index():
-    #start_time = time.time()
+    start_time = time.time()
     following = current_user.following_list()
     followed = current_user.followed.count()
     posts = []
@@ -34,140 +38,8 @@ def index():
         profilePic = avatarPath
     else:
         profilePic = posts[0].userProfilePic
-    #print("--- {} seconds fetching feed---".format(time.time() - start_time))
+    print("--- {} seconds fetching twitter feed---".format(time.time() - start_time))
     return render_template('index.html', title='Home', posts=posts, avatar=avatarPath, profilePic = profilePic, followedCount=followed, form=form)
-
-
-@app.route('/login', methods=['GET', 'POST'])
-def login():
-    if current_user.is_authenticated:
-        return redirect(url_for('index'))
-    form = LoginForm()
-    if form.validate_on_submit():
-        user = User.query.filter_by(username=form.username.data).first()
-        if user is None or not user.check_password(form.password.data):
-            flash('Invalid username or password')
-            return redirect(url_for('login'))
-        login_user(user, remember=form.remember_me.data)
-        next_page = request.args.get('next')
-        if not next_page or url_parse(next_page).netloc != '':
-            next_page = url_for('index')
-        return redirect(next_page)
-    return render_template('login.html', title='Sign In', form=form)
-
-
-@app.route('/logout')
-def logout():
-    logout_user()
-    return redirect(url_for('index'))
-
-@app.route('/settings')
-@login_required
-def settings():
-    return render_template('settings.html')
-
-@app.route('/export')
-@login_required
-#Export data into a JSON file. Later you can import the data.
-def export():
-    a = exportData()
-    if a:
-        return send_from_directory('.', 'data_export.json', as_attachment=True)
-    else:
-        return redirect(url_for('error/405'))
-
-def exportData():
-    twitterFollowing = current_user.following_list()
-    youtubeFollowing = current_user.youtube_following_list()
-    data = {}
-    data['twitter'] = []
-    data['youtube'] = []
-
-    for f in twitterFollowing:
-        data['twitter'].append({
-            'username': f.username
-        })
-    
-    for f in youtubeFollowing:
-        data['youtube'].append({
-            'channelId': f.channelId
-        })
-
-    try:
-        with open('app/data_export.json', 'w') as outfile:
-            json.dump(data, outfile)
-        return True
-    except:
-        return False
-
-    
-
-@app.route('/register', methods=['GET', 'POST'])
-def register():
-    if current_user.is_authenticated:
-        return redirect(url_for('index'))
-
-    form = RegistrationForm()
-    if form.validate_on_submit():
-        if isTwitterUser(form.username.data):
-            flash('This is username is taken! Choose a different one.')
-        else:
-            user = User(username=form.username.data, email=form.email.data)
-            user.set_password(form.password.data)
-            db.session.add(user)
-            db.session.commit()
-            flash('Congratulations, you are now a registered user!')
-            return redirect(url_for('login'))
-    return render_template('register.html', title='Register', form=form)
-
-@app.route('/invidious', methods=['GET', 'POST'])
-@login_required
-def invidious():
-    form = ChannelForm()
-    if form.validate_on_submit():
-        channelId = form.channelId.data
-        if requests.get('https://invidio.us/feed/channel/{}'.format(channelId)).status_code == 200:
-            follow = invidiousFollow()
-            follow.channelId = channelId
-            follow.followers.append(current_user)
-            try:
-                db.session.add(follow)
-                db.session.commit()
-                flash("Added to list!")
-            except:
-                flash("Something went wrong. Try again!")
-                return redirect(url_for('invidious'))
-        else:
-            flash("Enter a valid Channel ID. Eg: UCJWCJCWOxBYSi5DhCieLOLQ")
-            return redirect(url_for('invidious'))
-    ids = current_user.youtube_following_list()
-    videos = getInvidiousPosts(ids)
-    if videos:
-        videos.sort(key=lambda x: x.date, reverse=True)
-    return render_template('invidious.html', videos=videos, form=form)
-
-@app.route('/ytsearch', methods=['GET', 'POST'])
-@login_required
-def ytsearch():
-    form = ChannelForm()
-    button_form = EmptyForm()
-    if form.validate_on_submit():
-        channelId = form.channelId.data
-        r = requests.get('https://invidio.us/api/v1/search?type=channel&q={}'.format(channelId))
-        if r.status_code == 200:
-            results = json.loads(r.content)
-            channels = []
-            for res in results:
-                channels.append({
-                    'username':res['author'],
-                    'channelId':res['authorId'],
-                    'thumbnail':res['authorThumbnails'][0]['url'],
-                    'subCount':letterify(res['subCount'])
-                })
-            
-            return render_template('ytsearch.html', form=form, btform=button_form, results=channels)
-    else:
-        return render_template('ytsearch.html', form=form)
 
 @app.route('/savePost/<url>', methods=['POST'])
 @login_required
@@ -203,43 +75,6 @@ def deleteSaved(id):
     db.session.delete(savedPost)
     db.session.commit()
     return redirect(url_for('saved'))
-
-@app.route('/ytfollow/<channelId>', methods=['POST'])
-@login_required
-def ytfollow(channelId):
-    form = EmptyForm()
-    if form.validate_on_submit():
-        channel = invidiousFollow.query.filter_by(channelId=channelId).first()
-        if requests.get('https://invidio.us/feed/channel/{}'.format(channelId)).status_code == 200:
-            if channel is None:
-                follow = invidiousFollow()
-                follow.channelId = channelId
-                follow.followers.append(current_user)
-                try:
-                    db.session.add(follow)
-                    db.session.commit()
-                except:
-                    flash("Something went wrong. Try again!")
-                    return redirect(url_for('invidious'))
-            flash('You are following {}!'.format(channelId))
-        else:
-            flash("Something went wrong... try again")
-        return redirect(url_for('ytsearch'))
-    else:
-        return redirect(url_for('ytsearch'))
-
-@app.route('/ytunfollow/<channelId>', methods=['POST'])
-@login_required
-def ytunfollow(channelId):
-    form = EmptyForm()
-    channel = invidiousFollow.query.filter_by(channelId=channelId).first()
-    try:
-        db.session.delete(channel)
-        db.session.commit()
-        flash("User unfollowed!")
-    except:
-        flash("There was an error unfollowing the user. Try again.")
-    return redirect(url_for('ytsearch'))
 
 @app.route('/follow/<username>', methods=['POST'])
 @login_required
@@ -331,12 +166,6 @@ def search():
     else:
         return render_template('search.html', form = form)
 
-
-
-@app.route('/error/<errno>')
-def error(errno):
-    return render_template('{}.html'.format(str(errno)))
-
 @app.route('/user/<username>')
 @login_required
 def user(username):
@@ -361,6 +190,219 @@ def user(username):
     else:
         profilePic = posts[0].userProfilePic
     return render_template('user.html', user=user, posts=posts, profilePic = profilePic, form=form)
+
+#########################
+#### Youtube Logic ######
+#########################
+@app.route('/invidious', methods=['GET', 'POST'])
+@login_required
+def invidious():
+    start_time = time.time()
+    form = ChannelForm()
+    if form.validate_on_submit():
+        channelId = form.channelId.data
+        if requests.get('https://{instance}/feed/channel/{cid}'.format(instance=invidiousInstance, cid=channelId)).status_code == 200:
+            follow = invidiousFollow()
+            follow.channelId = channelId
+            follow.followers.append(current_user)
+            try:
+                db.session.add(follow)
+                db.session.commit()
+                flash("Added to list!")
+            except:
+                flash("Something went wrong. Try again!")
+                return redirect(url_for('invidious'))
+        else:
+            flash("Enter a valid Channel ID. Eg: UCJWCJCWOxBYSi5DhCieLOLQ")
+            return redirect(url_for('invidious'))
+    ids = current_user.youtube_following_list()
+    videos = getInvidiousPosts(ids)
+    if videos:
+        videos.sort(key=lambda x: x.date, reverse=True)
+    print("--- {} seconds fetching invidious feed---".format(time.time() - start_time))
+    return render_template('invidious.html', videos=videos, form=form)
+
+@app.route('/ytsearch', methods=['GET', 'POST'])
+@login_required
+def ytsearch():
+    form = ChannelForm()
+    button_form = EmptyForm()
+    if form.validate_on_submit():
+        channelId = form.channelId.data
+        c = requests.get('https://{instance}/api/v1/search?type=channel&q={cid}'.format(instance=invidiousInstance, cid=channelId))
+        v = requests.get('https://{instance}/api/v1/search?type=video&q={cid}'.format(instance=invidiousInstance, cid=channelId))
+        if c.status_code == 200 and v.status_code == 200:
+            results = json.loads(c.content)
+            channels = []
+            videos = []
+            for res in results:
+                channels.append({
+                    'username':res['author'],
+                    'channelId':res['authorId'],
+                    'thumbnail':res['authorThumbnails'][0]['url'],
+                    'subCount':letterify(res['subCount'])
+                })
+            
+            results = json.loads(v.content)
+            for data in results:
+                videos.append({
+                    'instance':invidiousInstance,
+                    'author':data['author'],
+                    'videoTitle':data['title'],
+                    'description':Markup(data['description'][0:125]+'...'),
+                    'id':data['videoId'],
+                    'videoThumb': data['videoThumbnails'][4]['url'],
+                    'channelUrl':data['authorUrl'],
+                    'views':data['viewCount'],
+                    'timeStamp':data['publishedText']
+                })
+            
+            return render_template('ytsearch.html', form=form, btform=button_form, results=channels, videos=videos)
+    else:
+        return render_template('ytsearch.html', form=form)
+
+@app.route('/ytfollow/<channelId>', methods=['POST'])
+@login_required
+def ytfollow(channelId):
+    form = EmptyForm()
+    if form.validate_on_submit():
+        channel = invidiousFollow.query.filter_by(channelId=channelId).first()
+        if requests.get('https://{instance}/feed/channel/{cid}'.format(instance=invidiousInstance, cid=channelId)).status_code == 200:
+            if channel is None:
+                follow = invidiousFollow()
+                follow.channelId = channelId
+                follow.followers.append(current_user)
+                try:
+                    db.session.add(follow)
+                    db.session.commit()
+                except:
+                    flash("Something went wrong. Try again!")
+                    return redirect(url_for('invidious'))
+            flash('You are following {}!'.format(channelId))
+        else:
+            flash("Something went wrong... try again")
+        return redirect(url_for('ytsearch'))
+    else:
+        return redirect(url_for('ytsearch'))
+
+@app.route('/ytunfollow/<channelId>', methods=['POST'])
+@login_required
+def ytunfollow(channelId):
+    form = EmptyForm()
+    channel = invidiousFollow.query.filter_by(channelId=channelId).first()
+    try:
+        db.session.delete(channel)
+        db.session.commit()
+        flash("User unfollowed!")
+    except:
+        flash("There was an error unfollowing the user. Try again.")
+    return redirect(url_for('ytsearch'))
+
+@app.route('/video/<id>', methods=['POST', 'GET'])
+@login_required
+def video(id):
+    data = requests.get('https://{instance}/api/v1/videos/{id}'.format(instance=invidiousInstance, id=id))
+    data = json.loads(data.content)
+
+    video = {
+        'title':data['title'],
+        'description':Markup(data['descriptionHtml']),
+        'viewCount':data['viewCount'],
+        'likeCount':data['likeCount'],
+        'dislikeCount':data['dislikeCount'],
+        'authorThumb':data['authorThumbnails'][4]['url'],
+        'author':data['author'],
+        'authorUrl':data['authorUrl'],
+        'instance':invidiousInstance,
+        'id':id
+    }
+    return render_template("video.html", video=video)
+
+#########################
+#### General Logic ######
+#########################
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    if current_user.is_authenticated:
+        return redirect(url_for('index'))
+    form = LoginForm()
+    if form.validate_on_submit():
+        user = User.query.filter_by(username=form.username.data).first()
+        if user is None or not user.check_password(form.password.data):
+            flash('Invalid username or password')
+            return redirect(url_for('login'))
+        login_user(user, remember=form.remember_me.data)
+        next_page = request.args.get('next')
+        if not next_page or url_parse(next_page).netloc != '':
+            next_page = url_for('index')
+        return redirect(next_page)
+    return render_template('login.html', title='Sign In', form=form)
+
+@app.route('/logout')
+def logout():
+    logout_user()
+    return redirect(url_for('index'))
+
+@app.route('/settings')
+@login_required
+def settings():
+    return render_template('settings.html')
+
+@app.route('/export')
+@login_required
+#Export data into a JSON file. Later you can import the data.
+def export():
+    a = exportData()
+    if a:
+        return send_from_directory('.', 'data_export.json', as_attachment=True)
+    else:
+        return redirect(url_for('error/405'))
+
+def exportData():
+    twitterFollowing = current_user.following_list()
+    youtubeFollowing = current_user.youtube_following_list()
+    data = {}
+    data['twitter'] = []
+    data['youtube'] = []
+
+    for f in twitterFollowing:
+        data['twitter'].append({
+            'username': f.username
+        })
+    
+    for f in youtubeFollowing:
+        data['youtube'].append({
+            'channelId': f.channelId
+        })
+
+    try:
+        with open('app/data_export.json', 'w') as outfile:
+            json.dump(data, outfile)
+        return True
+    except:
+        return False    
+
+@app.route('/register', methods=['GET', 'POST'])
+def register():
+    if current_user.is_authenticated:
+        return redirect(url_for('index'))
+
+    form = RegistrationForm()
+    if form.validate_on_submit():
+        if isTwitterUser(form.username.data):
+            flash('This is username is taken! Choose a different one.')
+        else:
+            user = User(username=form.username.data, email=form.email.data)
+            user.set_password(form.password.data)
+            db.session.add(user)
+            db.session.commit()
+            flash('Congratulations, you are now a registered user!')
+            return redirect(url_for('login'))
+    return render_template('register.html', title='Register', form=form)
+
+@app.route('/error/<errno>')
+def error(errno):
+    return render_template('{}.html'.format(str(errno)))
 
 def getTimeDiff(t):
     tweetTime = datetime.datetime(*t[:6])
@@ -459,7 +501,7 @@ def getPosts(account):
 def getInvidiousPosts(ids):
     videos = []
     with FuturesSession() as session:
-        futures = [session.get('https://invidio.us/feed/channel/{}'.format(id.channelId)) for id in ids]
+        futures = [session.get('https://{instance}/feed/channel/{id}'.format(instance=invidiousInstance, id=id.channelId)) for id in ids]
         for future in as_completed(futures):
             resp = future.result()
             rssFeed=feedparser.parse(resp.content)
@@ -470,6 +512,7 @@ def getInvidiousPosts(ids):
                 video.channelName = vid.author_detail.name
                 video.channelUrl = vid.author_detail.href
                 video.videoUrl = vid.link
+                video.id = vid.link.split("?v=")[1]
                 video.videoTitle = vid.title
                 video.videoThumb = vid.media_thumbnail[0]['url']
                 video.views = vid.media_statistics['views']

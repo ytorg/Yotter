@@ -102,6 +102,7 @@ class invidiousPost():
     description = "LOREM IPSUM"
     date = 'None'
     views = 'NaN'
+    id = 'isod'
 
 
 class invidiousFollow(db.Model):
