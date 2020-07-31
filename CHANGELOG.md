@@ -13,7 +13,7 @@
 - Play media from Parasitter.
 - Create following lists.
 
-## [0.2.1] - 2020-07-29
+## [0.2.1] - 2020-07-31
 ### Added
 - [x] Youtube: New video page - Watch videos without exiting Parasitter.
 - [x] Youtube: Improved search - You can now search for channels and videos.
