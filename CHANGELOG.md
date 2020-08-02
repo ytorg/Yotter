@@ -1,4 +1,5 @@
 ## Unreleased
+- [ ] General: Break dependence with Invidious API - [Reason](https://github.com/iv-org/invidious/issues/1320)
 - [ ] General: Import data from JSON file.
 - [ ] Database: Improve following logic.
 - [ ] Configuration page: Disable retweets.
