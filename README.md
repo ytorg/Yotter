@@ -3,9 +3,7 @@
 <p align="center"> Twitter and Youtube via RSS with privacy </p>
 <br>
 
-Parasitter allows you to follow your favorite Twitter and YouTube accounts with full privacy. Parasitter uses [Nitter's](https://nitter.net/) and [Invidious](invidio.us) rss feeds in order to gather the latest content from your favourite accounts and builds a *beautiful* feed so you can read them. We will never connect you to Twitter or YouTube in any way, so your privacy is safe when using Parasitter. Parasitter is written in Python and Flask and uses Semantic-UI as its CSS framework.
-
-Parasitter doesn't try to compete with Nitter nor Invidious. It serves as a complement, as it beneficiates from them. Parasitter is not a Twitter viewer as Nitter is or a YouTube frontend as Invidious. Instead Parasitter gathers all your accounts in one place so you can stay tuned with their latest content. 
+Parasitter allows you to follow your favorite Twitter and YouTube accounts with full privacy using rss feeds in order to gather the latest content from your favourite accounts and builds a *beautiful* feed so you can read them. Parasitter is written in Python and Flask and uses Semantic-UI as its CSS framework.
 
 Parasitter is possible thanks to several open-source projects that are listed on the [Powered by](#powered-by) section. Make sure to check out those awesome projects!
 
@@ -42,7 +40,6 @@ I always recommend self-hosting, as you will be the only person with access to t
 ## Privacy
 Parasitter cares about your privacy, and for this it will never make any connection to Twitter or Youtube. We make use pf rss feeds to fetch all the tweets from your followed accounts. If you want to use a specific Nitter or Invidious instance you can replace it on the file `app/routes.py`.
 
-It is always recommended to set up a self-hosted instance. It is quite easy and conveninent and will give you full control over your data. The only data that is stored on the Database is:
 * Hash of the password
 * Username
 * Email (we won't send you any mails so you can make up the mail) - This is for future versions.
@@ -52,6 +49,7 @@ It is always recommended to set up a self-hosted instance. It is quite easy and 
 # Self hosting
 
 ### Local
+> IMPORTANT: Connections to googlevideo will be made to stream the videos (as Invidious did). It is recommended to use a VPS server to preserve your privacy.
 You don't need a server to run Parasitter. You can run it on your computer locally and own your (little) data. The installation process is done on a GNU/Linux environment, but should be pretty similar on other platforms.
 
 1. Install `python3`, `pip3`, `python3-venv` (optional) and `git`.
@@ -136,8 +134,8 @@ Another option is to host a Parasitter server so you can access it from anywhere
 #### TO BE CONTINUED!
 
 ### Powered by:
-* [Nitter](https://nitter.net)
-* [Invidious](https://invidio.us)
+* [RSSBridge](https://github.com/RSS-Bridge/rss-bridge)
+* [youtube-dl](https://github.com/ytdl-org/youtube-dl)
 * [Flask](https://flask.palletsprojects.com/)
 * [SQLAlchemy](https://docs.sqlalchemy.org/en/13/)
 * [Semantic-UI](https://semantic-ui.com)
