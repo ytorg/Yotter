@@ -9,21 +9,7 @@
         <title>Parasitter</title>
         {% endif %}
         <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='semantic/semantic.min.css') }}">
-
-        <style>
-            .twitter{
-                color: rgb(0, 166, 196) !important;
-            }
-
-            .youtube{
-                color: rgb(224, 32, 32) !important;
-            }
-
-            .video-title{
-                font-weight: bold;
-                font-size: 1.15em;
-            }
-        </style>
+        <link rel="stylesheet" type= "text/css" href="{{ url_for('static',filename='styles.css') }}">
     </head>
     <body>
         <div class="ui stackable menu">

@@ -2,37 +2,40 @@
 
 {% block content %}
 <div style="margin-top: 2em;" class="ui one column centered grid">
-    <iframe id='ivplayer' width='640' height='360' src='https://{{video.instance}}/embed/{{video.id}}' style='border:none;'>
-    </iframe>
-
+    <video width="720" height="480" controls>
+        <source src="{{video.url}}" type="video/mp4">
+        <track label="English" kind="subtitles" srclang="en" src="captions/vtt/sintel-en.vtt" default>
+    </video>
 </div>
 
 <div style="margin-top: 2em;" class="ui one column center aligned grid">
-    <a href="https://{{video.instance}}/watch?v={{video.id}}"><h2 class="ui header">{{video.title}}</h2></a>
+    <h2 class="ui header">{{video.title}}</h2></a>
 </div>
 
-<div style="margin-top: 2em;" class="ui one column center aligned grid">
-    <a target="_blank" href="https://{{video.instance}}{{video.authorUrl}}" class="ui image label">
-        <img src="{{video.authorThumb}}">
-        {%if video.author.__len__() > 8%}
-            {{video.author[0:8]+'...'}}
-        {%else%}
-            {{video.author}}
-        {%endif%}
-    </a>
-
-    <div class="ui label">
-        <i class="eye icon"></i> {{video.viewCount}}
+<div style="margin-top: 2em;" class="ui center aligned grid">
+    <div class="two wide column">
+        <a target="_blank" href="{{video.authorUrl}}" class="ui label">
+            {%if video.author.__len__() > 8%}
+                <i class="user icon"></i> {{video.author[0:10]+'...'}}
+            {%else%}
+                <i class="user icon"></i> {{video.author}}
+            {%endif%}
+        </a>
     </div>
-
-    <div class="ui label">
-        <i class="thumbs up green icon"></i> {{video.likeCount}}
+    <div class="two wide column">
+        <div class="ui label">
+            <i class="eye icon"></i>{{video.viewCount}}
+        </div>
     </div>
-
-    <div class="ui label">
-        <i class="thumbs down red icon"></i> {{video.dislikeCount}}
+    <div class="two wide column">
+        <div class="para-light-grey">
+            <div class="para-green" style="height:12px;width:{{video.averageRating.split(".")[0]}}%"></div>
+        </div>
+        <div class="label"> Rating: {{video.averageRating[0:4]}}% <i class="green thumbs up icon"></i></div>
     </div>
 </div>
+
+
 
 <div style="margin-top: 2em;" class="ui one column center aligned grid">
     <div style="margin-bottom: 2em;" class="ui comments">

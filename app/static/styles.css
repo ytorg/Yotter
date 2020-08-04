@@ -1,0 +1,20 @@
+.para-light-grey{
+    background-color: rgb(250, 82, 82);
+}
+
+.para-green{
+    background-color: lightgreen;
+}
+
+.twitter{
+    color: rgb(0, 166, 196) !important;
+}
+
+.youtube{
+    color: rgb(224, 32, 32) !important;
+}
+
+.video-title{
+    font-weight: bold;
+    font-size: 1.15em;
+}

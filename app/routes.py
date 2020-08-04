@@ -6,19 +6,20 @@ from requests_futures.sessions import FuturesSession
 from concurrent.futures import as_completed
 from werkzeug.urls import url_parse
 from bs4 import BeautifulSoup
+from youtube_dl import YoutubeDL
 from app import app, db
 import random, string
 import time, datetime
 import feedparser
 import requests
-import youtubedl
 import json
 import re
 
 # Instances - Format must be instance.tld (No '/' and no 'https://')
 nitterInstance = "https://nitter.net/"
 nitterInstanceII = "https://nitter.mastodont.cat/"
-invidiousInstance = "invidious.snopyta.org"
+invidiousInstance = "invidio.us"
+proxy = "" #eg. socks5://IP:PORT
 
 #########################
 #### Twitter Logic ######
@@ -302,20 +303,24 @@ def ytunfollow(channelId):
 @app.route('/video/<id>', methods=['POST', 'GET'])
 @login_required
 def video(id):
-    data = requests.get('https://{instance}/api/v1/videos/{id}'.format(instance=invidiousInstance, id=id))
-    data = json.loads(data.content)
+    if proxy:
+        ydl_opts = {
+            'proxy':proxy
+        }
+    else:
+        ydl_opts = {}
 
+    ydl = YoutubeDL(ydl_opts)
+    data = ydl.extract_info("{id}".format(id=id), download=False)
     video = {
         'title':data['title'],
-        'description':Markup(data['descriptionHtml']),
-        'viewCount':data['viewCount'],
-        'likeCount':data['likeCount'],
-        'dislikeCount':data['dislikeCount'],
-        'authorThumb':data['authorThumbnails'][4]['url'],
-        'author':data['author'],
-        'authorUrl':data['authorUrl'],
-        'instance':invidiousInstance,
-        'id':id
+        'description':Markup(data['description']),
+        'viewCount':data['view_count'],
+        'author':data['uploader'],
+        'authorUrl':data['uploader_url'],
+        'id':id,
+        'url': data['formats'][-1]['url'],
+        'averageRating': str((float(data['average_rating'])/5)*100)
     }
     return render_template("video.html", video=video)
 
@@ -501,6 +506,8 @@ def getPosts(account):
 
 def getInvidiousPosts(ids):
     videos = []
+    ydl = YoutubeDL()
+    link = ydl.extract_info("https://www.youtube.com/watch?v=XCSfoiD8wUA", download=False)['formats'][-1]['url']
     with FuturesSession() as session:
         futures = [session.get('https://{instance}/feed/channel/{id}'.format(instance=invidiousInstance, id=id.channelId)) for id in ids]
         for future in as_completed(futures):
@@ -512,7 +519,6 @@ def getInvidiousPosts(ids):
                 video.timeStamp = getTimeDiff(vid.published_parsed)
                 video.channelName = vid.author_detail.name
                 video.channelUrl = vid.author_detail.href
-                video.videoUrl = vid.link
                 video.id = vid.link.split("?v=")[1]
                 video.videoTitle = vid.title
                 video.videoThumb = vid.media_thumbnail[0]['url']
