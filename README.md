@@ -95,13 +95,14 @@ You can test this new version.
 > **See [CHANGELOG](CHANGELOG.md) for a list of changes.**
 
 ### Powered by:
-* [RSSBridge](https://github.com/RSS-Bridge/rss-bridge)
+* [Nitter](https://nitter.net/)
 * [youtube-dl](https://github.com/ytdl-org/youtube-dl)
 * [Flask](https://flask.palletsprojects.com/)
 * [SQLAlchemy](https://docs.sqlalchemy.org/en/13/)
 * [Semantic-UI](https://semantic-ui.com)
 * [requests-futures](https://github.com/ross/requests-futures)
 * [microblog](https://github.com/miguelgrinberg/microblog)
+* [Video.js](https://videojs.com/)
 
 ### Donate 💌
 This project is completelly Open Source and is built on my own free time as a hobby. I am (almost) alone with it [one contributor helped me with a small thing but he's not an active contributor anymore].
