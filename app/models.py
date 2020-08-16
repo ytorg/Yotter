@@ -93,7 +93,7 @@ class twitterPost():
     timeStamp = "error"
     userProfilePic = "1.png"
 
-class invidiousPost():
+class ytPost():
     channelName = 'Error'
     channelUrl = '#'
     videoUrl = '#'

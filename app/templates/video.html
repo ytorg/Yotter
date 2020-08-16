@@ -3,7 +3,7 @@
 {% block content %}
 <div style="margin-top: 2em;" class="ui one column centered grid">
     <video width="720" height="480" controls>
-        <source src="{{video.url}}" type="video/mp4">
+        <source src="/watch/{{video.id}}" type="video/mp4">
         <track label="English" kind="subtitles" srclang="en" src="captions/vtt/sintel-en.vtt" default>
     </video>
 </div>

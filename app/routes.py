@@ -1,12 +1,13 @@
 from flask import render_template, flash, redirect, url_for, request, send_from_directory, Markup
 from app.forms import LoginForm, RegistrationForm, EmptyForm, SearchForm, ChannelForm
-from app.models import User, twitterPost, invidiousPost, Post, invidiousFollow
+from app.models import User, twitterPost, ytPost, Post, invidiousFollow
 from flask_login import login_user, logout_user, current_user, login_required
+from flask import Flask, Response, stream_with_context
 from requests_futures.sessions import FuturesSession
 from concurrent.futures import as_completed
 from werkzeug.urls import url_parse
-from bs4 import BeautifulSoup
 from youtube_dl import YoutubeDL
+from bs4 import BeautifulSoup
 from app import app, db
 import random, string
 import time, datetime
@@ -218,7 +219,7 @@ def invidious():
             flash("Enter a valid Channel ID. Eg: UCJWCJCWOxBYSi5DhCieLOLQ")
             return redirect(url_for('invidious'))
     ids = current_user.youtube_following_list()
-    videos = getInvidiousPosts(ids)
+    videos = getYoutubePosts(ids)
     if videos:
         videos.sort(key=lambda x: x.date, reverse=True)
     print("--- {} seconds fetching invidious feed---".format(time.time() - start_time))
@@ -323,6 +324,15 @@ def video(id):
         'averageRating': str((float(data['average_rating'])/5)*100)
     }
     return render_template("video.html", video=video)
+
+## PROXY
+@app.route('/watch/<id>')
+def watch(id):
+    ydl = YoutubeDL()
+    data = ydl.extract_info("{id}".format(id=id), download=False)
+    req = requests.get(data['formats'][-1]['url'], stream = True)
+    return Response(stream_with_context(req.iter_content(chunk_size=1024)), content_type = req.headers['content-type'])
+
 
 #########################
 #### General Logic ######
@@ -504,26 +514,26 @@ def getPosts(account):
             posts.append(newPost)
     return posts
 
-def getInvidiousPosts(ids):
+def getYoutubePosts(ids):
     videos = []
     ydl = YoutubeDL()
     link = ydl.extract_info("https://www.youtube.com/watch?v=XCSfoiD8wUA", download=False)['formats'][-1]['url']
     with FuturesSession() as session:
-        futures = [session.get('https://{instance}/feed/channel/{id}'.format(instance=invidiousInstance, id=id.channelId)) for id in ids]
+        futures = [session.get('https://www.youtube.com/feeds/videos.xml?channel_id={id}'.format(instance=invidiousInstance, id=id.channelId)) for id in ids]
         for future in as_completed(futures):
             resp = future.result()
             rssFeed=feedparser.parse(resp.content)
             for vid in rssFeed.entries:
-                video = invidiousPost()
+                video = ytPost()
                 video.date = vid.published_parsed
                 video.timeStamp = getTimeDiff(vid.published_parsed)
                 video.channelName = vid.author_detail.name
                 video.channelUrl = vid.author_detail.href
-                video.id = vid.link.split("?v=")[1]
+                video.id = vid.yt_videoid
                 video.videoTitle = vid.title
                 video.videoThumb = vid.media_thumbnail[0]['url']
                 video.views = vid.media_statistics['views']
-                video.description = vid.summary.split('<p style="word-break:break-word;white-space:pre-wrap">')[1]
+                video.description = vid.summary_detail.value
                 video.description = re.sub(r'^https?:\/\/.*[\r\n]*', '', video.description[0:120]+"...", flags=re.MULTILINE)
                 videos.append(video)
     return videos
