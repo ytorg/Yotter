@@ -17,6 +17,7 @@
 - [x] Get video info through `youtube-dl`
 - [x] Stream video to client through local proxy.
 - [x] List videos without Invidious RSS feed.
+- [x] Use Video.js player.
 
 ## [0.2.0] - 2020-07-29
 ### Added
