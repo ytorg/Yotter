@@ -11,7 +11,7 @@
 - Play media from Parasitter.
 - Create following lists.
 
-## [0.2.1a] - 2020-07-29
+## [0.2.1a] - 2020-08-16
 #### Breaking dependence with Invidious.
 ### Changed
 - [x] Get video info through `youtube-dl`
