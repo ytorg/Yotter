@@ -9,9 +9,10 @@
 A new branch is being developed where I'm trying to break dependence with Invidious.
 
 Progress:
-- [x] Video data - Ditch youtube RSS/Images.
+- [x] Video data.
 - [x] Video playing
 - [x] Proxy video - no Google/Youtube connections on client.
+- [ ] Ditch Youtube RSS.
 - [ ] Search
 
 # What is Parasitter?
