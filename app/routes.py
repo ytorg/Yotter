@@ -19,8 +19,9 @@ import re
 # Instances - Format must be instance.tld (No '/' and no 'https://')
 nitterInstance = "https://nitter.net/"
 nitterInstanceII = "https://nitter.mastodont.cat/"
+
+ytChannelRss = "https://www.youtube.com/feeds/videos.xml?channel_id="
 invidiousInstance = "invidio.us"
-proxy = "" #eg. socks5://IP:PORT
 
 #########################
 #### Twitter Logic ######
@@ -197,33 +198,16 @@ def user(username):
 #########################
 #### Youtube Logic ######
 #########################
-@app.route('/invidious', methods=['GET', 'POST'])
+@app.route('/youtube', methods=['GET', 'POST'])
 @login_required
-def invidious():
+def youtube():
     start_time = time.time()
-    form = ChannelForm()
-    if form.validate_on_submit():
-        channelId = form.channelId.data
-        if requests.get('https://{instance}/feed/channel/{cid}'.format(instance=invidiousInstance, cid=channelId)).status_code == 200:
-            follow = invidiousFollow()
-            follow.channelId = channelId
-            follow.followers.append(current_user)
-            try:
-                db.session.add(follow)
-                db.session.commit()
-                flash("Added to list!")
-            except:
-                flash("Something went wrong. Try again!")
-                return redirect(url_for('invidious'))
-        else:
-            flash("Enter a valid Channel ID. Eg: UCJWCJCWOxBYSi5DhCieLOLQ")
-            return redirect(url_for('invidious'))
     ids = current_user.youtube_following_list()
     videos = getYoutubePosts(ids)
     if videos:
         videos.sort(key=lambda x: x.date, reverse=True)
     print("--- {} seconds fetching invidious feed---".format(time.time() - start_time))
-    return render_template('invidious.html', videos=videos, form=form)
+    return render_template('invidious.html', videos=videos)
 
 @app.route('/ytsearch', methods=['GET', 'POST'])
 @login_required
@@ -301,18 +285,16 @@ def ytunfollow(channelId):
         flash("There was an error unfollowing the user. Try again.")
     return redirect(url_for('ytsearch'))
 
-@app.route('/video/<id>', methods=['POST', 'GET'])
+@app.route('/watch', methods=['POST', 'GET'])
 @login_required
-def video(id):
-    if proxy:
-        ydl_opts = {
-            'proxy':proxy
-        }
-    else:
-        ydl_opts = {}
-
-    ydl = YoutubeDL(ydl_opts)
+def watch():
+    id = request.args.get('v', None)
+    ydl = YoutubeDL()
     data = ydl.extract_info("{id}".format(id=id), download=False)
+    if data['formats'][-1]['url'].find("manifest.googlevideo") > 0:
+        flash("Livestreams are not yet supported!")
+        return redirect(url_for('youtube'))
+
     video = {
         'title':data['title'],
         'description':Markup(data['description']),
@@ -324,14 +306,20 @@ def video(id):
     }
     return render_template("video.html", video=video)
 
-## PROXY
-@app.route('/watch/<id>')
-def watch(id):
-    ydl = YoutubeDL()
-    data = ydl.extract_info("{id}".format(id=id), download=False)
-    req = requests.get(data['formats'][-2]['url'], stream = True)
-    return Response(stream_with_context(req.iter_content(chunk_size=4096)), content_type = req.headers['content-type'])
-
+## PROXY videos through Parasitter server to the client.
+@app.route('/stream', methods=['GET'])
+@login_required
+def stream():
+    id = request.args.get('v', None)
+    if(id):
+        ydl = YoutubeDL()
+        data = ydl.extract_info("{id}".format(id=id), download=False)
+        req = requests.get(data['formats'][-1]['url'], stream = True)
+        return Response(stream_with_context(req.iter_content(chunk_size=4096)), content_type = req.headers['content-type'])
+    else:
+        # Temporarilly play a blank video.
+        req = requests.get('https://cdn.plyr.io/static/blank.mp4', stream=True)
+        return Response(stream_with_context(req.iter_content(chunk_size=4096)), content_type = req.headers['content-type'])
 
 #########################
 #### General Logic ######
@@ -516,9 +504,8 @@ def getPosts(account):
 def getYoutubePosts(ids):
     videos = []
     ydl = YoutubeDL()
-    link = ydl.extract_info("https://www.youtube.com/watch?v=XCSfoiD8wUA", download=False)['formats'][-1]['url']
     with FuturesSession() as session:
-        futures = [session.get('https://www.youtube.com/feeds/videos.xml?channel_id={id}'.format(instance=invidiousInstance, id=id.channelId)) for id in ids]
+        futures = [session.get('https://www.youtube.com/feeds/videos.xml?channel_id={id}'.format(id=id.channelId)) for id in ids]
         for future in as_completed(futures):
             resp = future.result()
             rssFeed=feedparser.parse(resp.content)

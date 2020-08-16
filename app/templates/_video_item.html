@@ -3,7 +3,7 @@
         <img src="{{video.videoThumb}}">
     </div>
     <div class="content">
-        <a class="video-title" href="{{url_for('video', id=video.id)}}">{{video.videoTitle}}</a>
+        <a class="video-title" href="{{url_for('watch', v=video.id, _method='GET')}}">{{video.videoTitle}}</a>
         <div class="meta">
             <a href="{{video.channelUrl}}">{{video.channelName}}</a>
         </div>
