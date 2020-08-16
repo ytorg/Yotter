@@ -31,7 +31,7 @@ Parasitter is possible thanks to several open-source projects that are listed on
     * [Update](#updating-to-new-versions)
     * [Server](#server)
 * [Powered by](#powered-by)
-* [Donate](#donate-)
+* [Donate](#donate-) (Please read!)
 
 ## Features:
 * No JavaScript.
@@ -159,6 +159,8 @@ Another option is to host a Parasitter server so you can access it from anywhere
 * [microblog](https://github.com/miguelgrinberg/microblog)
 
 ### Donate 💌
+Testing will soon be needed, and I will need to set up a server for this. If I want that Parasitter to go public and host some users I will need a (relativelly) good server and this is somehow expensive for me. So any contribution will be really welcome!
+
 This project is completelly Open Source and is built on my own free time as a hobby. I am (almost) alone with it [one contributor helped me with a small thing but he's not an active contributor anymore].
 
 If you like it, you can buy me a coffee!
