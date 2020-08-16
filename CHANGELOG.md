@@ -11,6 +11,13 @@
 - Play media from Parasitter.
 - Create following lists.
 
+## [0.2.1a] - 2020-07-29
+#### Breaking dependence with Invidious.
+### Changed
+- [x] Get video info through `youtube-dl`
+- [x] Stream video to client through local proxy.
+- [x] List videos without Invidious RSS feed.
+
 ## [0.2.0] - 2020-07-29
 ### Added
 - [x] Export your followed accounts (Youtube and Twitter) to a JSON file
