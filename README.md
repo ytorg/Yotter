@@ -3,7 +3,7 @@
 <p align="center"> Twitter and Youtube via RSS with privacy </p>
 <br>
 
-### This is a new version where I'm trying to break dependance with Invidious (and later Nitter). Currently the video playing page (`/video/<video-id>`) no longer depends on Invidious, but it connects to *googlevideo*. I'm working on a proxy-based solution for this and any help is welcome!
+### This is a new version where I'm trying to break dependance with Invidious (and later Nitter). ~~Currently the video playing page (`/video/<video-id>`) no longer depends on Invidious, but it connects to *googlevideo*~~. Google free video streams are now working! Yay!
 
 Parasitter allows you to follow your favorite Twitter and YouTube accounts with full privacy using rss feeds in order to gather the latest content from your favourite accounts and builds a *beautiful* feed so you can read them. Parasitter is written in Python and Flask and uses Semantic-UI as its CSS framework.
 
@@ -14,9 +14,8 @@ Parasitter is possible thanks to several open-source projects that are listed on
 * [Security](#security)
 * [Privacy](#privacy)
 * [Self hosting](#self-hosting)
-    * [Test](#test)
+    * [Test it!](#test)
     * [Update](#updating-to-new-versions)
-    * [Server](#server)
 * [Powered by](#powered-by)
 * [Donate](#donate-)
 
@@ -46,6 +45,8 @@ Parasitter cares about your privacy, and for this it will never make any connect
 * Email (we won't send you any mails so you can make up the mail) - This is for future versions.
 * List of followed users
 * List of saved posts
+
+The Parasitter server connects to Google (Youtube) in order to gather all the necessary data. Then it serves it (proxied through itself) to the client. This means that as a user, you will never connect to Google - the Parasitter server will do it for you. So if you want to set up a Parasitter server I recommend you to set it up on a remote VPS so you don't share your IP with Google or use a VPN on the server.
 
 # Self hosting
 
