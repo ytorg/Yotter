@@ -3,6 +3,8 @@
 <p align="center"> Twitter and Youtube via RSS with privacy </p>
 <br>
 
+### This is a new version where I'm trying to break dependance with Invidious (and later Nitter). Currently the video playing page (`/video/<video-id>`) no longer depends on Invidious, but it connects to *googlevideo*. I'm working on a proxy-based solution for this and any help is welcome!
+
 Parasitter allows you to follow your favorite Twitter and YouTube accounts with full privacy using rss feeds in order to gather the latest content from your favourite accounts and builds a *beautiful* feed so you can read them. Parasitter is written in Python and Flask and uses Semantic-UI as its CSS framework.
 
 Parasitter is possible thanks to several open-source projects that are listed on the [Powered by](#powered-by) section. Make sure to check out those awesome projects!
@@ -12,7 +14,7 @@ Parasitter is possible thanks to several open-source projects that are listed on
 * [Security](#security)
 * [Privacy](#privacy)
 * [Self hosting](#self-hosting)
-    * [Local](#local)
+    * [Test](#test)
     * [Update](#updating-to-new-versions)
     * [Server](#server)
 * [Powered by](#powered-by)
@@ -20,7 +22,6 @@ Parasitter is possible thanks to several open-source projects that are listed on
 
 ## Features:
 * No JavaScript.
-* 0 connections to Twitter or Youtube.
 * Uses RSS feeds (could be expanded to more social networks)
 * Follow Twitter accounts.
 * Follow Youtube accounts.
@@ -48,9 +49,9 @@ Parasitter cares about your privacy, and for this it will never make any connect
 
 # Self hosting
 
-### Local
-> IMPORTANT: Connections to googlevideo will be made to stream the videos (as Invidious did). It is recommended to use a VPS server to preserve your privacy.
-You don't need a server to run Parasitter. You can run it on your computer locally and own your (little) data. The installation process is done on a GNU/Linux environment, but should be pretty similar on other platforms.
+### Test
+You can test this new version.
+> IMPORTANT: Connections to googlevideo will be made to stream the videos. It is recommended to use a VPS server to preserve your privacy.
 
 1. Install `python3`, `pip3`, `python3-venv` (optional) and `git`.
 2. Clone this repository:
@@ -91,47 +92,6 @@ You don't need a server to run Parasitter. You can run it on your computer local
     - `flask db upgrade`
 6. Done! You are on latest version.
 > **See [CHANGELOG](CHANGELOG.md) for a list of changes.**
-
-### Server
-Another option is to host a Parasitter server so you can access it from anywhere or give access to your beloved friends/community. Installation is a little bit more complex than the [local](#local), but should be easy if you follow the steps.
-
-> WARNING: This section is under construction.
-##### Installing the app:
-1. Install base dependencies:
-   - `sudo apt-get -y update`
-   - `sudo apt-get -y install python3 python3-venv python3-dev`
-   - `sudo apt-get -y install mysql-server postfix supervisor nginx git`
-   > Installation of MySQL will require you to enter a *database root* password.
-2. Install the application:
-   - `git clone https://github.com/pluja/Parasitter.git`
-   - `cd Parasitter`
-3. Prepare the environment:
-   - `python3 -m venv venv`
-   - `source venv/bin/activate`
-   - (venv) $ `pip install -r requirements.txt`
-4. Install deployment packages:
-   - (venv) `pip install gunicorn pymysql`
-5. Edit the *.env* SECRET_KEY:
-   - `nano .env`
-   > This will open an editor. Make sure to change the SECRET_KEY to a string of your like. Make it random and long enough.
-6. Set up FLASK_APP environment variable:
-   - `echo "export FLASK_APP=parasitter.py" >> ~/.profile`
-
-##### Database configuration:
-1. Enter the MySQL command prompt:
-   - `mysql -u root -p`
-   > It will prompt for the "root" password. This password is the one you set on the MySQL installation.
-2. Create the database:
-   - mysql> `create database parasitter character set utf8 collate utf8_bin;`
-   - mysql> `create user 'parasitter'@'localhost' identified by '<db-password>';`
-   > Replace `<db-password>` as the password for the database *parasitter* user. This one needs to match the password set on the DATABASE_URL in the *.env* file (See Step 5 of [App installation](installing-the-app))
-   - mysql> `grant all privileges on parasitter.* to 'parasitter'@'localhost';`
-   - mysql> `flush privileges;`
-   - mysql> `quit;`
-3. Upgrade the database:
-   - (venv) `flask db upgrade`
-
-#### TO BE CONTINUED!
 
 ### Powered by:
 * [RSSBridge](https://github.com/RSS-Bridge/rss-bridge)
