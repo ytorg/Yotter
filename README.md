@@ -6,7 +6,7 @@
 > Important issue: [#7](https://github.com/pluja/Parasitter/issues/7) - Help wanted!
 
 ## BREAKING DEPENDENCE WITH INVIDIOUS
-A new branch is being developed where I'm trying to break dependence with Invidious.
+A [**new branch**](https://github.com/pluja/Parasitter/tree/dev-indep) is being developed where I'm trying to break dependence with Invidious.
 
 Progress:
 - [x] Video data.
