@@ -5,7 +5,13 @@
 
 > Important issue: [#7](https://github.com/pluja/Parasitter/issues/7) - Help wanted!
 
-> Important note: A [new branch](https://github.com/pluja/Parasitter/tree/dev-indep) is being developed as I'm breaking the dependance with Invidious. You can now test it.
+## BREAKING DEPENDENCE WITH INVIDIOUS
+A new branch is being developed where I'm trying to break dependence with Invidious.
+
+Progress:
+- [x] Video data
+- [x] Video playing
+- [ ] Search
 
 Parasitter allows you to follow your favorite Twitter and YouTube accounts with full privacy. Parasitter uses [Nitter's](https://nitter.net/) and [Invidious](invidio.us) rss feeds in order to gather the latest content from your favourite accounts and builds a *beautiful* feed. We will never connect you to Twitter or YouTube in any way, so your privacy is safe when using Parasitter. Parasitter is written in Python and Flask and uses Semantic-UI as its CSS framework.
 
