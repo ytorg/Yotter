@@ -46,6 +46,8 @@ Parasitter cares about your privacy, and for this it will never make any connect
 * List of followed users
 * List of saved posts
 
+The Parasitter server connects to Google (Youtube) in order to gather all the necessary data. Then it serves it (proxied through itself) to the client. This means that as a user, you will never connect to Google - the Parasitter server will do it for you. So if you want to set up a Parasitter server I recommend you to set it up on a remote VPS so you don't share your IP with Google or use a VPN on the server.
+
 # Self hosting
 
 ### Test
