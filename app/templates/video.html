@@ -2,9 +2,8 @@
 
 {% block content %}
 <div style="margin-top: 2em;" class="ui one column centered grid">
-    <video width="720" height="480" controls>
+    <video class="video-js vjs-default-skin" controls data-setup='{ "playbackRates": [0.5, 1, 1.25,1.5, 2] }' width="720" height="420" data-setup="{}">
         <source src="/watch/{{video.id}}" type="video/mp4">
-        <track label="English" kind="subtitles" srclang="en" src="captions/vtt/sintel-en.vtt" default>
     </video>
 </div>
 

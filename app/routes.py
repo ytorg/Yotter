@@ -320,7 +320,6 @@ def video(id):
         'author':data['uploader'],
         'authorUrl':data['uploader_url'],
         'id':id,
-        'url': data['formats'][-1]['url'],
         'averageRating': str((float(data['average_rating'])/5)*100)
     }
     return render_template("video.html", video=video)
@@ -330,8 +329,8 @@ def video(id):
 def watch(id):
     ydl = YoutubeDL()
     data = ydl.extract_info("{id}".format(id=id), download=False)
-    req = requests.get(data['formats'][-1]['url'], stream = True)
-    return Response(stream_with_context(req.iter_content(chunk_size=1024)), content_type = req.headers['content-type'])
+    req = requests.get(data['formats'][-2]['url'], stream = True)
+    return Response(stream_with_context(req.iter_content(chunk_size=4096)), content_type = req.headers['content-type'])
 
 
 #########################
