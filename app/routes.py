@@ -290,7 +290,7 @@ def ytunfollow(channelId):
 def watch():
     id = request.args.get('v', None)
     ydl = YoutubeDL()
-    data = ydl.extract_info("{id}".format(id=id), download=False, quiet=True)
+    data = ydl.extract_info("{id}".format(id=id), download=False)
     if data['formats'][-1]['url'].find("manifest.googlevideo") > 0:
         flash("Livestreams are not yet supported!")
         return redirect(url_for('youtube'))
@@ -313,7 +313,7 @@ def stream():
     id = request.args.get('v', None)
     if(id):
         ydl = YoutubeDL()
-        data = ydl.extract_info("{id}".format(id=id), download=False, quiet=True)
+        data = ydl.extract_info("{id}".format(id=id), download=False)
         req = requests.get(data['formats'][-1]['url'], stream = True)
         return Response(stream_with_context(req.iter_content(chunk_size=1024)), content_type = req.headers['content-type'])
     else:
