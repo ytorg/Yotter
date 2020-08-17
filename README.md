@@ -103,6 +103,7 @@ You can test this new version.
 * [requests-futures](https://github.com/ross/requests-futures)
 * [microblog](https://github.com/miguelgrinberg/microblog)
 * [Video.js](https://videojs.com/)
+* [My fork of youtube_search](https://github.com/pluja/youtube_search-fork)
 
 ### Donate 💌
 Testing with a public instance will soon be needed, and I will need to set up a server for this. If I want that Parasitter to go public and host some users I will need a (relativelly) good server and this is somehow expensive for me. So any contribution will be really welcome!
