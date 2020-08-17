@@ -44,5 +44,7 @@ webencodings==0.5.1
 Werkzeug==1.0.1
 WTForms==2.3.1
 yarl==1.4.2
+youtube-dl==2020.7.28
+youtube-search-fork==1.1.0
 zope.event==4.4
 zope.interface==5.1.0

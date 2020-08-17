@@ -1,10 +1,11 @@
 from flask import render_template, flash, redirect, url_for, request, send_from_directory, Markup
 from app.forms import LoginForm, RegistrationForm, EmptyForm, SearchForm, ChannelForm
-from app.models import User, twitterPost, ytPost, Post, invidiousFollow
 from flask_login import login_user, logout_user, current_user, login_required
+from app.models import User, twitterPost, ytPost, Post, invidiousFollow
 from flask import Flask, Response, stream_with_context
 from requests_futures.sessions import FuturesSession
 from concurrent.futures import as_completed
+from youtube_search import YoutubeSearch
 from werkzeug.urls import url_parse
 from youtube_dl import YoutubeDL
 from bs4 import BeautifulSoup
@@ -215,38 +216,38 @@ def ytsearch():
     form = ChannelForm()
     button_form = EmptyForm()
     if form.validate_on_submit():
-        ydl = YoutubeDL()
-        data = ydl
-        channelId = form.channelId.data
-        c = requests.get('https://{instance}/api/v1/search?type=channel&q={cid}'.format(instance=invidiousInstance, cid=channelId))
-        v = requests.get('https://{instance}/api/v1/search?type=video&q={cid}'.format(instance=invidiousInstance, cid=channelId))
-        if c.status_code == 200 and v.status_code == 200:
-            results = json.loads(c.content)
-            channels = []
-            videos = []
-            for res in results:
-                channels.append({
-                    'username':res['author'],
-                    'channelId':res['authorId'],
-                    'thumbnail':res['authorThumbnails'][0]['url'],
-                    'subCount':letterify(res['subCount'])
-                })
-            
-            results = json.loads(v.content)
-            for data in results:
-                videos.append({
-                    'instance':invidiousInstance,
-                    'author':data['author'],
-                    'videoTitle':data['title'],
-                    'description':Markup(data['description'][0:125]+'...'),
-                    'id':data['videoId'],
-                    'videoThumb': data['videoThumbnails'][4]['url'],
-                    'channelUrl':data['authorUrl'],
-                    'views':data['viewCount'],
-                    'timeStamp':data['publishedText']
-                })
-            
-            return render_template('ytsearch.html', form=form, btform=button_form, results=channels, videos=videos)
+        channels = []
+        videos = []
+
+        searchTerm = form.channelId.data
+        search = YoutubeSearch(searchTerm)
+        chnns = search.channels_to_dict()
+        vids = search.videos_to_dict()
+        
+        for v in vids:
+            videos.append({
+                'author':v['channel'],
+                'videoTitle':v['title'],
+                'description':Markup(v['long_desc']),
+                'id':v['id'],
+                'videoThumb': v['thumbnails'][-1],
+                'channelUrl':v['url_suffix'],
+                'views':v['views'],
+                'timeStamp':v['publishedText']
+            })
+
+        for c in chnns:
+            channels.append({
+                'username':c['name'],
+                'channelId':c['id'],
+                'thumbnail':'https:{}'.format(c['thumbnails'][0]),
+                'subCount':letterify(c['suscriberCountText'])
+            })
+
+        print(channels)
+        print(videos)
+        return render_template('ytsearch.html', form=form, btform=button_form, channels=channels, videos=videos)
+
     else:
         return render_template('ytsearch.html', form=form)
 
