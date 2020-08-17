@@ -3,7 +3,7 @@
 <p align="center"> Twitter and Youtube via RSS with privacy </p>
 <br>
 
-### This is a new version where I'm ~~trying to~~ break*ing* dependance with Invidious (and later Nitter). ~~Currently the video playing page (`/video/<video-id>`) no longer depends on Invidious, but it connects to *googlevideo*~~. Google free video streams are now working! Yay!
+### This is a new version where I'm ~~trying to~~ break*ing* dependency with Invidious (and later Nitter). ~~Currently the video playing page (`/video/<video-id>`) no longer depends on Invidious, but it connects to *googlevideo*~~. Google free video streams are now working! Yay!
 
 Parasitter allows you to follow your favorite Twitter and YouTube accounts with full privacy using rss feeds in order to gather the latest content from your favourite accounts and builds a *beautiful* feed so you can read them. Parasitter is written in Python and Flask and uses Semantic-UI as its CSS framework.
 
@@ -103,6 +103,7 @@ You can test this new version.
 * [requests-futures](https://github.com/ross/requests-futures)
 * [microblog](https://github.com/miguelgrinberg/microblog)
 * [Video.js](https://videojs.com/)
+* [My fork of youtube_search](https://github.com/pluja/youtube_search-fork)
 
 ### Donate 💌
 Testing with a public instance will soon be needed, and I will need to set up a server for this. If I want that Parasitter to go public and host some users I will need a (relativelly) good server and this is somehow expensive for me. So any contribution will be really welcome!
