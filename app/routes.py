@@ -243,9 +243,6 @@ def ytsearch():
                 'thumbnail':'https:{}'.format(c['thumbnails'][0]),
                 'subCount':letterify(c['suscriberCountText'])
             })
-
-        print(channels)
-        print(videos)
         return render_template('ytsearch.html', form=form, btform=button_form, channels=channels, videos=videos)
 
     else:
