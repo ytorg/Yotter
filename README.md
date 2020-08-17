@@ -12,7 +12,7 @@ Progress:
 - [x] Video data.
 - [x] Video playing
 - [x] Proxy video - no Google/Youtube connections on client. [2020.08.16]
-- [ ] Ditch Youtube RSS.
+- [ ] Offer alternative to Youtube RSS.
 - [ ] Search
 
 # What is Parasitter?
