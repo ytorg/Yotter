@@ -215,6 +215,8 @@ def ytsearch():
     form = ChannelForm()
     button_form = EmptyForm()
     if form.validate_on_submit():
+        ydl = YoutubeDL()
+        data = ydl
         channelId = form.channelId.data
         c = requests.get('https://{instance}/api/v1/search?type=channel&q={cid}'.format(instance=invidiousInstance, cid=channelId))
         v = requests.get('https://{instance}/api/v1/search?type=video&q={cid}'.format(instance=invidiousInstance, cid=channelId))
@@ -285,12 +287,12 @@ def ytunfollow(channelId):
         flash("There was an error unfollowing the user. Try again.")
     return redirect(url_for('ytsearch'))
 
-@app.route('/watch', methods=['POST', 'GET'])
+@app.route('/watch', methods=['GET'])
 @login_required
 def watch():
     id = request.args.get('v', None)
     ydl = YoutubeDL()
-    data = ydl.extract_info("{id}".format(id=id), download=False)
+    data = ydl.extract_info("{id}".format(id=id), download=False, quiet=True)
     if data['formats'][-1]['url'].find("manifest.googlevideo") > 0:
         flash("Livestreams are not yet supported!")
         return redirect(url_for('youtube'))
@@ -313,13 +315,12 @@ def stream():
     id = request.args.get('v', None)
     if(id):
         ydl = YoutubeDL()
-        data = ydl.extract_info("{id}".format(id=id), download=False)
+        data = ydl.extract_info("{id}".format(id=id), download=False, quiet=True)
         req = requests.get(data['formats'][-1]['url'], stream = True)
-        return Response(stream_with_context(req.iter_content(chunk_size=4096)), content_type = req.headers['content-type'])
+        return Response(stream_with_context(req.iter_content(chunk_size=1024)), content_type = req.headers['content-type'])
     else:
-        # Temporarilly play a blank video.
-        req = requests.get('https://cdn.plyr.io/static/blank.mp4', stream=True)
-        return Response(stream_with_context(req.iter_content(chunk_size=4096)), content_type = req.headers['content-type'])
+        flash("Something went wrong loading the video... Try again.")
+        return redirect(url_for('youtube'))
 
 #########################
 #### General Logic ######
