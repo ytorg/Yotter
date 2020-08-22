@@ -1,8 +1,15 @@
+<head>
+    <link rel="stylesheet" type= "text/css" href="{{ url_for('static',filename='videojs.css') }}">
+</head>
 {% extends "base.html" %}
-
 {% block content %}
 <div style="margin-top: 2em;" class="ui one column centered grid">
-    <video class="video-js vjs-default-skin" controls data-setup='{ "playbackRates": [0.5, 1, 1.25,1.5, 2] }' width="720" height="420" data-setup="{}">
+    <video class="video-js vjs-default-skin" 
+           data-setup='{ "playbackRates": [0.5, 1, 1.25,1.5, 2] }' 
+           width="720" height="420" 
+           controls
+           preload="auto">
+           
         <source src="/stream?v={{video.id}}" type="video/mp4">
     </video>
 </div>
@@ -42,4 +49,5 @@
         {{video.description}}
     </div>
 </div>
+<script src="{{ url_for('static',filename='videojs.js') }}"></script>
 {% endblock %}

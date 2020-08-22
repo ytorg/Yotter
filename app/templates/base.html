@@ -10,7 +10,6 @@
         {% endif %}
         <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='semantic/semantic.min.css') }}">
         <link rel="stylesheet" type= "text/css" href="{{ url_for('static',filename='styles.css') }}">
-        <link rel="stylesheet" type= "text/css" href="{{ url_for('static',filename='videojs.css') }}">
     </head>
     <body>
         <div class="ui stackable menu">
@@ -48,8 +47,5 @@
         {% endwith %}
         
         {% block content %}{% endblock %}
-
-        
-        <script src="{{ url_for('static',filename='videojs.js') }}"></script>
     </body>
 </html>

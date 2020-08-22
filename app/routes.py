@@ -226,7 +226,7 @@ def ytsearch():
         
         for v in vids:
             videos.append({
-                'author':v['channel'],
+                'channelName':v['channel'],
                 'videoTitle':v['title'],
                 'description':Markup(v['long_desc']),
                 'id':v['id'],
@@ -315,7 +315,7 @@ def stream():
         ydl = YoutubeDL()
         data = ydl.extract_info("{id}".format(id=id), download=False)
         req = requests.get(data['formats'][-1]['url'], stream = True)
-        return Response(stream_with_context(req.iter_content(chunk_size=1024)), content_type = req.headers['content-type'])
+        return Response(req.iter_content(chunk_size=10*1024), content_type = req.headers['Content-Type'])
     else:
         flash("Something went wrong loading the video... Try again.")
         return redirect(url_for('youtube'))
