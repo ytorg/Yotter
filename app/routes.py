@@ -294,7 +294,6 @@ def channel(id):
     data = feedparser.parse(data.content)
 
     channelData = YoutubeSearch.channelInfo(id)
-
     return render_template('channel.html', form=form, btform=button_form, channel=channelData[0], videos=channelData[1])
 
 @app.route('/watch', methods=['GET'])
