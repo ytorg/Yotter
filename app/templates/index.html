@@ -2,9 +2,15 @@
 
 {% block content %}
     <div style="padding: 1.3em;" class="ui one column centered grid">
-        <div><h2 class="ui blue header"><a href="{{ url_for('following') }}">Manage following: {{ followedCount }}</a></h2></div>
+        <a href="{{ url_for('following') }}"><div class="ui small teal statistic">
+            <div class="value">
+                {{ followedCount }}
+            </div>
+            <div class="label">
+                Following
+            </div>
+        </div></a>
     </div>
-    <hr>
     <div class="ui one column grid" id="card-container">
         {% if posts %}
             {% for post in posts %}
