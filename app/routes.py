@@ -285,6 +285,16 @@ def ytunfollow(channelId):
         flash("There was an error unfollowing the user. Try again.")
     return redirect(url_for('ytsearch'))
 
+@app.route('/channel/<id>', methods=['GET'])
+@login_required
+def channel(id):
+    data = requests.get('https://www.youtube.com/feeds/videos.xml?channel_id={id}'.format(id=id))
+    data = feedparser.parse(data.content)
+
+    channel = YoutubeSearch.channelInfo(id)
+
+    return render_template('channel.html', channel=channel)
+
 @app.route('/watch', methods=['GET'])
 @login_required
 def watch():

@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <div class="blue ui centered card">
+        <div class="content">
+            <div class="center aligned author">
+                <img class="ui avatar image" src="{{channel.avatar}}">
+            </div>
+            <div style="margin: .1em" class="center aligned header"><a href="">{{channel.name}}</a></div>
+        <div class="center aligned description">
+            <a>
+                <i class="users icon"></i>
+                {{channel.subCount}}
+            </a>
+        </div>
+        </div>
+        <div class="extra content">           
+        </div>
+        </div>
+    </div>
+
+    <div class="ui one column grid" id="card-container">
+    
+    <!--{% if not posts %}
+        {% include '_empty_feed.html' %}
+    {% else %}
+        {% for post in posts %}
+            {% if post.isRT %}
+                {% include '_post.html' %}
+            {% else %}
+                {% include '_post_nort.html' %}
+            {% endif %}
+        {% endfor %}
+    {% endif %}-->
+    </div>
+{% endblock %}
