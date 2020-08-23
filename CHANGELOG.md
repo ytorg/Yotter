@@ -11,6 +11,11 @@
 - Play media from Parasitter.
 - Create following lists.
 
+## [0.2.1] - 2020-08-23
+### Added
+- [x] Youtube: Ability to view a channel page: /channel/<id>
+- [x] Youtube: Ability to search with full text: Channels and videos.
+
 ## [0.2.1a] - 2020-08-16
 #### Breaking dependence with Invidious.
 ### Changed
