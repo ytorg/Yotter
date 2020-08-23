@@ -264,13 +264,13 @@ def ytfollow(channelId):
                     db.session.commit()
                 except:
                     flash("Something went wrong. Try again!")
-                    return redirect(url_for('invidious'))
+                    return redirect(request.referrer)
             flash('You are following {}!'.format(channelId))
         else:
             flash("Something went wrong... try again")
-        return redirect(url_for('ytsearch'))
+        return redirect(request.referrer)
     else:
-        return redirect(url_for('ytsearch'))
+        return redirect(request.referrer)
 
 @app.route('/ytunfollow/<channelId>', methods=['POST'])
 @login_required
@@ -283,17 +283,19 @@ def ytunfollow(channelId):
         flash("User unfollowed!")
     except:
         flash("There was an error unfollowing the user. Try again.")
-    return redirect(url_for('ytsearch'))
+    return redirect(request.referrer)
 
 @app.route('/channel/<id>', methods=['GET'])
 @login_required
 def channel(id):
+    form = ChannelForm()
+    button_form = EmptyForm()
     data = requests.get('https://www.youtube.com/feeds/videos.xml?channel_id={id}'.format(id=id))
     data = feedparser.parse(data.content)
 
     channelData = YoutubeSearch.channelInfo(id)
 
-    return render_template('channel.html', channel=channelData[0], videos=channelData[1])
+    return render_template('channel.html', form=form, btform=button_form, channel=channelData[0], videos=channelData[1])
 
 @app.route('/watch', methods=['GET'])
 @login_required

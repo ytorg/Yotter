@@ -14,7 +14,22 @@
             </a>
         </div>
         </div>
-        <div class="extra content">           
+        <div class="center aligned extra content">
+            {% if not current_user.is_following_yt(channel.id) %}
+                <p>
+                    <form action="{{ url_for('ytfollow', channelId=channel.id) }}" method="post">
+                        {{ btform.hidden_tag() }}
+                        {{ btform.submit(value='Follow') }}
+                    </form>
+                </p>
+            {% else %}
+                <p>
+                    <form action="{{ url_for('ytunfollow', channelId=channel.id) }}" method="post">
+                        {{ btform.hidden_tag() }}
+                        {{ btform.submit(value='Unfollow') }}
+                    </form>
+                </p>
+            {% endif %}           
         </div>
         </div>
     </div>
