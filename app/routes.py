@@ -232,6 +232,7 @@ def ytsearch():
                 'id':v['id'],
                 'videoThumb': v['thumbnails'][-1],
                 'channelUrl':v['url_suffix'],
+                'channelId': v['channelId'],
                 'views':v['views'],
                 'timeStamp':v['publishedText']
             })
