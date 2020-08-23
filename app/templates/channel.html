@@ -19,18 +19,15 @@
         </div>
     </div>
 
-    <div class="ui one column grid" id="card-container">
-    
-    <!--{% if not posts %}
+    <br>
+    <br> 
+    {% if not videos %}
         {% include '_empty_feed.html' %}
     {% else %}
-        {% for post in posts %}
-            {% if post.isRT %}
-                {% include '_post.html' %}
-            {% else %}
-                {% include '_post_nort.html' %}
-            {% endif %}
+    <div class="ui centered cards">
+        {% for video in videos %}
+            {% include '_video_item.html' %}
         {% endfor %}
-    {% endif %}-->
     </div>
+    {% endif %}
 {% endblock %}

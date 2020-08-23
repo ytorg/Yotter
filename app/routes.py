@@ -291,9 +291,9 @@ def channel(id):
     data = requests.get('https://www.youtube.com/feeds/videos.xml?channel_id={id}'.format(id=id))
     data = feedparser.parse(data.content)
 
-    channel = YoutubeSearch.channelInfo(id)
+    channelData = YoutubeSearch.channelInfo(id)
 
-    return render_template('channel.html', channel=channel)
+    return render_template('channel.html', channel=channelData[0], videos=channelData[1])
 
 @app.route('/watch', methods=['GET'])
 @login_required
