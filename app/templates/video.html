@@ -20,7 +20,7 @@
 
 <div style="margin-top: 2em;" class="ui center aligned grid">
     <div class="two wide column">
-        <a target="_blank" href="{{video.authorUrl}}" class="ui label">
+        <a target="_blank" href="{{ url_for('channel', id=video.channelId)}}" class="ui label">
             {%if video.author.__len__() > 8%}
                 <i class="user icon"></i> {{video.author[0:10]+'...'}}
             {%else%}

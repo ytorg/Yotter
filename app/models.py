@@ -96,6 +96,7 @@ class twitterPost():
 class ytPost():
     channelName = 'Error'
     channelUrl = '#'
+    channelId = '@'
     videoUrl = '#'
     videoTitle = '#'
     videoThumb = '#'

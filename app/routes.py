@@ -207,8 +207,8 @@ def youtube():
     videos = getYoutubePosts(ids)
     if videos:
         videos.sort(key=lambda x: x.date, reverse=True)
-    print("--- {} seconds fetching invidious feed---".format(time.time() - start_time))
-    return render_template('invidious.html', videos=videos)
+    print("--- {} seconds fetching youtube feed---".format(time.time() - start_time))
+    return render_template('youtube.html', videos=videos)
 
 @app.route('/ytsearch', methods=['GET', 'POST'])
 @login_required
@@ -311,6 +311,7 @@ def watch():
         'viewCount':data['view_count'],
         'author':data['uploader'],
         'authorUrl':data['uploader_url'],
+        'channelId': data['uploader_id'],
         'id':id,
         'averageRating': str((float(data['average_rating'])/5)*100)
     }
@@ -523,6 +524,7 @@ def getYoutubePosts(ids):
                 video.date = vid.published_parsed
                 video.timeStamp = getTimeDiff(vid.published_parsed)
                 video.channelName = vid.author_detail.name
+                video.channelId = vid.yt_channelid
                 video.channelUrl = vid.author_detail.href
                 video.id = vid.yt_videoid
                 video.videoTitle = vid.title

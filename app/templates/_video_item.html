@@ -5,7 +5,7 @@
     <div class="content">
         <a class="video-title" href="{{url_for('watch', v=video.id, _method='GET')}}">{{video.videoTitle}}</a>
         <div class="meta">
-            <a href="{{video.channelUrl}}">{{video.channelName}}</a>
+            <a href="{{url_for('channel', id=video.channelId)}}">{{video.channelName}}</a>
         </div>
         <div class="description">
             {{video.description}}
