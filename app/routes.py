@@ -19,8 +19,8 @@ import json
 import re
 
 # Instances - Format must be instance.tld (No '/' and no 'https://')
-nitterInstance = "https://nitter.net/"
-nitterInstanceII = "https://nitter.mastodont.cat/"
+nitterInstanceII = "https://nitter.net/"
+nitterInstance = "https://nitter.mastodont.cat/"
 
 ytChannelRss = "https://www.youtube.com/feeds/videos.xml?channel_id="
 invidiousInstance = "invidio.us"
@@ -92,24 +92,23 @@ def deleteSaved(id):
 def follow(username):
     form = EmptyForm()
     if form.validate_on_submit():
-        if twFollow(username):
+        if followTwitterAccount(username):
             flash("{} followed!".format(username))
-        else:
-            flash("Something went wrong...")
     return redirect(request.referrer)
 
-def twFollow(username):
+def followTwitterAccount(username):
     if isTwitterUser(username):
-        try:
-            follow = twitterFollow()
-            follow.username = username
-            follow.followers.append(current_user)
-            db.session.add(follow)
-            db.session.commit()
-            return True
-        except:
-            flash("Couldn't follow {}. Maybe you are already following!".format(username))
-            return False
+        if not current_user.is_following_tw(username):
+            try:
+                follow = twitterFollow()
+                follow.username = username
+                follow.followers.append(current_user)
+                db.session.add(follow)
+                db.session.commit()
+                return True
+            except:
+                flash("Twitter: Couldn't follow {}. Already followed?".format(username))
+                return False
     else:
         flash("Something went wrong... try again")
         return False
@@ -121,8 +120,6 @@ def unfollow(username):
     if form.validate_on_submit():
         if twUnfollow(username):
             flash("{} unfollowed!".format(username))
-        else:
-            flash("Something went wrong...")
     return redirect(request.referrer)
 
 def twUnfollow(username):
@@ -130,7 +127,6 @@ def twUnfollow(username):
         user = twitterFollow.query.filter_by(username=username).first()
         db.session.delete(user)
         db.session.commit()
-        flash("{} unfollowed!".format(username))
     except:
         flash("There was an error unfollowing the user. Try again.")
     return redirect(request.referrer)
@@ -252,19 +248,21 @@ def ytfollow(channelId):
     return redirect(request.referrer)
 
 def followYoutubeChannel(channelId):
-    channel = youtubeFollow.query.filter_by(channelId=channelId).first()
     channelData = YoutubeSearch.channelInfo(channelId, False)
     try:
-        follow = youtubeFollow()
-        follow.channelId = channelId
-        follow.channelName = channelData[0]['name']
-        follow.followers.append(current_user)
-        db.session.add(follow)
-        db.session.commit()
-        flash("{} followed!".format(channelData[0]['name']))
-        return True
+        if not current_user.is_following_yt(channelId):
+            follow = youtubeFollow()
+            follow.channelId = channelId
+            follow.channelName = channelData[0]['name']
+            follow.followers.append(current_user)
+            db.session.add(follow)
+            db.session.commit()
+            flash("{} followed!".format(channelData[0]['name']))
+            return True
+        else:
+            return False
     except:
-        flash("Couldn't follow {}. Maybe you are already following!".format(channelData[0]['name']))
+        flash("Youtube: Couldn't follow {}. Already followed?".format(channelData[0]['name']))
         return False
 
 @app.route('/ytunfollow/<channelId>', methods=['POST'])
@@ -374,7 +372,7 @@ def export():
         return redirect(url_for('error/405'))
 
 def exportData():
-    twitterFollowing = current_user.following_list()
+    twitterFollowing = current_user.twitter_following_list()
     youtubeFollowing = current_user.youtube_following_list()
     data = {}
     data['twitter'] = []
@@ -413,14 +411,19 @@ def importdata():
             flash('No selected file')
             return redirect(request.url)
         if file and allowed_file(file.filename):
-            filename = secure_filename(file.filename)
-            data = json.load(file)
-            for acc in data['twitter']:
-                if twFollow(acc['username']):
-                    print("{} followed!".format(acc['username']))
-                else:
-                    print("Something went wrong!")
+            importAccounts(file)
+            return render_template('settings.html')
+
     return redirect(request.referrer)
+
+def importAccounts(file):
+    filename = secure_filename(file.filename)
+    data = json.load(file)
+    for acc in data['twitter']:
+        r = followTwitterAccount(acc['username'])
+    
+    for acc in data['youtube']:
+        r = followYoutubeChannel(acc['channelId'])
 
 def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
@@ -461,7 +464,7 @@ def getTimeDiff(t):
     return timeString
 
 def isTwitterUser(username):
-    request = requests.get('https://nitter.net/{}/rss'.format(username), timeout=5)
+    request = requests.get('{instance}{user}/rss'.format(instance=nitterInstance, user=username))
     if request.status_code == 404:
         return False
     return True
@@ -470,7 +473,7 @@ def getFeed(urls):
     avatarPath = "img/avatars/{}.png".format(str(random.randint(1,12)))
     feedPosts = []
     with FuturesSession() as session:
-        futures = [session.get('https://nitter.net/{}/rss'.format(u.username)) for u in urls]
+        futures = [session.get('{instance}{user}/rss'.format(instance=nitterInstance, user=u.username)) for u in urls]
         for future in as_completed(futures):
             resp = future.result()
             rssFeed=feedparser.parse(resp.content)

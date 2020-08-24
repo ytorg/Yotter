@@ -2,7 +2,7 @@
 
 {% block content %}
 <br>
-<div class="ui one column centered grid">
+<div style="margin-bottom: 1em;" class="ui one column centered grid">
     <h2 class="ui icon header">
         <i class="settings icon"></i>
         <div class="content">
@@ -11,8 +11,19 @@
         </div>
     </h2>
 </div>
-<hr>
-<br>
+
+
+<div class="ui one column centered grid" style="margin-bottom: 1.4em;">
+    <div class="ui icon message" style=" width: 55%;">
+        <i class="info circle icon"></i>
+        <div class="content">
+        <div class="header">
+            Imports can take up to 2 minutes.
+        </div>
+        <p>But you can still use Parasitter.</p>
+        </div>
+    </div>
+</div>
 
 <div class="ui one column centered grid">
     <div class="ui relaxed divided list">
@@ -30,7 +41,7 @@
                     <input type = "file" name = "file"/>
                     <input type = "submit"/>
                 </form> 
-                <div class="description">Import data from JSON file</div>
+                <div class="description">Import from JSON export.</div>
             </div>
         </div>
 

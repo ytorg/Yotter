@@ -132,7 +132,7 @@ class ytPost():
 class youtubeFollow(db.Model):
     __tablename__ = 'channel'
     id = db.Column(db.Integer, primary_key=True)
-    channelId = db.Column(db.String(30), nullable=False, unique=True)
+    channelId = db.Column(db.String(30), nullable=False)
     channelName = db.Column(db.String(30))
     followers = db.relationship('User', 
                                 secondary=channel_association,
@@ -144,7 +144,7 @@ class youtubeFollow(db.Model):
 class twitterFollow(db.Model):
     __tablename__ = 'twitterAccount'
     id = db.Column(db.Integer, primary_key=True)
-    username = db.Column(db.String(30), unique=True)
+    username = db.Column(db.String(30), nullable=False)
     followers = db.relationship('User', 
                                 secondary=twitter_association,
                                 back_populates="twitterFollowed")
