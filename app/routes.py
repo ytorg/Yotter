@@ -435,7 +435,7 @@ def register():
         if isTwitterUser(form.username.data):
             flash('This is username is taken! Choose a different one.')
         else:
-            user = User(username=form.username.data, email=form.email.data)
+            user = User(username=form.username.data)
             user.set_password(form.password.data)
             db.session.add(user)
             db.session.commit()
