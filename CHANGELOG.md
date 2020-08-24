@@ -1,6 +1,4 @@
 ## Unreleased
-- [ ] Import data from JSON file.
-- [ ] Database: Fix following logic.
 - [ ] Configuration page: Disable retweets.
 - [ ] Configuration page: Disable loading media content.
 - [ ] Configuration page: Dark mode
@@ -14,11 +12,15 @@
 ## [0.2.1] - 2020-08-23
 ### Changed
 - [x] Youtube: All channel links now link within Parasitter
+- [x] Twitter: Improve database logic
+- [x] Twitter: Remove Following tab and move it to 'following number'
+- [x] General: Ability to import accounts from exported JSON file
 
 ### Added
 - [x] Youtube: Ability to view a channel page: /channel/<id>
 - [x] Youtube: Ability to search with full text: Channels and videos.
 - [x] Youtube: Ability to Follow and Unfollow a user from the channel profile.
+- [x] Youtube: Manage followed accounts clicking on 'following number'
 
 ## [0.2.1a] - 2020-08-16
 #### Breaking dependence with Invidious.
