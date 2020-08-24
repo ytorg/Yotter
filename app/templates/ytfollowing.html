@@ -1,23 +1,24 @@
 {% extends "base.html" %}
 
 {% block content %}
-<div style="margin: 0em;" class="ui one column centered grid">
-    <div style="margin-top: 1em;" class="row">
-        <img class="ui tiny circular image" src="{{ url_for('static',filename='img/avatars/')}}{{range(1, 12) | random}}.png">
-    </div>
-    <div style="margin: 1.5em;" class="row">
-        <h2 class="ui header">Accounts you follow ({{ count }}):</h2>
-    </div>
+<div style="padding: 1.3em;" class="ui one column centered grid">
+    <a href="{{ url_for('ytfollowing') }}"><div class="ui red statistic">
+        <div class="value">
+            {{ channelCount }}
+        </div>
+        <div class="label">
+            Following
+        </div>
+    </div></a>
 </div>
-<hr>
 
 <div style="margin: 0em;" class="ui one column centered grid">
 <div class="ui middle aligned divided list">
-    {% for acc in accounts %}
+    {% for channel in channelList %}
     <div class="item">
       <div class="right floated content">
             <p>
-                <form action="{{ url_for('unfollow', username=acc.username) }}" method="post">
+                <form action="{{ url_for('ytunfollow', channelId=channel.channelId) }}" method="post">
                     {{ form.hidden_tag() }}
                     {{ form.submit(value='Unfollow') }}
                 </form>
@@ -25,7 +26,7 @@
       </div>
       <img class="ui avatar image" src="{{ url_for('static',filename='img/avatars/')}}{{range(1, 12) | random}}.png">
       <div class="content">
-        {{acc.username}}
+        <a href="{{ url_for('channel', id=channel.channelId)}}">{{channel.channelName}}</a>
       </div>
     </div>
     {% endfor %}

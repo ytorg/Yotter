@@ -13,6 +13,11 @@ channel_association = db.Table('channel_association',
     db.Column('user_id', db.Integer, db.ForeignKey('user.id'))
 ) # Association: CHANNEL --followed by--> [USERS]
 
+twitter_association = db.Table('twitter_association',
+    db.Column('account_id', db.String, db.ForeignKey('twitterAccount.id')),
+    db.Column('user_id', db.Integer, db.ForeignKey('user.id'))
+) # Association: ACCOUNT --followed by--> [USERS]
+
 class User(UserMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(64), index=True, unique=True)
@@ -47,13 +52,28 @@ class User(UserMixin, db.Model):
 
     def saved_posts(self):
         return Post.query.filter_by(user_id=self.id)
+
+    # TWITTER
+    def twitter_following_list(self):
+        return self.twitterFollowed.all()
+    
+    def is_following_tw(self, uname):
+        temp_cid = twitterFollow.query.filter_by(username = uname).first()
+        if temp_cid is None:
+            return False
+        else:
+            following = self.twitter_following_list()
+            for f in following:
+                if f.username == uname:
+                    return True
+        return False
     
     # YOUTUBE
     def youtube_following_list(self):
         return self.youtubeFollowed.all()
     
     def is_following_yt(self, cid):
-        temp_cid = invidiousFollow.query.filter_by(channelId = cid).first()
+        temp_cid = youtubeFollow.query.filter_by(channelId = cid).first()
         if temp_cid is None:
             return False
         else:
@@ -69,8 +89,13 @@ class User(UserMixin, db.Model):
         secondaryjoin=(followers.c.followed_id == id),
         backref=db.backref('followers', lazy='dynamic'), lazy='dynamic')
 
-    youtubeFollowed = db.relationship("invidiousFollow",
+    youtubeFollowed = db.relationship("youtubeFollow",
         secondary=channel_association,
+        back_populates="followers",
+        lazy='dynamic')
+
+    twitterFollowed = db.relationship("twitterFollow",
+        secondary=twitter_association,
         back_populates="followers",
         lazy='dynamic')
 
@@ -106,16 +131,28 @@ class ytPost():
     id = 'isod'
 
 
-class invidiousFollow(db.Model):
+class youtubeFollow(db.Model):
     __tablename__ = 'channel'
     id = db.Column(db.Integer, primary_key=True)
     channelId = db.Column(db.String(30), nullable=False, unique=True)
+    channelName = db.Column(db.String(30))
     followers = db.relationship('User', 
                                 secondary=channel_association,
                                 back_populates="youtubeFollowed")
     
     def __repr__(self):
-        return '<invidiousFollow {}>'.format(self.channelId)
+        return '<youtubeFollow {}>'.format(self.channelName)
+
+class twitterFollow(db.Model):
+    __tablename__ = 'twitterAccount'
+    id = db.Column(db.Integer, primary_key=True)
+    username = db.Column(db.String(30), unique=True)
+    followers = db.relationship('User', 
+                                secondary=twitter_association,
+                                back_populates="twitterFollowed")
+    
+    def __repr__(self):
+        return '<twitterFollow {}>'.format(self.username)
 
 class Post(db.Model):
     id = db.Column(db.Integer, primary_key=True)

@@ -18,7 +18,7 @@
             <div class="ui one column centered grid">
             {% if user == current_user %}
                 <p><a>This is your profile</a></p>
-            {% elif not current_user.is_following(user) %}
+            {% elif not current_user.is_following_tw(user.username) %}
                 <p>
                     <form action="{{ url_for('follow', username=user.username) }}" method="post">
                         {{ form.hidden_tag() }}

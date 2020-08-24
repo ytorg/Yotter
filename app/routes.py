@@ -1,10 +1,11 @@
 from flask import render_template, flash, redirect, url_for, request, send_from_directory, Markup
 from app.forms import LoginForm, RegistrationForm, EmptyForm, SearchForm, ChannelForm
+from app.models import User, twitterPost, ytPost, Post, youtubeFollow, twitterFollow
 from flask_login import login_user, logout_user, current_user, login_required
-from app.models import User, twitterPost, ytPost, Post, invidiousFollow
 from flask import Flask, Response, stream_with_context
 from requests_futures.sessions import FuturesSession
 from concurrent.futures import as_completed
+from werkzeug.utils import secure_filename
 from youtube_search import YoutubeSearch
 from werkzeug.urls import url_parse
 from youtube_dl import YoutubeDL
@@ -24,6 +25,11 @@ nitterInstanceII = "https://nitter.mastodont.cat/"
 ytChannelRss = "https://www.youtube.com/feeds/videos.xml?channel_id="
 invidiousInstance = "invidio.us"
 
+##########################
+#### Global variables ####
+##########################
+ALLOWED_EXTENSIONS = {'json'}
+
 #########################
 #### Twitter Logic ######
 #########################
@@ -32,19 +38,19 @@ invidiousInstance = "invidio.us"
 @login_required
 def index():
     start_time = time.time()
-    following = current_user.following_list()
-    followed = current_user.followed.count()
+    followingList = current_user.twitter_following_list()
+    followCount = len(followingList)
     posts = []
     avatarPath = "img/avatars/1.png"
     form = EmptyForm()
-    posts.extend(getFeed(following))
+    posts.extend(getFeed(followingList))
     posts.sort(key=lambda x: x.timeStamp, reverse=True)
     if not posts:
         profilePic = avatarPath
     else:
         profilePic = posts[0].userProfilePic
     print("--- {} seconds fetching twitter feed---".format(time.time() - start_time))
-    return render_template('index.html', title='Home', posts=posts, avatar=avatarPath, profilePic = profilePic, followedCount=followed, form=form)
+    return render_template('index.html', title='Home', posts=posts, avatar=avatarPath, profilePic = profilePic, followedCount=followCount, form=form)
 
 @app.route('/savePost/<url>', methods=['POST'])
 @login_required
@@ -86,71 +92,56 @@ def deleteSaved(id):
 def follow(username):
     form = EmptyForm()
     if form.validate_on_submit():
-        user = User.query.filter_by(username=username).first()
-        isTwitter = isTwitterUser(username)
-        if user is None and isTwitter:
-            x = ''.join(randomrandom.choice(string.ascii_uppercase + string.ascii_lowercase + string.digits) for _ in range(16))
-            newUser = User(username=username, email="{}@person.is".format(x))
-            db.session.add(newUser)
+        if twFollow(username):
+            flash("{} followed!".format(username))
+        else:
+            flash("Something went wrong...")
+    return redirect(request.referrer)
+
+def twFollow(username):
+    if isTwitterUser(username):
+        try:
+            follow = twitterFollow()
+            follow.username = username
+            follow.followers.append(current_user)
+            db.session.add(follow)
             db.session.commit()
-            flash('You are now following {}!'.format(username))
-            #flash('User {} not found.'.format(username))
-            return redirect(url_for('index'))
-        if user == current_user:
-            flash('You cannot follow yourself!')
-            return redirect(url_for('user', username=username))
-        current_user.follow(user)
-        db.session.commit()
-        flash('You are following {}!'.format(username))
-        return redirect(url_for('user', username=username))
+            return True
+        except:
+            flash("Couldn't follow {}. Maybe you are already following!".format(username))
+            return False
     else:
-        return redirect(url_for('index'))
+        flash("Something went wrong... try again")
+        return False
 
 @app.route('/unfollow/<username>', methods=['POST'])
 @login_required
 def unfollow(username):
     form = EmptyForm()
     if form.validate_on_submit():
-        user = User.query.filter_by(username=username).first()
-        if user is None:
-            flash('User {} not found.'.format(username))
-            return redirect(url_for('index'))
-        if user == current_user:
-            flash('You cannot unfollow yourself!')
-            return redirect(url_for('user', username=username))
-        current_user.unfollow(user)
-        db.session.commit()
-        flash('You are no longer following {}.'.format(username))
-        return redirect(url_for('user', username=username))
-    else:
-        return redirect(url_for('index'))
+        if twUnfollow(username):
+            flash("{} unfollowed!".format(username))
+        else:
+            flash("Something went wrong...")
+    return redirect(request.referrer)
 
-@app.route('/unfollowList/<username>', methods=['POST'])
-@login_required
-def unfollowList(username):
-    form = EmptyForm()
-    if form.validate_on_submit():
-        user = User.query.filter_by(username=username).first()
-        if user is None:
-            flash('User {} not found.'.format(username))
-            return redirect(url_for('index'))
-        if user == current_user:
-            flash('You cannot unfollow yourself!')
-            return redirect(url_for('user', username=username))
-        current_user.unfollow(user)
+def twUnfollow(username):
+    try:
+        user = twitterFollow.query.filter_by(username=username).first()
+        db.session.delete(user)
         db.session.commit()
-        flash('You are no longer following {}!'.format(username))
-        return redirect(url_for('following'))
-    else:
-        return redirect(url_for('index'))
+        flash("{} unfollowed!".format(username))
+    except:
+        flash("There was an error unfollowing the user. Try again.")
+    return redirect(request.referrer)
 
 @app.route('/following')
 @login_required
 def following():
     form = EmptyForm()
-    following = current_user.following_list()
-    followed = current_user.followed.count()
-    return render_template('following.html', accounts = following, count = followed, form = form)
+    followCount = len(current_user.twitter_following_list())
+    accounts = current_user.twitter_following_list()
+    return render_template('following.html', accounts = accounts, count = followCount, form = form)
 
 @app.route('/search', methods=['GET', 'POST'])
 @login_required
@@ -174,16 +165,9 @@ def search():
 @app.route('/user/<username>')
 @login_required
 def user(username):
-    user = User.query.filter_by(username=username).first()
-    isTwitter = isTwitterUser(username)
-
-    if isTwitter and user is None:
-        x = ''.join(random.choice(string.ascii_uppercase + string.ascii_lowercase + string.digits) for _ in range(16))
-        newUser = User(username=username, email="{}@person.is".format(x))
-        db.session.add(newUser)
-        db.session.commit()
-    
-    elif not isTwitter and user is None:
+    isTwitter = isTwitterUser(username)    
+    if not isTwitter:
+        flash("This user is not on Twitter.")
         return redirect( url_for('error', errno="404"))
     
     posts = []
@@ -202,13 +186,23 @@ def user(username):
 @app.route('/youtube', methods=['GET', 'POST'])
 @login_required
 def youtube():
+    followCount = len(current_user.youtube_following_list())
     start_time = time.time()
     ids = current_user.youtube_following_list()
     videos = getYoutubePosts(ids)
     if videos:
         videos.sort(key=lambda x: x.date, reverse=True)
     print("--- {} seconds fetching youtube feed---".format(time.time() - start_time))
-    return render_template('youtube.html', videos=videos)
+    return render_template('youtube.html', videos=videos, followCount=followCount)
+
+@app.route('/ytfollowing', methods=['GET', 'POST'])
+@login_required
+def ytfollowing():
+    form = EmptyForm()
+    channelList = current_user.youtube_following_list()
+    channelCount = len(channelList)
+    
+    return render_template('ytfollowing.html', form=form, channelList=channelList, channelCount=channelCount)
 
 @app.route('/ytsearch', methods=['GET', 'POST'])
 @login_required
@@ -254,35 +248,41 @@ def ytsearch():
 def ytfollow(channelId):
     form = EmptyForm()
     if form.validate_on_submit():
-        channel = invidiousFollow.query.filter_by(channelId=channelId).first()
-        if requests.get('https://{instance}/feed/channel/{cid}'.format(instance=invidiousInstance, cid=channelId)).status_code == 200:
-            if channel is None:
-                follow = invidiousFollow()
-                follow.channelId = channelId
-                follow.followers.append(current_user)
-                try:
-                    db.session.add(follow)
-                    db.session.commit()
-                except:
-                    flash("Something went wrong. Try again!")
-                    return redirect(request.referrer)
-            flash('You are following {}!'.format(channelId))
-        else:
-            flash("Something went wrong... try again")
-        return redirect(request.referrer)
-    else:
-        return redirect(request.referrer)
+        r = followYoutubeChannel(channelId)            
+    return redirect(request.referrer)
+
+def followYoutubeChannel(channelId):
+    channel = youtubeFollow.query.filter_by(channelId=channelId).first()
+    channelData = YoutubeSearch.channelInfo(channelId, False)
+    try:
+        follow = youtubeFollow()
+        follow.channelId = channelId
+        follow.channelName = channelData[0]['name']
+        follow.followers.append(current_user)
+        db.session.add(follow)
+        db.session.commit()
+        flash("{} followed!".format(channelData[0]['name']))
+        return True
+    except:
+        flash("Couldn't follow {}. Maybe you are already following!".format(channelData[0]['name']))
+        return False
 
 @app.route('/ytunfollow/<channelId>', methods=['POST'])
 @login_required
 def ytunfollow(channelId):
     form = EmptyForm()
-    channel = invidiousFollow.query.filter_by(channelId=channelId).first()
+    if form.validate_on_submit():
+        r =  unfollowYoutubeChannel(channelId)
+    return redirect(request.referrer)
+
+def unfollowYoutubeChannel(channelId):
     try:
+        channel = youtubeFollow.query.filter_by(channelId=channelId).first()
         db.session.delete(channel)
         db.session.commit()
-        flash("User unfollowed!")
+        flash("{} unfollowed!".format(channel.channelName))
     except:
+        print("Exception")
         flash("There was an error unfollowing the user. Try again.")
     return redirect(request.referrer)
 
@@ -295,7 +295,7 @@ def channel(id):
     data = feedparser.parse(data.content)
 
     channelData = YoutubeSearch.channelInfo(id)
-    return render_template('channel.html', form=form, btform=button_form, channel=channelData[0], videos=channelData[1])
+    return render_template('channel.html', form=form, btform=button_form, channel=channelData[1], videos=channelData[0])
 
 @app.route('/watch', methods=['GET'])
 @login_required
@@ -396,6 +396,34 @@ def exportData():
         return True
     except:
         return False    
+
+@app.route('/importdata', methods=['GET', 'POST'])
+@login_required
+def importdata():
+    if request.method == 'POST':
+        print("Post request recieved")
+        # check if the post request has the file part
+        if 'file' not in request.files:
+            flash('No file part')
+            return redirect(request.url)
+        file = request.files['file']
+        # if user does not select file, browser also
+        # submit an empty part without filename
+        if file.filename == '':
+            flash('No selected file')
+            return redirect(request.url)
+        if file and allowed_file(file.filename):
+            filename = secure_filename(file.filename)
+            data = json.load(file)
+            for acc in data['twitter']:
+                if twFollow(acc['username']):
+                    print("{} followed!".format(acc['username']))
+                else:
+                    print("Something went wrong!")
+    return redirect(request.referrer)
+
+def allowed_file(filename):
+    return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():

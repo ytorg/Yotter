@@ -1,15 +1,23 @@
 {% extends "base.html" %}
 
 {% block content %}
-<br>
-<br>
-    {% if videos %}
-      <div class="ui centered cards">
-        {% for video in videos %}
-          {% include '_video_item.html' %}
-        {% endfor %}
-      </div>
-    {% else %}
-      {% include '_empty_feed.html' %}
-    {% endif %}
+  <div style="padding: 1.3em;" class="ui one column centered grid">
+    <a href="{{ url_for('ytfollowing') }}"><div class="ui small red statistic">
+        <div class="value">
+            {{ followCount }}
+        </div>
+        <div class="label">
+            Following
+        </div>
+    </div></a>
+  </div>
+  {% if videos %}
+    <div class="ui centered cards">
+      {% for video in videos %}
+        {% include '_video_item.html' %}
+      {% endfor %}
+    </div>
+  {% else %}
+    {% include '_empty_feed.html' %}
+  {% endif %}
 {% endblock %}

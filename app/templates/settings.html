@@ -24,6 +24,17 @@
             </div>
         </div>
         <div class="item">
+            <i class="large upload middle aligned icon"></i>
+            <div class="content">
+                <form action = "{{ url_for('importdata') }}" method = "POST" enctype = "multipart/form-data">
+                    <input type = "file" name = "file"/>
+                    <input type = "submit"/>
+                </form> 
+                <div class="description">Import data from JSON file</div>
+            </div>
+        </div>
+
+        <div class="item">
             <i class="large moon middle aligned icon"></i>
             <div class="content">
                 <div class="ui slider checkbox">
