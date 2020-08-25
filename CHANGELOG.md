@@ -9,7 +9,7 @@
 - Play media from Parasitter.
 - Create following lists.
 
-## [0.2.1] - 2020-08-23
+## [0.2.1] - 2020-08-25
 ### Changed
 - [x] Youtube: All channel links now link within Parasitter
 - [x] Twitter: Improve database logic
@@ -21,6 +21,9 @@
 - [x] Youtube: Ability to search with full text: Channels and videos.
 - [x] Youtube: Ability to Follow and Unfollow a user from the channel profile.
 - [x] Youtube: Manage followed accounts clicking on 'following number'
+  
+### Fixed
+- [x] Youtube: Channel link on channel videos not working.
 
 ## [0.2.1a] - 2020-08-16
 #### Breaking dependence with Invidious.
