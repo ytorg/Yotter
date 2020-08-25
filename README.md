@@ -82,7 +82,7 @@ You can test this new version.
 9. Go to "http://localhost:5000/" and enjoy.
 
 ### Updating to new versions:
-**NOTE: Updating will never delete your database, your following list will not be erased.**
+**IMPORTANT: Before updating to new versions, it is recommended to always export your data on `Settings>ExportData`. A major version update could have changes on the whole database and you may be forced to remove and reset the database!**
 1. Navigate to the git repository (the one you cloned when installing).
 2. Pull new changes:
     - `git pull`
@@ -90,9 +90,11 @@ You can test this new version.
    - `pip install -r requirements.txt`
    > It may be that there are no new packages to install. In that case, all requirements will be satisfied.
 
-5. [opt] This next step is only needed if you are running a version previous to [2020-07-15](CHANGELOG.md). Then you will need to update the database:
+5. Update the database:
     - `flask db migrate`
     - `flask db upgrade`
+> If you experience any error in this step, it might be that there were changes on the database. You can solve it by exporting your data, deleting and resetting the database. Run `rm -rf app.db migrations` and then `flask db init`. Then run step 5 normally.
+
 6. Done! You are on latest version.
 > **See [CHANGELOG](CHANGELOG.md) for a list of changes.**
 
