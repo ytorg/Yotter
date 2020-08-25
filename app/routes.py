@@ -19,8 +19,8 @@ import json
 import re
 
 # Instances - Format must be instance.tld (No '/' and no 'https://')
-nitterInstanceII = "https://nitter.net/"
-nitterInstance = "https://nitter.mastodont.cat/"
+nitterInstance = "https://nitter.net/"
+nitterInstanceII = "https://nitter.mastodont.cat/"
 
 ytChannelRss = "https://www.youtube.com/feeds/videos.xml?channel_id="
 invidiousInstance = "invidio.us"
@@ -293,7 +293,7 @@ def channel(id):
     data = feedparser.parse(data.content)
 
     channelData = YoutubeSearch.channelInfo(id)
-    return render_template('channel.html', form=form, btform=button_form, channel=channelData[1], videos=channelData[0])
+    return render_template('channel.html', form=form, btform=button_form, channel=channelData[0], videos=channelData[1])
 
 @app.route('/watch', methods=['GET'])
 @login_required
