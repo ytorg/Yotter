@@ -4,51 +4,52 @@
     <div class="blue ui centered card">
         <div class="content">
             <div class="center aligned author">
-                <img class="ui avatar image" src="{{ posts[0].userProfilePic }}"> {{ twitterAt }}
+                <img class="ui avatar image" src="{{user.profilePic}}">
             </div>
-            <div style="margin: .1em" class="center aligned header"><a href="https://nitter.net/{{ user.username }}">{{ posts[0].twitterName }}</a></div>
-        <div class="center aligned description">
-            <a>
-                <i class="users icon"></i>
-                {{ user.followers.count() }}
-            </a>
+            <div class="center aligned header"><a href="https://nitter.net/{{ user.profileUsername.replace('@','') }}">
+                {%if user.profileFullName%}
+                    {{user.profileFullName}}
+                {%else%}
+                    {{user.profileUsername}}
+                {%endif%}
+            </a></div>
+            <div class="center aligned description">
+                    <div class="statistic">
+                        <div class="value">
+                            <i class="users icon"></i>{{user.followers}}
+                        </div>
+                        <div class="label">
+                        Followers
+                        </div>
+                    </div>   
+            </div>
         </div>
-        </div>
-        <div class="extra content">
-            <div class="ui one column centered grid">
-            {% if user == current_user %}
-                <p><a>This is your profile</a></p>
-            {% elif not current_user.is_following_tw(user.username) %}
+        <div class="center aligned extra content">
+            {% if not current_user.is_following_tw(user.profileUsername.replace('@','')) %}
                 <p>
-                    <form action="{{ url_for('follow', username=user.username) }}" method="post">
+                    <form action="{{ url_for('follow', username=user.profileUsername.replace('@','')) }}" method="post">
                         {{ form.hidden_tag() }}
                         {{ form.submit(value='Follow') }}
                     </form>
                 </p>
             {% else %}
                 <p>
-                    <form action="{{ url_for('unfollow', username=user.username) }}" method="post">
+                    <form action="{{ url_for('unfollow', username=user.profileUsername.replace('@','')) }}" method="post">
                         {{ form.hidden_tag() }}
                         {{ form.submit(value='Unfollow') }}
                     </form>
                 </p>
-            {% endif %}
-        </div>
+            {% endif %}        
         </div>
     </div>
 
-    <div class="ui one column grid" id="card-container">
-    
-    {% if not posts %}
-        {% include '_empty_feed.html' %}
-    {% else %}
-        {% for post in posts %}
-            {% if post.isRT %}
-                {% include '_post.html' %}
-            {% else %}
-                {% include '_post_nort.html' %}
-            {% endif %}
-        {% endfor %}
-    {% endif %}
+    <div class="text container" id="card-container">
+        {% if not posts %}
+            {% include '_empty_feed.html' %}
+        {% else %}
+            {% for post in posts %}
+                    {% include '_twitter_post.html' %}
+            {% endfor %}
+        {% endif %}
     </div>
 {% endblock %}

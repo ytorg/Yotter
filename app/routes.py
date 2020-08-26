@@ -15,6 +15,7 @@ import random, string
 import time, datetime
 import feedparser
 import requests
+import urllib
 import json
 import re
 
@@ -67,7 +68,7 @@ def savePost(url):
 
     newPost = Post()
     newPost.url = savedUrl
-    newPost.body = html.body.find_all('div', attrs={'class':'main-tweet'})[0].find_all('div', attrs={'class':'tweet-content'})[0].text
+    newPost.body = html.body.find_all('div', attrs={'class':'main-tweet'})[0].find_all('div', attrs={'class':'tweet-content'})[0].text.encode('latin1').decode('unicode_escape').encode('latin1').decode('utf8')
     newPost.username = html.body.find('a','username').text.replace("@","")
     newPost.timestamp = html.body.find_all('p', attrs={'class':'tweet-published'})[0].text
     newPost.user_id = current_user.id
@@ -76,7 +77,7 @@ def savePost(url):
         db.session.commit()
     except:
         flash("Post could not be saved. Either it was already saved or there was an error.")
-    return redirect(url_for('index'))
+    return redirect(request.referrer)
 
 @app.route('/saved')
 @login_required
@@ -166,20 +167,19 @@ def search():
 @app.route('/user/<username>')
 @login_required
 def user(username):
-    isTwitter = isTwitterUser(username)    
-    if not isTwitter:
+    form = EmptyForm() 
+    avatarPath = "img/avatars/{}.png".format(str(random.randint(1,12)))
+    user = getTwitterUserInfo(username)
+    if not user:
         flash("This user is not on Twitter.")
-        return redirect( url_for('error', errno="404"))
+        return redirect(request.referrer)
     
     posts = []
     posts.extend(getPosts(username))
-    form = EmptyForm()
-    user = User.query.filter_by(username=username).first()
     if not posts:
-        profilePic = avatarPath
-    else:
-        profilePic = posts[0].userProfilePic
-    return render_template('user.html', user=user, posts=posts, profilePic = profilePic, form=form)
+        user['profilePic'] = avatarPath
+
+    return render_template('user.html', posts=posts, user=user, form=form)
 
 #########################
 #### Youtube Logic ######
@@ -469,10 +469,31 @@ def getTimeDiff(t):
     return timeString
 
 def isTwitterUser(username):
-    request = requests.get('{instance}{user}/rss'.format(instance=nitterInstance, user=username))
-    if request.status_code == 404:
+    response = requests.get('{instance}{user}/rss'.format(instance=nitterInstance, user=username))
+    if response.status_code == 404:
         return False
     return True
+
+def getTwitterUserInfo(username):
+    response = urllib.request.urlopen('{instance}{user}'.format(instance=nitterInstance, user=username)).read()
+    #rssFeed = feedparser.parse(response.content)
+
+    html = BeautifulSoup(str(response), "lxml")
+    if html.body.find('div', attrs={'class':'error-panel'}):
+        return False
+    else:
+        html = html.body.find('div', attrs={'class':'profile-card'})
+        user = {
+            "profileFullName":html.find('a', attrs={'class':'profile-card-fullname'}).string,
+            "profileUsername":html.find('a', attrs={'class':'profile-card-username'}).string,
+            "profileBio":html.find('div', attrs={'class':'profile-bio'}).get_text().encode('latin1').decode('unicode_escape').encode('latin1').decode('utf8'),
+            "tweets":html.find_all('span', attrs={'class':'profile-stat-num'})[0].string,
+            "following":html.find_all('span', attrs={'class':'profile-stat-num'})[1].string,
+            "followers":html.find_all('span', attrs={'class':'profile-stat-num'})[2].string,
+            "likes":html.find_all('span', attrs={'class':'profile-stat-num'})[3].string,
+            "profilePic":"{instance}{pic}".format(instance=nitterInstance, pic=html.find('a', attrs={'class':'profile-card-avatar'})['href'][1:])
+        }
+        return user
 
 def getFeed(urls):
     avatarPath = "img/avatars/{}.png".format(str(random.randint(1,12)))
@@ -484,12 +505,16 @@ def getFeed(urls):
             rssFeed=feedparser.parse(resp.content)
             if rssFeed.entries != []:
                     for post in rssFeed.entries:
+                        time = datetime.datetime.now() - datetime.datetime(*post.published_parsed[:6])
+                        if time.days >= 15:
+                            continue
                         newPost = twitterPost()
                         newPost.username = rssFeed.feed.title.split("/")[1].replace(" ", "")
                         newPost.twitterName = rssFeed.feed.title.split("/")[0]
                         newPost.date = getTimeDiff(post.published_parsed)
                         newPost.timeStamp = datetime.datetime(*post.published_parsed[:6])
                         newPost.op = post.author
+
                         try:
                             newPost.userProfilePic = rssFeed.channel.image.url
                         except:
