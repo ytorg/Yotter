@@ -54,7 +54,8 @@ The Parasitter server connects to Google (Youtube) in order to gather all the ne
 
 ### Test
 You can test this new version.
-> IMPORTANT: Connections to googlevideo will be made to stream the videos. It is recommended to use a VPS server to preserve your privacy.
+
+##### IMPORTANT: Connections to googlevideo will be made to stream the videos. It is recommended to use a VPS server or a VPN to preserve your privacy. This version is intended for a remote server.
 
 1. Install `python3`, `pip3`, `python3-venv` (optional) and `git`.
 2. Clone this repository:
@@ -63,7 +64,7 @@ You can test this new version.
     - `cd Parasitter`
 4. Change to this branch:
    - `git checkout dev-indep`
-5. [Optional] Prepare a virtual environment and activate it:
+5. [Optional] Prepare a virtual environment and activate it (Recommended):
 
    > Python lets you create virtual environments. This allows you to avoid installing all the `pip` packages on your system.   
    If you don't mind about that, you can jump to step **5.** and ignore everything about "[env]".
@@ -71,14 +72,15 @@ You can test this new version.
     - `source venv/bin/activate`
     > Now you are inside of the virtual environment for python. All instructions wiht [env] indicate that must be done inside the env if you decided to create one. From now on, you will always need to start the application from within the virtual env.
 6. [env] Update pip
-    - `pip3 install --upgrade pip`
+    - `python3 pip install --upgrade pip`
 7. [env] Install the required libraries:
-    - `pip3 install -r requirements.txt`
+    - `python3 pip install -r requirements.txt`
        > Use `sudo` or, preferably `--user`, if not working.
 8. [env] Initialize and prepare the database.
     - `flask db init`
     - `flask db migrate`
     - `flask db upgrade`
+    > If you get *`"No such command db"`*, try running `source venv/bin/activate` again.
 9. [env] Run the application.
     - `flask run`
 10. Go to "http://localhost:5000/" and enjoy.
