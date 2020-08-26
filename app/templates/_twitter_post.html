@@ -2,7 +2,12 @@
     <div class="content">
         <div class="extra content">
             <div class="left floated author">
-                <img class="ui avatar image" src="{{ url_for('static',filename='img/avatars/')}}{{range(1, 12) | random}}.png">
+                {% if post.isRT %}
+                    <img class="ui avatar image" src="{{ url_for('static',filename='img/avatars/')}}{{range(1, 12) | random}}.png">
+                {%else%}
+                <img class="ui avatar image" src="{{ post.profilePic }}">
+                {%endif%}
+
             </div>
             
             <a href="{{post.url}}"><span class="right floated star">
@@ -12,7 +17,12 @@
         <div class="header" id="author"><a href="user/{{post.op.replace('@','')}}">{{ post.op }}</a></div>
         <div class="meta">
             <span class="category" id="time"><i class="clock icon"></i> {{post.date}} </span>
-            <span class="category"><i class="retweet icon"></i> {{post.username}} retwitted</span>      
+            {% if post.isPinned %}
+                <span class="category" id="time"><i class="map pin icon"></i> Pinned </span>
+            {%endif%}
+            {% if post.isRT %}
+                <span class="category"><i class="retweet icon"></i> {{post.username}} retwitted</span>
+            {%endif%}
         </div>
         <div class="description break-word">
             <p>{{post.content}}</p>

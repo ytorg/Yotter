@@ -14,11 +14,7 @@
     <div class="text container" id="card-container">
         {% if posts %}
             {% for post in posts %}
-                {% if post.isRT %}
-                    {% include '_post.html' %}
-                {% else %}
-                    {% include '_post_nort.html' %}
-                {% endif %}
+                    {% include '_twitter_post.html' %}
             {% endfor %}
         {% else %}
             <div>No posts</div>
