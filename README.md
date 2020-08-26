@@ -72,9 +72,9 @@ You can test this new version.
     - `source venv/bin/activate`
     > Now you are inside of the virtual environment for python. All instructions wiht [env] indicate that must be done inside the env if you decided to create one. From now on, you will always need to start the application from within the virtual env.
 6. [env] Update pip
-    - `pip3 install --upgrade pip`
+    - `python3 pip install --upgrade pip`
 7. [env] Install the required libraries:
-    - `pip3 install -r requirements.txt`
+    - `python3 pip install -r requirements.txt`
        > Use `sudo` or, preferably `--user`, if not working.
 8. [env] Initialize and prepare the database.
     - `flask db init`
