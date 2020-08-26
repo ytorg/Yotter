@@ -63,7 +63,7 @@ You can test this new version.
     - `cd Parasitter`
 4. Change to this branch:
    - `git checkout dev-indep`
-5. [Optional] Prepare a virtual environment and activate it:
+5. [Optional] Prepare a virtual environment and activate it (Recommended):
 
    > Python lets you create virtual environments. This allows you to avoid installing all the `pip` packages on your system.   
    If you don't mind about that, you can jump to step **5.** and ignore everything about "[env]".
@@ -79,6 +79,7 @@ You can test this new version.
     - `flask db init`
     - `flask db migrate`
     - `flask db upgrade`
+    > If you get *`"No such command db"`*, try running `source venv/bin/activate` again.
 9. [env] Run the application.
     - `flask run`
 10. Go to "http://localhost:5000/" and enjoy.
