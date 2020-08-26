@@ -54,7 +54,8 @@ The Parasitter server connects to Google (Youtube) in order to gather all the ne
 
 ### Test
 You can test this new version.
-> IMPORTANT: Connections to googlevideo will be made to stream the videos. It is recommended to use a VPS server to preserve your privacy.
+
+##### IMPORTANT: Connections to googlevideo will be made to stream the videos. It is recommended to use a VPS server or a VPN to preserve your privacy. This version is intended for a remote server.
 
 1. Install `python3`, `pip3`, `python3-venv` (optional) and `git`.
 2. Clone this repository:
