@@ -22,3 +22,7 @@
 .break-word{
     word-break: break-word;
 }
+
+.overflow-auto{
+    overflow: auto;
+}

@@ -12,7 +12,7 @@
         <link rel="stylesheet" type= "text/css" href="{{ url_for('static',filename='styles.css') }}">
     </head>
     <body>
-        <div class="ui labeled icon menu">
+        <div class="ui icon menu overflow-auto">
             <a href="{{ url_for('index') }}"><div class="item">
                 <img src="{{ url_for('static',filename='img/logo.png') }}">
             </div></a>
@@ -24,8 +24,10 @@
                 <a href="{{ url_for('saved') }}" class="twitter item"><i class="bookmark icon"></i></a>
                 <a href="{{ url_for('youtube') }}" class="youtube item"><i class="youtube icon"></i></a>
                 <a href="{{ url_for('ytsearch') }}" class="youtube item"><i class="search icon"></i></a>
-                <a href="{{ url_for('settings') }}" class="item"><i class="cog icon"></i></a>
-                <a href="{{ url_for('logout') }}" class="item"><i class="sign-out icon"></i></a>
+                <div class="right menu">
+                    <a href="{{ url_for('settings') }}" class="item"><i class="cog icon"></i></a>
+                    <a href="{{ url_for('logout') }}" class="item"><i class="sign-out icon"></i></a>
+                </div>
             {% endif %}
         </div>
 
