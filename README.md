@@ -6,7 +6,7 @@
 #### **IMPORTANT** If you want to try out the latest features you should look at [**this branch**](https://github.com/pluja/Parasitter/tree/dev-indep). Master branch is currently inactive!
 
 ## BREAKING DEPENDENCE WITH INVIDIOUS
-A [**new branch**](https://github.com/pluja/Parasitter/tree/dev-indep) is being developed where I'm trying to break dependence with Invidious.
+A [**new branch**](https://github.com/pluja/Parasitter/tree/dev-indep) is being developed where I've broke dependence on Invidious.
 
 Progress:
 - [x] Video data.
