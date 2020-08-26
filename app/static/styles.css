@@ -18,3 +18,7 @@
     font-weight: bold;
     font-size: 1.15em;
 }
+
+.break-word{
+    word-break: break-word;
+}

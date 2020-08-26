@@ -1,17 +1,17 @@
 {% extends "base.html" %}
 
 {% block content %}
-    <div style="padding: 1.3em;" class="ui one column centered grid">
-        <a href="{{ url_for('following') }}"><div class="ui small teal statistic">
+    <div class="text container centered">
+        <a style="padding: 1.3em; display: block;" href="{{ url_for('following') }}" class="ui small teal statistic">
             <div class="value">
                 {{ followedCount }}
             </div>
             <div class="label">
                 Following
             </div>
-        </div></a>
+        </a>
     </div>
-    <div class="ui one column grid" id="card-container">
+    <div class="text container" id="card-container">
         {% if posts %}
             {% for post in posts %}
                 {% if post.isRT %}
