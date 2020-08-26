@@ -61,25 +61,27 @@ You can test this new version.
     - `git clone https://github.com/pluja/Parasitter.git`
 3. Navigate to the project folder:
     - `cd Parasitter`
-4. [Optional] Prepare a virtual environment and activate it:
+4. Change to this branch:
+   - `git checkout dev-indep`
+5. [Optional] Prepare a virtual environment and activate it:
 
    > Python lets you create virtual environments. This allows you to avoid installing all the `pip` packages on your system.   
    If you don't mind about that, you can jump to step **5.** and ignore everything about "[env]".
     - `python3 -m venv venv`
     - `source venv/bin/activate`
     > Now you are inside of the virtual environment for python. All instructions wiht [env] indicate that must be done inside the env if you decided to create one. From now on, you will always need to start the application from within the virtual env.
-5. [env] Update pip
+6. [env] Update pip
     - `pip3 install --upgrade pip`
-6. [env] Install the required libraries:
+7. [env] Install the required libraries:
     - `pip3 install -r requirements.txt`
        > Use `sudo` or, preferably `--user`, if not working.
-7. [env] Initialize and prepare the database.
+8. [env] Initialize and prepare the database.
     - `flask db init`
     - `flask db migrate`
     - `flask db upgrade`
-8. [env] Run the application.
+9. [env] Run the application.
     - `flask run`
-9. Go to "http://localhost:5000/" and enjoy.
+10. Go to "http://localhost:5000/" and enjoy.
 
 ### Updating to new versions:
 **IMPORTANT: Before updating to new versions, it is recommended to always export your data on `Settings>ExportData`. A major version update could have changes on the whole database and you may be forced to remove and reset the database!**
