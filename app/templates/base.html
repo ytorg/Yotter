@@ -13,13 +13,13 @@
     </head>
     <body>
         <div class="ui stackable menu">
-            <div class="item">
-            <img src="{{ url_for('static',filename='img/logo.png') }}">
-            </div>
+            <a href="{{ url_for('index') }}"><div class="item">
+                <img src="{{ url_for('static',filename='img/logo.png') }}">
+            </div></a>
             {% if current_user.is_anonymous %}
             <a href="{{ url_for('login') }}" class="item">Login</a>
             {% else %}
-                <a href="{{ url_for('index') }}" class="twitter item">Twitter</a>
+                <a href="{{ url_for('twitter') }}" class="twitter item">Twitter</a>
                 <a href="{{ url_for('search') }}" class="twitter item">Search</a>
                 <a href="{{ url_for('saved') }}" class="twitter item">Saved</a>
                 <a href="{{ url_for('youtube') }}" class="youtube item">Youtube</a>

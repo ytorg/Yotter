@@ -37,6 +37,11 @@ ALLOWED_EXTENSIONS = {'json'}
 @app.route('/index')
 @login_required
 def index():
+    return render_template('home.html')
+
+@app.route('/twitter')
+@login_required
+def twitter():
     start_time = time.time()
     followingList = current_user.twitter_following_list()
     followCount = len(followingList)
@@ -50,7 +55,7 @@ def index():
     else:
         profilePic = posts[0].userProfilePic
     print("--- {} seconds fetching twitter feed---".format(time.time() - start_time))
-    return render_template('index.html', title='Home', posts=posts, avatar=avatarPath, profilePic = profilePic, followedCount=followCount, form=form)
+    return render_template('twitter.html', title='Home', posts=posts, avatar=avatarPath, profilePic = profilePic, followedCount=followCount, form=form)
 
 @app.route('/savePost/<url>', methods=['POST'])
 @login_required
@@ -300,7 +305,7 @@ def channel(id):
 def watch():
     id = request.args.get('v', None)
     ydl = YoutubeDL()
-    data = ydl.extract_info("{id}".format(id=id), download=False)
+    data = ydl.extract_info(id, False)
     if data['formats'][-1]['url'].find("manifest.googlevideo") > 0:
         flash("Livestreams are not yet supported!")
         return redirect(url_for('youtube'))
