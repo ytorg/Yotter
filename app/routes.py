@@ -56,7 +56,7 @@ def twitter():
     else:
         profilePic = posts[0].userProfilePic
     print("--- {} seconds fetching twitter feed---".format(time.time() - start_time))
-    return render_template('twitter.html', title='Home', posts=posts, avatar=avatarPath, profilePic = profilePic, followedCount=followCount, form=form)
+    return render_template('twitter.html', title='Parasitter | Twitter', posts=posts, avatar=avatarPath, profilePic = profilePic, followedCount=followCount, form=form)
 
 @app.route('/savePost/<url>', methods=['POST'])
 @login_required
@@ -64,13 +64,13 @@ def savePost(url):
     savedUrl = url.replace('~', '/')
     r = requests.get(savedUrl)
     html = BeautifulSoup(str(r.content), "lxml")
-    post = html.body.find_all('div', attrs={'class':'tweet-content'})
+    post = html.body.find('div', attrs={'class':'main-tweet'})
 
     newPost = Post()
     newPost.url = savedUrl
-    newPost.body = html.body.find_all('div', attrs={'class':'main-tweet'})[0].find_all('div', attrs={'class':'tweet-content'})[0].text.encode('latin1').decode('unicode_escape').encode('latin1').decode('utf8')
-    newPost.username = html.body.find('a','username').text.replace("@","")
-    newPost.timestamp = html.body.find_all('p', attrs={'class':'tweet-published'})[0].text
+    newPost.username = post.find('a','username').text.replace("@","")
+    newPost.body = post.find_all('div', attrs={'class':'tweet-content'})[0].text.encode('latin1').decode('unicode_escape').encode('latin1').decode('utf8')
+    newPost.timestamp = post.find_all('p', attrs={'class':'tweet-published'})[0].text.encode('latin1').decode('unicode_escape').encode('latin1').decode('utf8')
     newPost.user_id = current_user.id
     try:
         db.session.add(newPost)
@@ -194,7 +194,7 @@ def youtube():
     if videos:
         videos.sort(key=lambda x: x.date, reverse=True)
     print("--- {} seconds fetching youtube feed---".format(time.time() - start_time))
-    return render_template('youtube.html', videos=videos, followCount=followCount)
+    return render_template('youtube.html', title="Parasitter | Youtube", videos=videos, followCount=followCount)
 
 @app.route('/ytfollowing', methods=['GET', 'POST'])
 @login_required
@@ -583,6 +583,11 @@ def getYoutubePosts(ids):
             resp = future.result()
             rssFeed=feedparser.parse(resp.content)
             for vid in rssFeed.entries:
+                time = datetime.datetime.now() - datetime.datetime(*vid.published_parsed[:6])
+
+                if time.days >= 15:
+                    continue
+                    
                 video = ytPost()
                 video.date = vid.published_parsed
                 video.timeStamp = getTimeDiff(vid.published_parsed)
