@@ -9,6 +9,7 @@ from werkzeug.utils import secure_filename
 from youtube_search import YoutubeSearch
 from werkzeug.urls import url_parse
 from youtube_dl import YoutubeDL
+from numerize import numerize
 from bs4 import BeautifulSoup
 from app import app, db
 import random, string
@@ -233,11 +234,12 @@ def ytsearch():
             })
 
         for c in chnns:
+            print(c)
             channels.append({
                 'username':c['name'],
                 'channelId':c['id'],
                 'thumbnail':'https:{}'.format(c['thumbnails'][0]),
-                'subCount':letterify(c['suscriberCountText'])
+                'subCount':c['suscriberCountText'].split(" ")[0]
             })
         return render_template('ytsearch.html', form=form, btform=button_form, channels=channels, videos=videos)
 
@@ -285,7 +287,6 @@ def unfollowYoutubeChannel(channelId):
         db.session.commit()
         flash("{} unfollowed!".format(channel.channelName))
     except:
-        print("Exception")
         flash("There was an error unfollowing the user. Try again.")
     return redirect(request.referrer)
 
@@ -404,7 +405,6 @@ def exportData():
 @login_required
 def importdata():
     if request.method == 'POST':
-        print("Post request recieved")
         # check if the post request has the file part
         if 'file' not in request.files:
             flash('No file part')
@@ -456,8 +456,7 @@ def error(errno):
     return render_template('{}.html'.format(str(errno)))
 
 def getTimeDiff(t):
-    tweetTime = datetime.datetime(*t[:6])
-    diff = datetime.datetime.now() - tweetTime
+    diff = datetime.datetime.now() - datetime.datetime(*t[:6])
 
     if diff.days == 0:
         if diff.seconds > 3599:
@@ -484,12 +483,12 @@ def getTwitterUserInfo(username):
     else:
         html = html.body.find('div', attrs={'class':'profile-card'})
         user = {
-            "profileFullName":html.find('a', attrs={'class':'profile-card-fullname'}).string,
-            "profileUsername":html.find('a', attrs={'class':'profile-card-username'}).string,
+            "profileFullName":html.find('a', attrs={'class':'profile-card-fullname'}).string.encode('latin1').decode('unicode_escape').encode('latin1').decode('utf8'),
+            "profileUsername":html.find('a', attrs={'class':'profile-card-username'}).string.encode('latin1').decode('unicode_escape').encode('latin1').decode('utf8'),
             "profileBio":html.find('div', attrs={'class':'profile-bio'}).get_text().encode('latin1').decode('unicode_escape').encode('latin1').decode('utf8'),
             "tweets":html.find_all('span', attrs={'class':'profile-stat-num'})[0].string,
             "following":html.find_all('span', attrs={'class':'profile-stat-num'})[1].string,
-            "followers":html.find_all('span', attrs={'class':'profile-stat-num'})[2].string,
+            "followers":numerize.numerize(int(html.find_all('span', attrs={'class':'profile-stat-num'})[2].string.replace(",",""))),
             "likes":html.find_all('span', attrs={'class':'profile-stat-num'})[3].string,
             "profilePic":"{instance}{pic}".format(instance=nitterInstance, pic=html.find('a', attrs={'class':'profile-card-avatar'})['href'][1:])
         }
@@ -587,7 +586,7 @@ def getYoutubePosts(ids):
 
                 if time.days >= 15:
                     continue
-                    
+
                 video = ytPost()
                 video.date = vid.published_parsed
                 video.timeStamp = getTimeDiff(vid.published_parsed)
@@ -602,22 +601,3 @@ def getYoutubePosts(ids):
                 video.description = re.sub(r'^https?:\/\/.*[\r\n]*', '', video.description[0:120]+"...", flags=re.MULTILINE)
                 videos.append(video)
     return videos
-
-def letterify(number):
-    order = len(str(number))
-    if order == 4:
-        subCount = "{k}.{c}k".format(k=str(number)[0:1], c=str(number)[1:2])
-    elif order == 5:
-        subCount = "{k}.{c}k".format(k=str(number)[0:2], c=str(number)[2:3])
-    elif order == 6:
-        subCount = "{k}.{c}k".format(k=str(number)[0:3], c=str(number)[3:4])
-    elif order == 7:
-        subCount = "~{M}M".format(M=str(number)[0:1])
-    elif order == 8:
-        subCount = "~{M}M".format(M=str(number)[0:2])
-    elif order >= 8:
-        subCount = "{M}M".format(M=str(number)[0:3])
-    else:
-        subCount = str(number)
-
-    return subCount
