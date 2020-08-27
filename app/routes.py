@@ -437,15 +437,16 @@ def register():
 
     form = RegistrationForm()
     if form.validate_on_submit():
-        if isTwitterUser(form.username.data):
-            flash('This is username is taken! Choose a different one.')
-        else:
-            user = User(username=form.username.data)
-            user.set_password(form.password.data)
-            db.session.add(user)
-            db.session.commit()
-            flash('Congratulations, you are now a registered user!')
-            return redirect(url_for('login'))
+        if User.query.filter_by(username=form.username.data).first():
+            flash("This username is taken! Try with another.")
+            return redirect(request.referrer)
+            
+        user = User(username=form.username.data)
+        user.set_password(form.password.data)
+        db.session.add(user)
+        db.session.commit()
+        flash('Congratulations, you are now a registered user!')
+        return redirect(url_for('login'))
     return render_template('register.html', title='Register', form=form)
 
 @app.route('/error/<errno>')
