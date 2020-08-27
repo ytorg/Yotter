@@ -471,7 +471,8 @@ def isTwitterUser(username):
     return True
 
 def twitterUserSearch(terms):
-    response = urllib.request.urlopen('{instance}search?f=users&q={user}'.format(instance=nitterInstance, user=terms)).read()
+    
+    response = urllib.request.urlopen('{instance}search?f=users&q={user}'.format(instance=nitterInstance, user=urllib.parse.quote(terms))).read()
     html = BeautifulSoup(str(response), "lxml")
 
     results = []
@@ -531,13 +532,14 @@ def getFeed(urls):
             userFeed = html.find_all('div', attrs={'class':'timeline-item'})
             if userFeed != []:
                     for post in userFeed[:-1]:
+                        date_time_str = post.find('span', attrs={'class':'tweet-date'}).find('a')['title'].replace(",","")
+                        time = datetime.datetime.now() - datetime.datetime.strptime(date_time_str, '%d/%m/%Y %H:%M:%S')
+                        if time.days >= 11:
+                            continue
+
                         if post.find('div', attrs={'class':'pinned'}):
                             if post.find('div', attrs={'class':'pinned'}).find('span', attrs={'icon-pin'}):
                                 continue
-                        date_time_str = post.find('span', attrs={'class':'tweet-date'}).find('a')['title'].replace(",","")
-                        time = datetime.datetime.now() - datetime.datetime.strptime(date_time_str, '%d/%m/%Y %H:%M:%S')
-                        if time.days >= 14:
-                            continue
 
                         newPost = twitterPost()
                         newPost.op = post.find('a', attrs={'class':'username'}).text
