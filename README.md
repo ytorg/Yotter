@@ -29,7 +29,6 @@ Parasitter is possible thanks to several open-source projects that are listed on
 * Tor-friendly.
 * Terminal-friendly.
 * Easy 1 minute self-hosting deploy.
-* No need for domain, runs locally.
 > And many more to come!
 
 ## Security
