@@ -37,15 +37,17 @@ Only the hash of your password is stored on the database. Also no personal infor
 I always recommend self-hosting, as you will be the only person with access to the data.
 
 ## Privacy
-Parasitter cares about your privacy, and for this it will never make any connection to Twitter or Youtube. We make use pf rss feeds to fetch all the tweets from your followed accounts. If you want to use a specific Nitter or Invidious instance you can replace it on the file `app/routes.py`.
+Parasitter cares about your privacy, and for this it will never make any connection to Twitter or Youtube on the client. We make use of rss feeds to fetch all the tweets from your followed accounts. If you want to use a specific Nitter instance you can replace it on the file `app/routes.py`.
 
+The only things the database stores are:
 * Hash of the password
 * Username
-* Email (we won't send you any mails so you can make up the mail) - This is for future versions.
 * List of followed users
 * List of saved posts
 
-The Parasitter server connects to Google (Youtube) in order to gather all the necessary data. Then it serves it (proxied through itself) to the client. This means that as a user, you will never connect to Google - the Parasitter server will do it for you. So if you want to set up a Parasitter server I recommend you to set it up on a remote VPS so you don't share your IP with Google or use a VPN on the server.
+This data will never be used for any other purpose than offering the service to the user.
+
+The Parasitter server connects to Google (Youtube) in order to gather all the necessary data. Then it serves it (proxied through itself) to the client. This means that as a client, you will never connect to Google - the Parasitter server will do it for you. So if you want to set up a Parasitter server I recommend you to set it up on a remote VPS so you don't share your IP with Google or use a VPN on the server.
 
 > Important note: The **client** never connects to Google / Youtube however, the server does in order to gather all the necessary things!
 
