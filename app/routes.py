@@ -481,15 +481,9 @@ def twitterUserSearch(terms):
     else:
         html = html.body.find_all('div', attrs={'class':'timeline-item'})
         for item in html:
-            descriptionBody = item.find('div', attrs={'class':'tweet-content'})
-           '''if not descriptionBody:
-                description=""
-            else:
-                description = "".join([str(x) for x in descriptionBody.contents])'''
             user = {
                 "fullName": item.find('a', attrs={'class':'fullname'}).getText().encode('latin_1').decode('unicode_escape').encode('latin_1').decode('utf8'),
                 "username": item.find('a', attrs={'class':'username'}).getText().encode('latin_1').decode('unicode_escape').encode('latin_1').decode('utf8'),
-                #"description": description.encode('latin_1').decode('unicode_escape').encode('latin_1').decode('utf8'),
                 'avatar': "{i}{s}".format(i=nitterInstance, s=item.find('img', attrs={'class':'avatar'})['src'][1:])
             }
             results.append(user)
