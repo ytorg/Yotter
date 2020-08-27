@@ -150,7 +150,6 @@ def following():
 @login_required
 def search():
     form = SearchForm()
-    parsedResults = []
     if form.validate_on_submit():
         user = form.username.data
         results = twitterUserSearch(user)
@@ -604,7 +603,6 @@ def getPosts(account):
 
 def getYoutubePosts(ids):
     videos = []
-    ydl = YoutubeDL()
     with FuturesSession() as session:
         futures = [session.get('https://www.youtube.com/feeds/videos.xml?channel_id={id}'.format(id=id.channelId)) for id in ids]
         for future in as_completed(futures):
