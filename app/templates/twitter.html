@@ -17,6 +17,6 @@
                     {% include '_twitter_post.html' %}
             {% endfor %}
         {% else %}
-            <div>No posts</div>
+            {% include '_empty_feed.html' %}
         {% endif %}
 {% endblock %}

@@ -440,7 +440,7 @@ def register():
         if User.query.filter_by(username=form.username.data).first():
             flash("This username is taken! Try with another.")
             return redirect(request.referrer)
-            
+
         user = User(username=form.username.data)
         user.set_password(form.password.data)
         db.session.add(user)
@@ -482,10 +482,10 @@ def twitterUserSearch(terms):
         html = html.body.find_all('div', attrs={'class':'timeline-item'})
         for item in html:
             descriptionBody = item.find('div', attrs={'class':'tweet-content'})
-            if not descriptionBody:
+           '''if not descriptionBody:
                 description=""
             else:
-                description = "".join([str(x) for x in descriptionBody.contents])
+                description = "".join([str(x) for x in descriptionBody.contents])'''
             user = {
                 "fullName": item.find('a', attrs={'class':'fullname'}).getText().encode('latin_1').decode('unicode_escape').encode('latin_1').decode('utf8'),
                 "username": item.find('a', attrs={'class':'username'}).getText().encode('latin_1').decode('unicode_escape').encode('latin_1').decode('utf8'),
