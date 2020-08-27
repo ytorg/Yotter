@@ -9,6 +9,17 @@
 - Play media from Parasitter.
 - Create following lists.
 
+## [0.2.2] - 2020-08-27
+### Changed
+- [x] Twitter: Scrap nitter pages instead of using RSS.
+- [x] Youtube: Improved video UI
+- [x] General: Following management page UI improved.
+### Added
+- [x] Twitter: Quotations are now shown
+
+### Fixed
+- [x] Twitter: Empty feed was showing an ugly text
+
 ## [0.2.1] - 2020-08-25
 ### Changed
 - [x] Twitter: Improve general UI and efficiency
