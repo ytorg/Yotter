@@ -11,12 +11,15 @@
 
 ## [0.2.1] - 2020-08-25
 ### Changed
+- [x] Twitter: Improve general UI and efficiency
+- [x] Twitter & Youtube: Posts older than 15 days are not shown anymore
 - [x] Youtube: All channel links now link within Parasitter
 - [x] Twitter: Improve database logic
 - [x] Twitter: Remove Following tab and move it to 'following number'
 - [x] General: Ability to import accounts from exported JSON file
 
 ### Added
+- [x] General: Welcome page
 - [x] Youtube: Ability to view a channel page: /channel/<id>
 - [x] Youtube: Ability to search with full text: Channels and videos.
 - [x] Youtube: Ability to Follow and Unfollow a user from the channel profile.
