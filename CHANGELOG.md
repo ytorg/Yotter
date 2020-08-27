@@ -27,6 +27,7 @@
   
 ### Fixed
 - [x] Youtube: Channel link on channel videos not working.
+- [x] General: Most usernames were already taken.
 
 ## [0.2.1a] - 2020-08-16
 #### Breaking dependence with Invidious.
