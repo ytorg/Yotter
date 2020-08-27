@@ -162,9 +162,9 @@ def search():
     else:
         return render_template('search.html', form = form)
 
-@app.route('/user/<username>')
+@app.route('/u/<username>')
 @login_required
-def user(username):
+def u(username):
     form = EmptyForm() 
     avatarPath = "img/avatars/{}.png".format(str(random.randint(1,12)))
     user = getTwitterUserInfo(username)
@@ -288,6 +288,7 @@ def unfollowYoutubeChannel(channelId):
     return redirect(request.referrer)
 
 @app.route('/channel/<id>', methods=['GET'])
+@app.route('/user/<id>', methods=['GET'])
 @login_required
 def channel(id):
     form = ChannelForm()
