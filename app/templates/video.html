@@ -3,51 +3,45 @@
 </head>
 {% extends "base.html" %}
 {% block content %}
-<div style="margin-top: 2em;" class="ui one column centered grid">
+<div class="ui text container">
     <video class="video-js vjs-default-skin" 
            data-setup='{ "playbackRates": [0.5, 1, 1.25,1.5, 2] }' 
            width="720" height="420" 
            controls
            preload="auto">
-           
         <source src="/stream?v={{video.id}}" type="video/mp4">
     </video>
-</div>
 
-<div style="margin-top: 2em;" class="ui one column center aligned grid">
-    <h2 class="ui header">{{video.title}}</h2></a>
-</div>
-
-<div style="margin-top: 2em;" class="ui center aligned grid">
-    <div class="two wide column">
-        <a target="_blank" href="{{ url_for('channel', id=video.channelId)}}" class="ui label">
-            {%if video.author.__len__() > 8%}
-                <i class="user icon"></i> {{video.author[0:10]+'...'}}
-            {%else%}
-                <i class="user icon"></i> {{video.author}}
-            {%endif%}
-        </a>
-    </div>
-    <div class="two wide column">
-        <div class="ui label">
-            <i class="eye icon"></i>{{video.viewCount}}
+    <div class="ui segments">
+        <div class="ui segment">
+            <h2 class="ui header">{{video.title}}</h2>
         </div>
-    </div>
-    <div class="two wide column">
-        <div class="para-light-grey">
-            <div class="para-green" style="height:12px;width:{{video.averageRating.split(".")[0]}}%"></div>
+        <div class="ui horizontal segments">
+          <div class="center aligned ui segment">
+            <a target="_blank" href="{{ url_for('channel', id=video.channelId)}}">
+                {%if video.author.__len__() > 8%}
+                    <i class="user icon"></i> {{video.author[0:10]+'...'}}
+                {%else%}
+                    <i class="user icon"></i> {{video.author}}
+                {%endif%}
+            </a>
+          </div>
+          <div class="center aligned ui segment">
+            <h4 class="ui header"><i class="grey eye icon"></i>{{video.viewCount}}</h4>
+          </div>
+          <div class="center aligned ui segment">
+            {% if video.averageRating | int > 49 %}
+                <h4 class="ui header"><i class="green thumbs up icon"></i> {{video.averageRating[0:4]}}%</h4>
+            {% else %}
+                <h4 class="ui header"><i class="red thumbs down icon"></i> {{video.averageRating[0:4]}}%</h4>
+            {% endif %}
+          </div>
         </div>
-        <div class="label"> Rating: {{video.averageRating[0:4]}}% <i class="green thumbs up icon"></i></div>
-    </div>
-</div>
 
-
-
-<div style="margin-top: 2em;" class="ui one column center aligned grid">
-    <div style="margin-bottom: 2em;" class="ui comments">
-        <h3 class="ui dividing header">Description</h3>
-        {{video.description}}
-    </div>
+        <div class="ui raised segment">
+            <p>{{video.description}}</p>
+          </div>
+      </div>
 </div>
 <script src="{{ url_for('static',filename='videojs.js') }}"></script>
 {% endblock %}
