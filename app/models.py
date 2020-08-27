@@ -111,10 +111,16 @@ class twitterPost():
     isRT = True
     urlToPost = ""
     validPost = True
-    content = "El gato siguió a la liebre. Esto es un texto de ejemplo."
+    content = ""
     profilePic = "url"
     timeStamp = "error"
     userProfilePic = "1.png"
+    isReply = False
+    replyingUrl = "#"
+    replyingUser = "@nobody"
+    replyingTweetContent = ""
+    attachedImg = ""
+    replyAttachedImg = ""
 
 class ytPost():
     channelName = 'Error'

@@ -522,44 +522,55 @@ def getTwitterUserInfo(username):
         return user
 
 def getFeed(urls):
-    avatarPath = "img/avatars/{}.png".format(str(random.randint(1,12)))
     feedPosts = []
     with FuturesSession() as session:
-        futures = [session.get('{instance}{user}/rss'.format(instance=nitterInstance, user=u.username)) for u in urls]
+        futures = [session.get('{instance}{user}'.format(instance=nitterInstance, user=u.username)) for u in urls]
         for future in as_completed(futures):
-            resp = future.result()
-            rssFeed=feedparser.parse(resp.content)
-            if rssFeed.entries != []:
-                    for post in rssFeed.entries:
-                        time = datetime.datetime.now() - datetime.datetime(*post.published_parsed[:6])
-                        if time.days >= 15:
+            res = future.result().content.decode('utf-8')
+            html = BeautifulSoup(res, "html.parser")
+            userFeed = html.find_all('div', attrs={'class':'timeline-item'})
+            if userFeed != []:
+                    for post in userFeed[:-1]:
+                        if post.find('div', attrs={'class':'pinned'}):
+                            if post.find('div', attrs={'class':'pinned'}).find('span', attrs={'icon-pin'}):
+                                continue
+                        date_time_str = post.find('span', attrs={'class':'tweet-date'}).find('a')['title'].replace(",","")
+                        time = datetime.datetime.now() - datetime.datetime.strptime(date_time_str, '%d/%m/%Y %H:%M:%S')
+                        if time.days >= 14:
                             continue
+
                         newPost = twitterPost()
-                        newPost.username = rssFeed.feed.title.split("/")[1].replace(" ", "")
-                        newPost.twitterName = rssFeed.feed.title.split("/")[0]
-                        newPost.date = getTimeDiff(post.published_parsed)
-                        newPost.timeStamp = datetime.datetime(*post.published_parsed[:6])
-                        newPost.op = post.author
-
-                        try:
-                            newPost.userProfilePic = rssFeed.channel.image.url
-                        except:
-                            newPost.profilePicture = ""
-                        newPost.url = post.link
-                        newPost.content = Markup(post.description)
+                        newPost.op = post.find('a', attrs={'class':'username'}).text
+                        newPost.twitterName = post.find('a', attrs={'class':'fullname'}).text
+                        newPost.timeStamp = datetime.datetime.strptime(date_time_str, '%d/%m/%Y %H:%M:%S')
+                        newPost.date = post.find('span', attrs={'class':'tweet-date'}).find('a').text
+                        newPost.content = Markup(post.find('div',  attrs={'class':'tweet-content'}))
                         
-                        if "Pinned" in post.title.split(":")[0]:
-                            newPost.isPinned = True
-
-                        if "RT by" in post.title:
+                        if post.find('div', attrs={'class':'retweet-header'}):
+                            newPost.username = post.find('div', attrs={'class':'retweet-header'}).find('div', attrs={'class':'icon-container'}).text
                             newPost.isRT = True
-                            newPost.profilePic = ""
                         else:
+                            newPost.username = newPost.op
                             newPost.isRT = False
-                            try:
-                                newPost.profilePic = rssFeed.channel.image.url
-                            except:
-                                newPost.profilePic = avatarPath
+                        
+                        newPost.profilePic = nitterInstance+post.find('a', attrs={'class':'tweet-avatar'}).find('img')['src'][1:]
+                        newPost.url = nitterInstance + post.find('a', attrs={'class':'tweet-link'})['href'][1:]
+                        if post.find('div', attrs={'class':'quote'}):
+                            newPost.isReply = True
+                            quote = post.find('div', attrs={'class':'quote'})
+                            if quote.find('div',  attrs={'class':'quote-text'}):
+                                newPost.replyingTweetContent = Markup(quote.find('div',  attrs={'class':'quote-text'}))
+                                
+                            if quote.find('a', attrs={'class':'still-image'}):
+                                newPost.replyAttachedImg = nitterInstance+quote.find('a', attrs={'class':'still-image'})['href'][1:]
+                            
+                            newPost.replyingUser=quote.find('a',  attrs={'class':'username'}).text
+                            post.find('div', attrs={'class':'quote'}).decompose()
+
+                        if post.find('div',  attrs={'class':'attachments'}):
+                            if not post.find(class_='quote'):
+                                if  post.find('div',  attrs={'class':'attachments'}).find('a', attrs={'class':'still-image'}):
+                                    newPost.attachedImg = nitterInstance + post.find('div',  attrs={'class':'attachments'}).find('a')['href'][1:]
                         feedPosts.append(newPost)
     return feedPosts
 

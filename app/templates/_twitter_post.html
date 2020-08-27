@@ -2,12 +2,7 @@
     <div class="content">
         <div class="extra content">
             <div class="left floated author">
-                {% if post.isRT %}
-                    <img class="ui avatar image" src="{{ url_for('static',filename='img/avatars/')}}{{range(1, 12) | random}}.png">
-                {%else%}
                 <img class="ui avatar image" src="{{ post.profilePic }}">
-                {%endif%}
-
             </div>
             
             <a href="{{post.url}}"><span class="right floated star">
@@ -21,13 +16,31 @@
                 <span class="category" id="time"><i class="map pin icon"></i> Pinned </span>
             {%endif%}
             {% if post.isRT %}
-                <span class="category"><i class="retweet icon"></i> {{post.username}} retwitted</span>
+                <span class="category"><i class="retweet icon"></i> {{post.username}}</span>
             {%endif%}
         </div>
         <div class="description break-word">
             <p>{{post.content}}</p>
         </div>
         <div class="extra content">
+            {% if post.attachedImg != "" %}
+                <img class="ui centered medium image" src="{{post.attachedImg}}">
+            {% endif %}
+            {% if post.isReply %}
+                <div class="ui card">
+                    <div class="content">
+                        <div class="header">{{post.replyingUser}}</div>
+                        <div class="meta">{{post.replyingUser}}</div>
+                        <div class="description break-word">
+                        {{post.replyingTweetContent}}
+                        {% if post.replyAttachedImg != "" %}
+                            <img class="ui centered medium image" src="{{post.replyAttachedImg}}">
+                        {% endif %}
+                        </div>
+                    </div>
+                </div>
+            {% endif %}
+
             <p>
                 <form class="ui form" action="{{ url_for('savePost', url=post.url.replace('/', '~')) }}" method="post">
                     <button type="submit" class="ui icon button">
