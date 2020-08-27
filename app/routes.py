@@ -153,15 +153,12 @@ def search():
     parsedResults = []
     if form.validate_on_submit():
         user = form.username.data
-        r = requests.get("{instance}search?f=users&q={usern}".format(instance=nitterInstance, usern=user.replace(" ", "+")))
-        html = BeautifulSoup(str(r.content), "lxml")
-        results = html.body.find_all('a', attrs={'class':'tweet-link'})
+        results = twitterUserSearch(user)
         if results:
-            parsedResults = [s['href'].replace("/", "") for s in results]
-            return render_template('search.html', form = form, results = parsedResults)
+            return render_template('search.html', form = form, results = results)
         else:
             flash("User {} not found...".format(user))
-            return render_template('search.html', form = form, results = parsedResults)
+            return redirect(request.referrer)
     else:
         return render_template('search.html', form = form)
 
@@ -473,6 +470,31 @@ def isTwitterUser(username):
         return False
     return True
 
+def twitterUserSearch(terms):
+    response = urllib.request.urlopen('{instance}search?f=users&q={user}'.format(instance=nitterInstance, user=terms)).read()
+    html = BeautifulSoup(str(response), "lxml")
+
+    results = []
+    if html.body.find('h2', attrs={'class':'timeline-none'}):
+        return False
+    else:
+        html = html.body.find_all('div', attrs={'class':'timeline-item'})
+        for item in html:
+            descriptionBody = item.find('div', attrs={'class':'tweet-content'})
+            if not descriptionBody:
+                description=""
+            else:
+                description = "".join([str(x) for x in descriptionBody.contents])
+            user = {
+                "fullName": item.find('a', attrs={'class':'fullname'}).getText().encode('latin_1').decode('unicode_escape').encode('latin_1').decode('utf8'),
+                "username": item.find('a', attrs={'class':'username'}).getText().encode('latin_1').decode('unicode_escape').encode('latin_1').decode('utf8'),
+                #"description": description.encode('latin_1').decode('unicode_escape').encode('latin_1').decode('utf8'),
+                'avatar': "{i}{s}".format(i=nitterInstance, s=item.find('img', attrs={'class':'avatar'})['src'][1:])
+            }
+            results.append(user)
+        return results
+
+
 def getTwitterUserInfo(username):
     response = urllib.request.urlopen('{instance}{user}'.format(instance=nitterInstance, user=username)).read()
     #rssFeed = feedparser.parse(response.content)
@@ -482,10 +504,21 @@ def getTwitterUserInfo(username):
         return False
     else:
         html = html.body.find('div', attrs={'class':'profile-card'})
+
+        if html.find('a', attrs={'class':'profile-card-fullname'}):
+            fullName = html.find('a', attrs={'class':'profile-card-fullname'}).getText().encode('latin1').decode('unicode_escape').encode('latin1').decode('utf8')
+        else:
+            fullName = None
+        
+        if html.find('div', attrs={'class':'profile-bio'}):
+            profileBio = html.find('div', attrs={'class':'profile-bio'}).getText().encode('latin1').decode('unicode_escape').encode('latin1').decode('utf8')
+        else:
+            profileBio = None
+
         user = {
-            "profileFullName":html.find('a', attrs={'class':'profile-card-fullname'}).string.encode('latin1').decode('unicode_escape').encode('latin1').decode('utf8'),
-            "profileUsername":html.find('a', attrs={'class':'profile-card-username'}).string.encode('latin1').decode('unicode_escape').encode('latin1').decode('utf8'),
-            "profileBio":html.find('div', attrs={'class':'profile-bio'}).get_text().encode('latin1').decode('unicode_escape').encode('latin1').decode('utf8'),
+            "profileFullName":fullName,
+            "profileUsername":html.find('a', attrs={'class':'profile-card-username'}).string.encode('latin_1').decode('unicode_escape').encode('latin_1').decode('utf8'),
+            "profileBio":profileBio,
             "tweets":html.find_all('span', attrs={'class':'profile-stat-num'})[0].string,
             "following":html.find_all('span', attrs={'class':'profile-stat-num'})[1].string,
             "followers":numerize.numerize(int(html.find_all('span', attrs={'class':'profile-stat-num'})[2].string.replace(",",""))),
