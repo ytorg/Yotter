@@ -3,7 +3,7 @@
 <p align="center"> Twitter and Youtube via RSS with privacy </p>
 <br>
 
-### This is a new version where I'm breaking dependency with Invidious (and later Nitter).
+### This is a new version where I'm breaking dependency with Invidious (and later Nitter). [Click on this link](https://github.com/pluja/Parasitter/tree/master) if you want to go to the old version.
 
 Parasitter allows you to follow your favorite Twitter and YouTube accounts with full privacy using rss feeds in order to gather the latest content from your favourite accounts and builds a *beautiful* feed so you can read them. Parasitter is written in Python and Flask and uses Semantic-UI as its CSS framework.
 
