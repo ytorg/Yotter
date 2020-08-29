@@ -22,12 +22,12 @@ import urllib
 import json
 import re
 
-# Instances - Format must be instance.tld (No '/' and no 'https://')
-nitterInstance = "https://nitter.net/"
-nitterInstanceII = "https://nitter.mastodont.cat/"
-
-ytChannelRss = "https://www.youtube.com/feeds/videos.xml?channel_id="
-invidiousInstance = "invidio.us"
+##########################
+#### Config variables ####
+##########################
+NITTERINSTANCE = "https://nitter.net/" # Must be https://.../ 
+YOUTUBERSS = "https://www.youtube.com/feeds/videos.xml?channel_id="
+REGISTRATIONS = False
 
 ##########################
 #### Global variables ####
@@ -457,7 +457,7 @@ def register():
         db.session.commit()
         flash('Congratulations, you are now a registered user!')
         return redirect(url_for('login'))
-    return render_template('register.html', title='Register', form=form)
+    return render_template('register.html', title='Register', registrations=REGISTRATIONS, form=form)
 
 @app.route('/error/<errno>')
 def error(errno):
@@ -476,14 +476,14 @@ def getTimeDiff(t):
     return timeString
 
 def isTwitterUser(username):
-    response = requests.get('{instance}{user}/rss'.format(instance=nitterInstance, user=username))
+    response = requests.get('{instance}{user}/rss'.format(instance=NITTERINSTANCE, user=username))
     if response.status_code == 404:
         return False
     return True
 
 def twitterUserSearch(terms):
     
-    response = urllib.request.urlopen('{instance}search?f=users&q={user}'.format(instance=nitterInstance, user=urllib.parse.quote(terms))).read()
+    response = urllib.request.urlopen('{instance}search?f=users&q={user}'.format(instance=NITTERINSTANCE, user=urllib.parse.quote(terms))).read()
     html = BeautifulSoup(str(response), "lxml")
 
     results = []
@@ -495,14 +495,14 @@ def twitterUserSearch(terms):
             user = {
                 "fullName": item.find('a', attrs={'class':'fullname'}).getText().encode('latin_1').decode('unicode_escape').encode('latin_1').decode('utf8'),
                 "username": item.find('a', attrs={'class':'username'}).getText().encode('latin_1').decode('unicode_escape').encode('latin_1').decode('utf8'),
-                'avatar': "{i}{s}".format(i=nitterInstance, s=item.find('img', attrs={'class':'avatar'})['src'][1:])
+                'avatar': "{i}{s}".format(i=NITTERINSTANCE, s=item.find('img', attrs={'class':'avatar'})['src'][1:])
             }
             results.append(user)
         return results
 
 
 def getTwitterUserInfo(username):
-    response = urllib.request.urlopen('{instance}{user}'.format(instance=nitterInstance, user=username)).read()
+    response = urllib.request.urlopen('{instance}{user}'.format(instance=NITTERINSTANCE, user=username)).read()
     #rssFeed = feedparser.parse(response.content)
 
     html = BeautifulSoup(str(response), "lxml")
@@ -529,14 +529,14 @@ def getTwitterUserInfo(username):
             "following":html.find_all('span', attrs={'class':'profile-stat-num'})[1].string,
             "followers":numerize.numerize(int(html.find_all('span', attrs={'class':'profile-stat-num'})[2].string.replace(",",""))),
             "likes":html.find_all('span', attrs={'class':'profile-stat-num'})[3].string,
-            "profilePic":"{instance}{pic}".format(instance=nitterInstance, pic=html.find('a', attrs={'class':'profile-card-avatar'})['href'][1:])
+            "profilePic":"{instance}{pic}".format(instance=NITTERINSTANCE, pic=html.find('a', attrs={'class':'profile-card-avatar'})['href'][1:])
         }
         return user
 
 def getFeed(urls):
     feedPosts = []
     with FuturesSession() as session:
-        futures = [session.get('{instance}{user}'.format(instance=nitterInstance, user=u.username)) for u in urls]
+        futures = [session.get('{instance}{user}'.format(instance=NITTERINSTANCE, user=u.username)) for u in urls]
         for future in as_completed(futures):
             res = future.result().content.decode('utf-8')
             html = BeautifulSoup(res, "html.parser")
@@ -566,8 +566,8 @@ def getFeed(urls):
                             newPost.username = newPost.op
                             newPost.isRT = False
                         
-                        newPost.profilePic = nitterInstance+post.find('a', attrs={'class':'tweet-avatar'}).find('img')['src'][1:]
-                        newPost.url = nitterInstance + post.find('a', attrs={'class':'tweet-link'})['href'][1:]
+                        newPost.profilePic = NITTERINSTANCE+post.find('a', attrs={'class':'tweet-avatar'}).find('img')['src'][1:]
+                        newPost.url = NITTERINSTANCE + post.find('a', attrs={'class':'tweet-link'})['href'][1:]
                         if post.find('div', attrs={'class':'quote'}):
                             newPost.isReply = True
                             quote = post.find('div', attrs={'class':'quote'})
@@ -575,7 +575,7 @@ def getFeed(urls):
                                 newPost.replyingTweetContent = Markup(quote.find('div',  attrs={'class':'quote-text'}))
                                 
                             if quote.find('a', attrs={'class':'still-image'}):
-                                newPost.replyAttachedImg = nitterInstance+quote.find('a', attrs={'class':'still-image'})['href'][1:]
+                                newPost.replyAttachedImg = NITTERINSTANCE+quote.find('a', attrs={'class':'still-image'})['href'][1:]
                             
                             newPost.replyingUser=quote.find('a',  attrs={'class':'username'}).text
                             post.find('div', attrs={'class':'quote'}).decompose()
@@ -583,7 +583,7 @@ def getFeed(urls):
                         if post.find('div',  attrs={'class':'attachments'}):
                             if not post.find(class_='quote'):
                                 if  post.find('div',  attrs={'class':'attachments'}).find('a', attrs={'class':'still-image'}):
-                                    newPost.attachedImg = nitterInstance + post.find('div',  attrs={'class':'attachments'}).find('a')['href'][1:]
+                                    newPost.attachedImg = NITTERINSTANCE + post.find('div',  attrs={'class':'attachments'}).find('a')['href'][1:]
                         feedPosts.append(newPost)
     return feedPosts
 
@@ -592,7 +592,7 @@ def getPosts(account):
     posts = []
         
     #Gather profile info.
-    rssFeed = feedparser.parse('{instance}{user}/rss'.format(instance=nitterInstance, user=account))
+    rssFeed = feedparser.parse('{instance}{user}/rss'.format(instance=NITTERINSTANCE, user=account))
     #Gather posts
     if rssFeed.entries != []:
         for post in rssFeed.entries:
