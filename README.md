@@ -1,3 +1,5 @@
+[![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
+
 # Parasitter
 <p align="center"> <img width="150" src="app/static/img/logo.png"> </img></p> 
 <p align="center"> Twitter and Youtube with privacy </p>
@@ -131,9 +133,7 @@ You can test this new version.
 * [My fork of youtube_search](https://github.com/pluja/youtube_search-fork)
 
 ### 💌 Donate
-Testing with a public instance will soon be needed, and I will need to set up a server for this. If I want that Parasitter to go public and host some users I will need a (relativelly) good server and this is somehow expensive for me. So any contribution will be really welcome!
-
-This project is completelly Open Source and is built on my own free time as a hobby. So if you like it, you can buy me a coffee!
+This project is completelly free and Open Source and will always be. I am dedicating my free time to build it so if you like it, you can buy me a coffee!
 
 - **Bitcoin**: `3EjaWjtsHz4WpbVL5Wx8Xg6MfyRRnKYj4e`
 - **Monero**: `83hinYmUkMH2ANgdhxRupmakzLwN26ddePrLQvZv4E3Q1CWjq7MDzsKRcPqLPQwTvG3DdujyaxbKbMsf9VKVAmphMhsfndc`
