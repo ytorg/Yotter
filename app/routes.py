@@ -4,6 +4,7 @@ from app.models import User, twitterPost, ytPost, Post, youtubeFollow, twitterFo
 from flask_login import login_user, logout_user, current_user, login_required
 from flask import Flask, Response, stream_with_context
 from requests_futures.sessions import FuturesSession
+from werkzeug.datastructures import Headers
 from concurrent.futures import as_completed
 from werkzeug.utils import secure_filename
 from youtube_search import YoutubeSearch
@@ -12,6 +13,7 @@ from youtube_dl import YoutubeDL
 from numerize import numerize
 from bs4 import BeautifulSoup
 from app import app, db
+from re import findall
 import random, string
 import time, datetime
 import feedparser
@@ -321,18 +323,27 @@ def watch():
     return render_template("video.html", video=video)
 
 ## PROXY videos through Parasitter server to the client.
-@app.route('/stream', methods=['GET'])
+@app.route('/stream', methods=['GET', 'POST'])
 @login_required
 def stream():
+    #This function proxies the video stream from GoogleVideo to the client.
     id = request.args.get('v', None)
+    headers = Headers()    
     if(id):
         ydl = YoutubeDL()
         data = ydl.extract_info("{id}".format(id=id), download=False)
         req = requests.get(data['formats'][-1]['url'], stream = True)
-        return Response(req.iter_content(chunk_size=10*1024), mimetype=req.headers['Content-Type'], direct_passthrough=True, content_type=req.headers['Content-Type'])
+        headers.add('Accept-Ranges','bytes')
+        headers.add('Content-Length', str(int(req.headers['Content-Length'])+1))
+        response = Response(req.iter_content(chunk_size=12*1024), mimetype=req.headers['Content-Type'], content_type=req.headers['Content-Type'], direct_passthrough=True, headers=headers)
+        #enable browser file caching with etags
+        response.cache_control.public  = True
+        response.cache_control.max_age = int(60000)
+        return response
     else:
         flash("Something went wrong loading the video... Try again.")
         return redirect(url_for('youtube'))
+
 #########################
 #### General Logic ######
 #########################
