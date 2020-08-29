@@ -65,10 +65,8 @@ You can test this new version.
     - `cd Parasitter`
 4. Change to this branch:
    - `git checkout dev-indep`
-5. [Optional] Prepare a virtual environment and activate it (Recommended):
-
-   > Python lets you create virtual environments. This allows you to avoid installing all the `pip` packages on your system.   
-   If you don't mind about that, you can jump to step **5.** and ignore everything about "[env]".
+5. Prepare a virtual environment and activate it:
+   > Python lets you create virtual environments. This allows you to avoid installing all the `pip` packages on your system.
     - `python3 -m venv venv`
     - `source venv/bin/activate`
     > Now you are inside of the virtual environment for python. All instructions wiht [env] indicate that must be done inside the env if you decided to create one. From now on, you will always need to start the application from within the virtual env.
@@ -84,6 +82,7 @@ You can test this new version.
     > If you get *`"No such command db"`*, try running `source venv/bin/activate` again.
 9. [env] Run the application.
     - `flask run`
+    > You can optionally use `flask run --host 0.0.0.0` so you can use Parasitter from other devices from the same network using the host device's IP address and port. ¡Test it from a smartphone!
 10. Go to "http://localhost:5000/" and enjoy.
 
 ### Updating to new versions:
