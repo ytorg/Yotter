@@ -1,6 +1,6 @@
 # Parasitter
 <p align="center"> <img width="150" src="app/static/img/logo.png"> </img></p> 
-<p align="center"> Twitter and Youtube via RSS with privacy </p>
+<p align="center"> Twitter and Youtube with privacy </p>
 <br>
 
 ### In this new version, Parasitter no longer depends on Invidious. [Click on this link](https://github.com/pluja/Parasitter/tree/master) if you want to go to the old version using Invidious (not updated anymore).
@@ -21,7 +21,6 @@ Parasitter is possible thanks to several open-source projects that are listed on
 
 ## Features:
 * No JavaScript.
-* Uses RSS feeds (could be expanded to more social networks)
 * Follow Twitter accounts.
 * Follow Youtube accounts.
 * Save your favourite Tweets.
@@ -31,14 +30,15 @@ Parasitter is possible thanks to several open-source projects that are listed on
 * Easy 1 minute self-hosting deploy.
 > And many more to come!
 
-## Security
-Only the hash of your password is stored on the database. Also no personal information of any kind is kept on the app itself, if a hacker gets access to it only thing they could do would be to follow/unfollow some accounts.
-
-I always recommend self-hosting, as you will be the only person with access to the data.
-
 ## Privacy
-Parasitter cares about your privacy, and for this it will never make any connection to Twitter or Youtube on the client. We make use of rss feeds to fetch all the tweets from your followed accounts. If you want to use a specific Nitter instance you can replace it on the file `app/routes.py`.
+#### Connections
+Parasitter cares about your privacy, and for this it will never make any connection to Twitter or Youtube on the client. Every request is proxied through the Parasitter server; video streaming, photos, data gathering, scrapping, etc.
 
+The Parasitter server connects to Google (Youtube) and Nitter in order to gather all the necessary data. Then it serves it (proxied through itself) to the client. This means that as a client, you will never connect to Google - the Parasitter server will do it for you. So if you want to set up a Parasitter server for privacy reasons I recommend you to set it up on a remote VPS so you don't share your IP with Google or use a VPN on the server. 
+
+If you don't mind exposing your IP making requests to Google then you can set it up wherever you want. Even with this method you will avoid all trackers, ads, heavy-loaded pages, etc.
+
+#### Your data
 The only things the database stores are:
 * Hash of the password
 * Username
@@ -47,7 +47,13 @@ The only things the database stores are:
 
 This data will never be used for any other purpose than offering the service to the user.
 
-The Parasitter server connects to Google (Youtube) in order to gather all the necessary data. Then it serves it (proxied through itself) to the client. This means that as a client, you will never connect to Google - the Parasitter server will do it for you. So if you want to set up a Parasitter server I recommend you to set it up on a remote VPS so you don't share your IP with Google or use a VPN on the server.
+#### Others
+If you want to use a specific Nitter instance you can replace it on the file `app/routes.py`.
+
+#### Security
+Only the hash of your password is stored on the database. Also no personal information of any kind is kept on the app itself, if a hacker gets access to it only thing they could do would be to follow/unfollow some accounts.
+
+I always recommend self-hosting, as you will be the only person with access to the data.
 
 > Important note: The **client** never connects to Google / Youtube however, the server does in order to gather all the necessary things!
 
