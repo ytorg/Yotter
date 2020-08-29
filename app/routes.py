@@ -27,7 +27,7 @@ import re
 ##########################
 NITTERINSTANCE = "https://nitter.net/" # Must be https://.../ 
 YOUTUBERSS = "https://www.youtube.com/feeds/videos.xml?channel_id="
-REGISTRATIONS = False
+REGISTRATIONS = True
 
 ##########################
 #### Global variables ####
