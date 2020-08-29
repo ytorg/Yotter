@@ -6,7 +6,7 @@
 ##### Long term
 - See cited posts (if any).
 - Share a tweet.
-- Play media from Parasitter.
+- Play tweet videos from Parasitter.
 - Create following lists.
 
 ## [0.2.2] - 2020-08-27
@@ -16,7 +16,7 @@
 - [x] General: Following management page UI improved.
 ### Added
 - [x] Twitter: Quotations are now shown
-
+- [x] Youtube: Ability to seek videos!
 ### Fixed
 - [x] Twitter: Empty feed was showing an ugly text
 
