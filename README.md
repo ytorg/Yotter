@@ -11,13 +11,13 @@ Parasitter is possible thanks to several open-source projects that are listed on
 
 ## Index:
 * [Features](#features)
+* [Privacy](#-privacy)
 * [Security](#security)
-* [Privacy](#privacy)
-* [Self hosting](#self-hosting)
-    * [Test it!](#test)
-    * [Update](#updating-to-newer-versions)
-* [Powered by](#powered-by)
-* [Donate](#donate-)
+* [Self hosting](#-self-hosting)
+    * [Test it!](#-test)
+    * [Update](#-updating-to-newer-versions)
+* [Powered by](#-powered-by)
+* [Donate](#-donate)
 
 ## Features:
 ✅ No Ads.
@@ -60,7 +60,7 @@ I always recommend self-hosting, as you will be the only person with access to t
 
 > Important note: The **client** never connects to Google / Youtube however, the server does in order to gather all the necessary things!
 
-# Self hosting
+# 🏠 Self hosting
 
 ### 🐣 Test
 You can test this new version.
