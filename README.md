@@ -15,7 +15,7 @@ Parasitter is possible thanks to several open-source projects that are listed on
 * [Privacy](#privacy)
 * [Self hosting](#self-hosting)
     * [Test it!](#test)
-    * [Update](#updating-to-new-versions)
+    * [Update](#updating-to-newer-versions)
 * [Powered by](#powered-by)
 * [Donate](#donate-)
 
@@ -77,7 +77,7 @@ You can test this new version.
     
 6. [env] Install the required libraries:
     - `python3 pip install -r requirements.txt`
-       > If you get errors, try running step 5c2 again of use `--user` option.
+       > If you get errors, try running `source venv/bin/activate` again of use `--user` option.
        
 7. [env] Initialize and prepare the database.
     - `flask db init`
@@ -91,11 +91,14 @@ You can test this new version.
     
 9. Go to "http://localhost:5000/" and enjoy.
 
-### Updating to new versions:
-**IMPORTANT: Before updating to new versions, it is recommended to always export your data on `Settings>ExportData`. A major version update could have changes on the whole database and you may be forced to remove and reset the database!**
+### Updating to newer versions:
+**IMPORTANT: Before updating to newer versions, always export your data on `Settings>Export Data`. A major version update could have changes on the whole database and you may be forced to remove and reset the database (only when running locally)!**
+
 1. Navigate to the git repository (the one you cloned when installing).
+
 2. Pull new changes:
     - `git pull`
+    
 4. Install new packages (if any):
    - `pip install -r requirements.txt`
    > It may be that there are no new packages to install. In that case, all requirements will be satisfied.
@@ -103,7 +106,7 @@ You can test this new version.
 5. Update the database:
     - `flask db migrate`
     - `flask db upgrade`
-> If you experience any error in this step, it might be that there were changes on the database. You can solve it by exporting your data, deleting and resetting the database. Run `rm -rf app.db migrations` and then `flask db init`. Then run step 5 normally.
+> If you experience any error in this step, it might be that there were big changes on the database structure. You can solve it by exporting your data, then deleting and resetting the database. Run `rm -rf app.db migrations` and then `flask db init`. Then run step 5 normally.
 
 6. Done! You are on latest version.
 > **See [CHANGELOG](CHANGELOG.md) for a list of changes.**
