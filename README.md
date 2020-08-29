@@ -59,31 +59,37 @@ You can test this new version.
 ##### IMPORTANT: Connections to googlevideo will be made to stream the videos. It is recommended to use a VPS server or a VPN to preserve your privacy. This version is intended for a remote server.
 
 1. Install `python3`, `pip3`, `python3-venv` (optional) and `git`.
+
 2. Clone this repository:
     - `git clone https://github.com/pluja/Parasitter.git`
+    
 3. Navigate to the project folder:
     - `cd Parasitter`
-4. Change to this branch:
-   - `git checkout dev-indep`
-5. Prepare a virtual environment and activate it:
+   
+4. Prepare a virtual environment and activate it:
    > Python lets you create virtual environments. This allows you to avoid installing all the `pip` packages on your system.
     - `python3 -m venv venv`
     - `source venv/bin/activate`
     > Now you are inside of the virtual environment for python. All instructions wiht [env] indicate that must be done inside the env if you decided to create one. From now on, you will always need to start the application from within the virtual env.
-6. [env] Update pip
+    
+5. [env] Update pip
     - `python3 pip install --upgrade pip`
-7. [env] Install the required libraries:
+    
+6. [env] Install the required libraries:
     - `python3 pip install -r requirements.txt`
-       > Use `sudo` or, preferably `--user`, if not working.
-8. [env] Initialize and prepare the database.
+       > If you get errors, try running step 5c2 again of use `--user` option.
+       
+7. [env] Initialize and prepare the database.
     - `flask db init`
     - `flask db migrate`
     - `flask db upgrade`
     > If you get *`"No such command db"`*, try running `source venv/bin/activate` again.
-9. [env] Run the application.
+    
+8. [env] Run the application.
     - `flask run`
     > You can optionally use `flask run --host 0.0.0.0` so you can use Parasitter from other devices from the same network using the host device's IP address and port. ¡Test it from a smartphone!
-10. Go to "http://localhost:5000/" and enjoy.
+    
+9. Go to "http://localhost:5000/" and enjoy.
 
 ### Updating to new versions:
 **IMPORTANT: Before updating to new versions, it is recommended to always export your data on `Settings>ExportData`. A major version update could have changes on the whole database and you may be forced to remove and reset the database!**
