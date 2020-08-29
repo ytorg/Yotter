@@ -20,17 +20,20 @@ Parasitter is possible thanks to several open-source projects that are listed on
 * [Donate](#donate-)
 
 ## Features:
-* No JavaScript.
-* Follow Twitter accounts.
-* Follow Youtube accounts.
-* Save your favourite Tweets.
-* Save your favourite Youtube videos [Coming soon!]
-* Tor-friendly.
-* Terminal-friendly.
-* Easy 1 minute self-hosting deploy.
+✅ No Ads.
+✅ No JavaScript.
+✅ Minimalist.
+✅ Search on Twitter and Youtube.
+✅ Zero connections to Google/Twitter on the client.
+✅ Follow Twitter accounts.
+✅ Follow Youtube accounts.
+✅ Save your favourite Tweets.
+✅ Tor-friendly.
+✅ Terminal-browser friendly.
+✅ Easy 2 minute self-hosting deploy.
 > And many more to come!
 
-## Privacy
+## 🎭 Privacy
 #### Connections
 Parasitter cares about your privacy, and for this it will never make any connection to Twitter or Youtube on the client. Every request is proxied through the Parasitter server; video streaming, photos, data gathering, scrapping, etc.
 
@@ -38,7 +41,7 @@ The Parasitter server connects to Google (Youtube) and Nitter in order to gather
 
 If you don't mind exposing your IP making requests to Google then you can set it up wherever you want. Even with this method you will avoid all trackers, ads, heavy-loaded pages, etc.
 
-#### Your data
+#### 🛡️ Your data
 The only things the database stores are:
 * Hash of the password
 * Username
@@ -59,7 +62,7 @@ I always recommend self-hosting, as you will be the only person with access to t
 
 # Self hosting
 
-### Test
+### 🐣 Test
 You can test this new version.
 
 ##### IMPORTANT: Connections to googlevideo will be made to stream the videos. It is recommended to use a VPS server or a VPN to preserve your privacy. This version is intended for a remote server.
@@ -97,7 +100,7 @@ You can test this new version.
     
 9. Go to "http://localhost:5000/" and enjoy.
 
-### Updating to newer versions:
+### 🐓 Updating to newer versions:
 **IMPORTANT: Before updating to newer versions, always export your data on `Settings>Export Data`. A major version update could have changes on the whole database and you may be forced to remove and reset the database (only when running locally)!**
 
 1. Navigate to the git repository (the one you cloned when installing).
@@ -117,7 +120,7 @@ You can test this new version.
 6. Done! You are on latest version.
 > **See [CHANGELOG](CHANGELOG.md) for a list of changes.**
 
-### Powered by:
+### ⛽ Powered by:
 * [Nitter](https://nitter.net/)
 * [youtube-dl](https://github.com/ytdl-org/youtube-dl)
 * [Flask](https://flask.palletsprojects.com/)
@@ -128,7 +131,7 @@ You can test this new version.
 * [Video.js](https://videojs.com/)
 * [My fork of youtube_search](https://github.com/pluja/youtube_search-fork)
 
-### Donate 💌
+### 💌 Donate
 Testing with a public instance will soon be needed, and I will need to set up a server for this. If I want that Parasitter to go public and host some users I will need a (relativelly) good server and this is somehow expensive for me. So any contribution will be really welcome!
 
 This project is completelly Open Source and is built on my own free time as a hobby. So if you like it, you can buy me a coffee!
