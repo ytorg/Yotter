@@ -4,8 +4,7 @@
 
 
 
-# Parasitter
-<p align="center"> <img width="150" src="app/static/img/logo.png"> </img></p> 
+<p align="center"> <img width="150" src="app/static/img/logo_new.svg"> </img></p> 
 <p align="center"> Twitter and Youtube with privacy </p>
 <br>
 
