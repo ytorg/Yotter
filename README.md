@@ -1,11 +1,12 @@
 [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
 [![made-with-python](https://img.shields.io/badge/Made%20with-Python-1f425f.svg)](https://www.python.org/)
 [![Generic badge](https://img.shields.io/badge/PRs-Welcome-green.svg)](https://github.com/pluja/Yotter/pulls)
+[![Generic badge](https://img.shields.io/badge/Formerly-Parasitter-blue.svg)](https://github.com/pluja/Yotter/pulls)
 
 
 
 <p align="center"> <img width="200" src="app/static/img/logo_new.png"> </img></p> 
-<p align="center"> Twitter and Youtube with privacy </p>
+<p align="center"> Youtube and Twitter with privacy </p>
 <br>
 
 ### In this new version, Yotter no longer depends on Invidious. [Click on this link](https://github.com/pluja/Yotter/tree/master) if you want to go to the old version using Invidious (not updated anymore).
