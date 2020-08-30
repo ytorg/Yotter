@@ -4,7 +4,7 @@
 
 
 
-<p align="center"> <img width="250" src="app/static/img/logo_new.svg"> </img></p> 
+<p align="center"> <img width="200" src="app/static/img/logo_new.png"> </img></p> 
 <p align="center"> Twitter and Youtube with privacy </p>
 <br>
 
@@ -25,16 +25,27 @@ Parasitter is possible thanks to several open-source projects that are listed on
 
 ## Features:
 ✅ No Ads.
+
 ✅ No JavaScript.
+
 ✅ Minimalist.
+
 ✅ Search on Twitter and Youtube.
+
 ✅ Zero connections to Google/Twitter on the client.
+
 ✅ Follow Twitter accounts.
+
 ✅ Follow Youtube accounts.
+
 ✅ Save your favourite Tweets.
+
 ✅ Tor-friendly.
+
 ✅ Terminal-browser friendly.
+
 ✅ Easy 2 minute self-hosting deploy.
+
 > And many more to come!
 
 ## 🎭 Privacy
