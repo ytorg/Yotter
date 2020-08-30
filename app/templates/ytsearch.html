@@ -14,8 +14,8 @@
         <p>{{ form.submit() }}</p>
     </form>
 
-        <h3 class="ui dividing header">Users</h3>
-        {% if channels %}
+    {% if channels %}
+    <h3 class="ui dividing header">Users</h3>
             <div class="ui relaxed divided list">
 
                     {% for res in channels %}
@@ -51,8 +51,8 @@
 
 
             <div class="ui middle aligned divided list">
-                <h3 class="ui dividing header">Videos</h3>
                 {% if videos %}
+                <h3 class="ui dividing header">Videos</h3>
                     <div class="ui centered cards">
                         {% for video in videos %}
                             {% include '_video_item.html' %}

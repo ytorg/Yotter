@@ -18,6 +18,7 @@ import random, string
 import time, datetime
 import feedparser
 import requests
+import bleach
 import urllib
 import json
 import re
@@ -312,7 +313,7 @@ def watch():
 
     video = {
         'title':data['title'],
-        'description':Markup(data['description']),
+        'description':Markup(markupString(data['description'])),
         'viewCount':data['view_count'],
         'author':data['uploader'],
         'authorUrl':data['uploader_url'],
@@ -320,7 +321,17 @@ def watch():
         'id':id,
         'averageRating': str((float(data['average_rating'])/5)*100)
     }
+    print(video['description'])
     return render_template("video.html", video=video)
+
+def markupString(string):
+    string = string.replace("\n\n", "<br><br>").replace("\n", "<br>")
+    string = bleach.linkify(string)
+    string = string.replace("https://youtube.com/", "")
+    string = string.replace("https://www.youtube.com/", "")
+    string = string.replace("https://twitter.com/", "/u/")
+    print(request.url)
+    return string
 
 ## PROXY videos through Parasitter server to the client.
 @app.route('/stream', methods=['GET', 'POST'])
@@ -636,7 +647,7 @@ def getYoutubePosts(ids):
 
                 if time.days >= 15:
                     continue
-
+                
                 video = ytPost()
                 video.date = vid.published_parsed
                 video.timeStamp = getTimeDiff(vid.published_parsed)
