@@ -6,7 +6,7 @@
         {% if title %}
         <title>{{ title }} - Parassiter</title>
         {% else %}
-        <title>Parasitter</title>
+        <title>Yotter</title>
         {% endif %}
         <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='semantic/semantic.min.css') }}">
         <link rel="stylesheet" type= "text/css" href="{{ url_for('static',filename='styles.css') }}">
@@ -14,7 +14,7 @@
     <body>
         <div class="ui icon menu overflow-auto">
             <a href="{{ url_for('index') }}"><div class="item">
-                <img src="{{ url_for('static',filename='img/logo.png') }}">
+                <img src="{{ url_for('static',filename='img/logo_simple.png') }}">
             </div></a>
             {% if current_user.is_anonymous %}
             <a href="{{ url_for('login') }}" class="item">Login</a>

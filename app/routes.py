@@ -60,7 +60,7 @@ def twitter():
     else:
         profilePic = posts[0].userProfilePic
     print("--- {} seconds fetching twitter feed---".format(time.time() - start_time))
-    return render_template('twitter.html', title='Parasitter | Twitter', posts=posts, avatar=avatarPath, profilePic = profilePic, followedCount=followCount, form=form)
+    return render_template('twitter.html', title='Yotter | Twitter', posts=posts, avatar=avatarPath, profilePic = profilePic, followedCount=followCount, form=form)
 
 @app.route('/savePost/<url>', methods=['POST'])
 @login_required
@@ -194,7 +194,7 @@ def youtube():
     if videos:
         videos.sort(key=lambda x: x.date, reverse=True)
     print("--- {} seconds fetching youtube feed---".format(time.time() - start_time))
-    return render_template('youtube.html', title="Parasitter | Youtube", videos=videos, followCount=followCount)
+    return render_template('youtube.html', title="Yotter | Youtube", videos=videos, followCount=followCount)
 
 @app.route('/ytfollowing', methods=['GET', 'POST'])
 @login_required
@@ -333,7 +333,7 @@ def markupString(string):
     print(request.url)
     return string
 
-## PROXY videos through Parasitter server to the client.
+## PROXY videos through Yotter server to the client.
 @app.route('/stream', methods=['GET', 'POST'])
 @login_required
 def stream():
