@@ -1,6 +1,6 @@
 [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
 [![made-with-python](https://img.shields.io/badge/Made%20with-Python-1f425f.svg)](https://www.python.org/)
-[![Generic badge](https://img.shields.io/badge/PRs-Welcome-green.svg)](https://github.com/pluja/Parasitter/pulls)
+[![Generic badge](https://img.shields.io/badge/PRs-Welcome-green.svg)](https://github.com/pluja/Yotter/pulls)
 
 
 
@@ -8,11 +8,11 @@
 <p align="center"> Twitter and Youtube with privacy </p>
 <br>
 
-### In this new version, Parasitter no longer depends on Invidious. [Click on this link](https://github.com/pluja/Parasitter/tree/master) if you want to go to the old version using Invidious (not updated anymore).
+### In this new version, Yotter no longer depends on Invidious. [Click on this link](https://github.com/pluja/Yotter/tree/master) if you want to go to the old version using Invidious (not updated anymore).
 
-Parasitter allows you to follow your favorite Twitter and YouTube accounts with full privacy using rss feeds in order to gather the latest content from your favourite accounts and builds a *beautiful* feed so you can read them. Parasitter is written in Python and Flask and uses Semantic-UI as its CSS framework.
+Yotter allows you to follow your favorite Twitter and YouTube accounts with full privacy using rss feeds in order to gather the latest content from your favourite accounts and builds a *beautiful* feed so you can read them. Yotter is written in Python and Flask and uses Semantic-UI as its CSS framework.
 
-Parasitter is possible thanks to several open-source projects that are listed on the [Powered by](#powered-by) section. Make sure to check out those awesome projects!
+Yotter is possible thanks to several open-source projects that are listed on the [Powered by](#powered-by) section. Make sure to check out those awesome projects!
 
 ## Index:
 * [Features](#features)
@@ -50,9 +50,9 @@ Parasitter is possible thanks to several open-source projects that are listed on
 
 ## 🎭 Privacy
 #### 🌐 Connections
-Parasitter cares about your privacy, and for this it will never make any connection to Twitter or Youtube on the client. Every request is proxied through the Parasitter server; video streaming, photos, data gathering, scrapping, etc.
+Yotter cares about your privacy, and for this it will never make any connection to Twitter or Youtube on the client. Every request is proxied through the Yotter server; video streaming, photos, data gathering, scrapping, etc.
 
-The Parasitter server connects to Google (Youtube) and Nitter in order to gather all the necessary data. Then it serves it (proxied through itself) to the client. This means that as a client, you will never connect to Google - the Parasitter server will do it for you. So if you want to set up a Parasitter server for privacy reasons I recommend you to set it up on a remote VPS so you don't share your IP with Google or use a VPN on the server. 
+The Yotter server connects to Google (Youtube) and Nitter in order to gather all the necessary data. Then it serves it (proxied through itself) to the client. This means that as a client, you will never connect to Google - the Yotter server will do it for you. So if you want to set up a Yotter server for privacy reasons I recommend you to set it up on a remote VPS so you don't share your IP with Google or use a VPN on the server. 
 
 If you don't mind exposing your IP making requests to Google then you can set it up wherever you want. Even with this method you will avoid all trackers, ads, heavy-loaded pages, etc.
 
@@ -85,10 +85,10 @@ You can test this new version.
 1. Install `python3`, `pip3`, `python3-venv` (optional) and `git`.
 
 2. Clone this repository:
-    - `git clone https://github.com/pluja/Parasitter.git`
+    - `git clone https://github.com/pluja/Yotter.git`
     
 3. Navigate to the project folder:
-    - `cd Parasitter`
+    - `cd Yotter`
    
 4. Prepare a virtual environment and activate it:
    > Python lets you create virtual environments. This allows you to avoid installing all the `pip` packages on your system.
@@ -111,7 +111,7 @@ You can test this new version.
     
 8. [env] Run the application.
     - `flask run`
-    > You can optionally use `flask run --host 0.0.0.0` so you can use Parasitter from other devices from the same network using the host device's IP address and port. ¡Test it from a smartphone!
+    > You can optionally use `flask run --host 0.0.0.0` so you can use Yotter from other devices from the same network using the host device's IP address and port. ¡Test it from a smartphone!
     
 9. Go to "http://localhost:5000/" and enjoy.
 
