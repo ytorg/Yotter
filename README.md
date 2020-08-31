@@ -16,6 +16,7 @@ Yotter is possible thanks to several open-source projects that are listed on the
 
 ## Index:
 * [Features](#features)
+* [Screenshots](#screenshots)
 * [Privacy and Security](#-privacy)
 * [Self hosting](#-self-hosting)
     * [Install & Test](#-test)
@@ -55,9 +56,6 @@ The only things the database stores are:
 
 This data will never be used for any other purpose than offering the service to the user.
 
-#### Others
-If you want to use a specific Nitter instance you can replace it on the file `app/routes.py`.
-
 #### 🔐 Security
 Only the hash of your password is stored on the database. Also no personal information of any kind is kept on the app itself, if a hacker gets access to it only thing they could do would be to follow/unfollow some accounts.
 
@@ -65,7 +63,10 @@ I always recommend self-hosting, as you will be the only person with access to t
 
 > Important note: The **client** never connects to Google / Youtube however, the server does in order to gather all the necessary things!
 
-# 🏠 Self hosting
+#### Others
+If you want to use a specific Nitter instance you can replace it on the file `app/routes.py`.
+
+## 🏠 Self hosting
 
 ### 🐣 Test
 You can test this new version.
@@ -105,6 +106,9 @@ You can test this new version.
     
 9. Go to "http://localhost:5000/" and enjoy.
 
+### 🔗 Hosting on a server:
+`SOON`
+
 ### 🐓 Updating to newer versions:
 **IMPORTANT: Before updating to newer versions, always export your data on `Settings>Export Data`. A major version update could have changes on the whole database and you may be forced to remove and reset the database (only when running locally)!**
 
@@ -141,3 +145,11 @@ This project is completelly free and Open Source and will always be. I am dedica
 
 - **Bitcoin**: `3EjaWjtsHz4WpbVL5Wx8Xg6MfyRRnKYj4e`
 - **Monero**: `83hinYmUkMH2ANgdhxRupmakzLwN26ddePrLQvZv4E3Q1CWjq7MDzsKRcPqLPQwTvG3DdujyaxbKbMsf9VKVAmphMhsfndc`
+
+## 🖼️ Screenshots
+<p align="center"> <img width="720" src="https://i.imgur.com/6AfXO57.png"> </img></p> 
+<p align="center"> <img width="720" src="https://i.imgur.com/jipjySH.png"> </img></p> 
+<p align="center"> <img width="720" src="https://i.imgur.com/JMUW6VH.png"> </img></p> 
+<p align="center"> <img width="720" src="https://i.imgur.com/a7rM4sv.png"> </img></p> 
+<p align="center"> <img width="720" src="https://i.imgur.com/skXFMqE.png"> </img></p> 
+<p align="center"> <img width="720" src="https://i.imgur.com/AurVw5M.png"> </img></p> 
