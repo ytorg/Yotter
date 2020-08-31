@@ -146,3 +146,6 @@ dmypy.json
 
 # Added
 data_export.json
+/misc
+misc/*
+/misc/*
