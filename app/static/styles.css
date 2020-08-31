@@ -44,3 +44,7 @@
 .overflow-auto{
     overflow: auto;
 }
+
+.menu{
+    width: 100% !important;
+}
