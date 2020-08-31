@@ -17,6 +17,7 @@ Yotter is possible thanks to several open-source projects that are listed on the
 * [Privacy and Security](#-privacy)
 * [Self hosting](#-self-hosting)
     * [Install & Test](#-test)
+    * [Hosting on a server](#-hosting-on-a-server)
     * [Update](#-updating-to-newer-versions)
 * [Powered by](#-powered-by)
 * [Donate](#-donate)
@@ -41,7 +42,7 @@ Yotter cares about your privacy, and for this it will never make any connection 
 
 The Yotter server connects to Google (Youtube) and Nitter in order to gather all the necessary data. Then it serves it (proxyed through itself) to the client. This means that as a client, you will never connect to Google - the Yotter server will do it for you. So if you want to set up a Yotter server for privacy reasons I recommend you to set it up on a remote VPS so you don't share your IP with Google or use a VPN on the server. 
 
-If you don't mind exposing your IP making requests to Google then you can set it up wherever you want. Even with this method you will avoid all trackers, ads, heavy-loaded pages, etc.
+If you don't mind exposing your IP making requests to Google then you can set it up wherever you want. Even with this method you will **avoid all trackers, ads, heavy-loaded pages, etc**. - Even with this method, you can stay safe if you use a VPN to hide your IP.
 
 #### 🛡️ Your data
 The only things the database stores are:
@@ -49,11 +50,12 @@ The only things the database stores are:
 * Username
 * List of followed users
 * List of saved posts
+* Some user configurations (Dark theme, etc)
 
-This data will never be used for any other purpose than offering the service to the user.
+This data will never be used for any other purpose than offering the service to the user. It's not sent anywhere, never.
 
 #### 🔐 Security
-Only the hash of your password is stored on the database. Also, no personal information of any kind is kept on the app itself, if a hacker gets access to it the only thing they could do would be to follow/unfollow some accounts.
+Only the hash of your password is stored on the database. Also, no personal information of any kind is required nor kept, if a hacker gets access to the database the only thing they could do would be to follow/unfollow some accounts. So there's no motivation in 'hacking' Yotter.
 
 I always recommend self-hosting, as you will be the only person with access to the data.
 
