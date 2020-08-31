@@ -1,14 +1,11 @@
 [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
 [![made-with-python](https://img.shields.io/badge/Made%20with-Python-1f425f.svg)](https://www.python.org/)
 [![Generic badge](https://img.shields.io/badge/PRs-Welcome-green.svg)](https://github.com/pluja/Yotter/pulls)
-[![Generic badge](https://img.shields.io/badge/Formerly-Parasitter-blue.svg)](https://github.com/pluja/Yotter/pulls)
+[![Generic badge](https://img.shields.io/badge/Formerly-Parasitter-blue.svg)](https://github.com/pluja/Yotter/tree/master)
 
 
 
 <p align="center"> <img width="620" src="app/static/img/banner.png"> </img></p> 
-<br>
-
-### In this new version, Yotter no longer depends on Invidious. [Click on this link](https://github.com/pluja/Yotter/tree/master) if you want to go to the old version using Invidious (not updated anymore).
 
 Yotter allows you to follow your favorite Twitter and YouTube accounts with full privacy. It helps you gather the latest content from your favourite accounts in a *beautiful* feed so you can stay up to date without compromising your privacy. Yotter is written with Python and Flask and uses Semantic-UI as its CSS framework.
 
