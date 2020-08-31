@@ -233,7 +233,6 @@ def ytsearch():
             })
 
         for c in chnns:
-            print(c)
             channels.append({
                 'username':c['name'],
                 'channelId':c['id'],
@@ -321,7 +320,6 @@ def watch():
         'id':id,
         'averageRating': str((float(data['average_rating'])/5)*100)
     }
-    print(video['description'])
     return render_template("video.html", video=video)
 
 def markupString(string):
@@ -330,7 +328,6 @@ def markupString(string):
     string = string.replace("https://youtube.com/", "")
     string = string.replace("https://www.youtube.com/", "")
     string = string.replace("https://twitter.com/", "/u/")
-    print(request.url)
     return string
 
 ## PROXY videos through Yotter server to the client.
