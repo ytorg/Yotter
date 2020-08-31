@@ -7,7 +7,7 @@
 
 <p align="center"> <img width="620" src="app/static/img/banner.png"> </img></p> 
 
-Yotter allows you to follow your favorite Twitter and YouTube accounts with full privacy. It helps you gather the latest content from your favourite accounts in a *beautiful* feed so you can stay up to date without compromising your privacy. Yotter is written with Python and Flask and uses Semantic-UI as its CSS framework.
+Yotter allows you to follow your favorite Twitter and YouTube accounts with full privacy. It helps you gather the latest content from your favorite accounts in a *beautiful* feed so you can stay up to date without compromising your privacy. Yotter is written with Python and Flask and uses Semantic-UI as its CSS framework.
 
 Yotter is possible thanks to several open-source projects that are listed on the [Powered by](#powered-by) section. Make sure to check out those awesome projects!
 
@@ -39,7 +39,7 @@ Yotter is possible thanks to several open-source projects that are listed on the
 #### 🌐 Connections
 Yotter cares about your privacy, and for this it will never make any connection to Twitter or Youtube on the client. Every request is proxied through the Yotter server; video streaming, photos, data gathering, scrapping, etc.
 
-The Yotter server connects to Google (Youtube) and Nitter in order to gather all the necessary data. Then it serves it (proxied through itself) to the client. This means that as a client, you will never connect to Google - the Yotter server will do it for you. So if you want to set up a Yotter server for privacy reasons I recommend you to set it up on a remote VPS so you don't share your IP with Google or use a VPN on the server. 
+The Yotter server connects to Google (Youtube) and Nitter in order to gather all the necessary data. Then it serves it (proxyed through itself) to the client. This means that as a client, you will never connect to Google - the Yotter server will do it for you. So if you want to set up a Yotter server for privacy reasons I recommend you to set it up on a remote VPS so you don't share your IP with Google or use a VPN on the server. 
 
 If you don't mind exposing your IP making requests to Google then you can set it up wherever you want. Even with this method you will avoid all trackers, ads, heavy-loaded pages, etc.
 
@@ -53,7 +53,7 @@ The only things the database stores are:
 This data will never be used for any other purpose than offering the service to the user.
 
 #### 🔐 Security
-Only the hash of your password is stored on the database. Also no personal information of any kind is kept on the app itself, if a hacker gets access to it only thing they could do would be to follow/unfollow some accounts.
+Only the hash of your password is stored on the database. Also, no personal information of any kind is kept on the app itself, if a hacker gets access to it the only thing they could do would be to follow/unfollow some accounts.
 
 I always recommend self-hosting, as you will be the only person with access to the data.
 
@@ -137,7 +137,7 @@ You can test this new version.
 * [My fork of youtube_search](https://github.com/pluja/youtube_search-fork)
 
 ### 💌 Donate
-This project is completelly free and Open Source and will always be. I am dedicating my free time to build it so if you like it, you can buy me a coffee!
+This project is completely free and Open Source and will always be. I am dedicating my free time to build it so if you like it, you can buy me a coffee!
 
 - **Bitcoin**: `3EjaWjtsHz4WpbVL5Wx8Xg6MfyRRnKYj4e`
 - **Monero**: `83hinYmUkMH2ANgdhxRupmakzLwN26ddePrLQvZv4E3Q1CWjq7MDzsKRcPqLPQwTvG3DdujyaxbKbMsf9VKVAmphMhsfndc`
