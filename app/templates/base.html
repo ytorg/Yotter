@@ -8,14 +8,17 @@
         {% else %}
         <title>Yotter</title>
         {% endif %}
-        <meta name="viewport" content="width=device-width, user-scalable=no">
-        <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='semantic/semantic.min.css') }}">
+        <meta name="viewport" content="width=device-width">
+        <link rel="preload" as= "style" type= "text/css" href= "{{ url_for('static',filename='semantic/semantic.min.css') }}">
         <link rel="stylesheet" type= "text/css" href="{{ url_for('static',filename='styles.css') }}">
+        <link rel="icon" href="{{ url_for('static',filename='favicons/favicon.ico') }}">
+
+        <link rel="stylesheet"href= "{{ url_for('static',filename='semantic/semantic.min.css') }}">
     </head>
     <body>
         <div class="ui icon menu overflow-auto">
             <a href="{{ url_for('index') }}"><div class="item">
-                <img src="{{ url_for('static',filename='img/logo_simple.png') }}">
+                <img alt="Yotter simple logo" src="{{ url_for('static',filename='img/logo_simple.png') }}">
             </div></a>
             {% if current_user.is_anonymous %}
             <a href="{{ url_for('login') }}" class="item">Login</a>

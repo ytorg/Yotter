@@ -18,7 +18,7 @@
         <div class="ui relaxed divided list">
             {% for res in results %}
             <div class="item">
-              <img class="ui avatar image" src="{{ res.avatar }}">
+              <img alt="Avatar" class="ui avatar image" src="{{ res.avatar }}">
               <div class="content">
                 {% if res.fullName|length > 20%}
                     <a class="header" href="/u/{{res.username}}">{{res.fullName[0:23]}}...</a>

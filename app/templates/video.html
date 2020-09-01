@@ -1,5 +1,5 @@
 <head>
-    <link rel="stylesheet" type= "text/css" href="{{ url_for('static',filename='videojs.css') }}">
+    <link rel="stylesheet" type= "text/css" href="{{ url_for('static',filename='video-js.min.css') }}">
 </head>
 {% extends "base.html" %}
 {% block content %}
@@ -46,5 +46,5 @@
           </div>
       </div>
 </div>
-<script src="{{ url_for('static',filename='videojs.js') }}"></script>
+<script src="{{ url_for('static',filename='video.min.js') }}"></script>
 {% endblock %}

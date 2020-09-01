@@ -2,7 +2,7 @@
     <div class="content">
         <div class="extra content">
             <div class="left floated author">
-                <img class="ui avatar image" src="{{ post.profilePic }}">
+                <img alt="Avatar" class="ui avatar image" src="{{ post.profilePic }}">
             </div>
             
             <a href="{{post.url}}"><span class="right floated star">
@@ -24,7 +24,7 @@
         </div>
         <div class="extra content">
             {% if post.attachedImg != "" %}
-                <img class="ui centered medium image" src="{{post.attachedImg}}">
+                <img alt="Image attachment" class="ui centered medium image" src="{{post.attachedImg}}">
             {% endif %}
             {% if post.isReply %}
                 <div class="ui card">
@@ -34,7 +34,7 @@
                         <div class="description break-word">
                         {{post.replyingTweetContent}}
                         {% if post.replyAttachedImg != "" %}
-                            <img class="ui centered medium image" src="{{post.replyAttachedImg}}">
+                            <img alt="Image attachment" class="ui centered medium image" src="{{post.replyAttachedImg}}">
                         {% endif %}
                         </div>
                     </div>
