@@ -12,6 +12,7 @@ Yotter allows you to follow and gather all the content from your favorite Twitte
 Yotter is possible thanks to several open-source projects that are listed on the [Powered by](#powered-by) section. Make sure to check out those awesome projects!
 
 ## Index:
+* [Why](#why)
 * [Features](#features)
 * [Screenshots](#screenshots)
 * [Privacy and Security](#-privacy)
@@ -21,6 +22,11 @@ Yotter is possible thanks to several open-source projects that are listed on the
     * [Update](#-updating-to-newer-versions)
 * [Powered by](#-powered-by)
 * [Donate](#-donate)
+
+## Why
+At first I started working on this project as a solution for following Twitter accounts (a thing that can't be done with Nitter) and getting a Twitter-like feed. Weeks later the leader of Invidious, Omar Roth, announced that he was stepping away from the project. As an Invidious active user, this made me think that a new alternative was needed for the community and also an alternative with an easier language for most people (as Invidious is written in Crystal). So I started developing a 'written-in-python Invidious alternative' and it went quite well.
+
+I hope that this project can prosperate, gain contributors, new instances and create a good community around it.
 
 ## Features:
 - [x] No Ads.
