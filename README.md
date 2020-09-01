@@ -148,9 +148,11 @@ You can test this new version.
 This project is completely free and Open Source and will always be.
 
 Funding will be used 100% for opening and mantaining an online public instance of Yotter, this will be hosted on Netcup and will (at first) be the *VPS 500 G8*. I mention all of this in case you want to check the prices.
+#### Crypto (preferred):
 - **Bitcoin**: `3EjaWjtsHz4WpbVL5Wx8Xg6MfyRRnKYj4e`
 - **Monero**: `83hinYmUkMH2ANgdhxRupmakzLwN26ddePrLQvZv4E3Q1CWjq7MDzsKRcPqLPQwTvG3DdujyaxbKbMsf9VKVAmphMhsfndc`
-- **[Liberapay](https://liberapay.com/pluja/)**
+#### Fiat:
+- <a href="https://liberapay.com/pluja/donate"><img alt="Donate using Liberapay" src="https://liberapay.com/assets/widgets/donate.svg"></a>
 
 ## 🖼️ Screenshots
 <p align="center"> <img width="720" src="https://i.imgur.com/6AfXO57.png"> </img></p> 
