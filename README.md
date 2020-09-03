@@ -110,6 +110,26 @@ You can test this new version.
     
 9. Go to "http://localhost:5000/" and enjoy.
 
+### Using Docker:
+A quick deployment
+
+1. Install Docker:
+    - `https://docs.docker.com/engine/install/`
+
+2. Clone this repository:
+    - `git clone https://github.com/pluja/Yotter.git`
+    
+3. Navigate to the project folder:
+    - `cd Yotter`
+
+4. Build the docker image:
+    - `docker build -t yotter .`
+
+5. Run the container:
+    - `docker run -p 5000:5000 yotter`
+    
+6. Go to "http://localhost:5000/" and enjoy.
+
 ### 🔗 Hosting on a server:
 `SOON`
 
