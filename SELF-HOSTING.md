@@ -9,7 +9,7 @@
 
 * `sudo apt-get -y install python3 python3-venv python3-dev`
 
-* `sudo apt-get -y install mysql-server postfix supervisor nginx git`
+* `sudo apt-get -y install mysql-server supervisor nginx git`
 
 > When installing MySQL-server it will prompt for a root password. Set up a password of your like, this will be the MySQL databases master password and will be required later, so don't forget it!
 
