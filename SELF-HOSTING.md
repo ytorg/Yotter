@@ -3,6 +3,8 @@
 <br>
 <a href="https://github.com/pluja/Yotter"><img alt="Tested on Ubuntu" src="https://img.shields.io/badge/Tested On-Ubuntu 20.04LTS-blue.svg"></img></a>
 
+> Using the `root` user is not recommended for this installation.
+
 #### Step 1: Base setup
 1. Connect to your server via SSH or direct access.
     * (Recommended) Set up password-less login with ssh-keys.
@@ -16,6 +18,8 @@
 
 > When installing MySQL-server it will prompt for a root password. Set up a password of your like, this will be the MySQL databases master password and will be required later, so don't forget it!
 
+> If after the MySQL-server installation you have not been prompted a password for the `root` user, run `sudo mysql_secure_installation`
+
 3. Clone this repository and acccess folder:
 * `git clone https://github.com/pluja/Yotter`
 
@@ -25,6 +29,8 @@
 * `python3 -m venv venv`
 * `source venv/bin/activate`
 
+* `pip install wheel`
+* `pip install cryptography`
 * `pip install -r requirements.txt`
 
 > You can edit the `yotter-config` file
@@ -46,6 +52,8 @@
 * Open the MySQL prompt line (Use the previously set MySQL root password!)
     `mysql -u root -p`
 
+> If you have problems with the root password try running `sudo mysql` and then run this query: `ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY 'YOUR_PASSWORD';`. This changes the password for the user `root` by `YOUR_PASSWORD`
+
 Now you should be on the MySQL prompt line (`mysql>`). So let's create the databases:
 
 > Change `<db-password>` for a password of your like. It will be the password for the dabase user `yotter`. Don't choose the same password as the root user of MySQL for security.
@@ -63,7 +71,8 @@ mysql> quit;
 If your set up was correct, you should now be able to run:
 
 `flask db init`
-`flask db migrate`
+
+`flask db upgrade`
 
 #### Step 3: Setting up Gunicorn and Supervisor
 When you run the server with flask run, you are using a web server that comes with Flask. This server is very useful during development, but it isn't a good choice to use for a production server because it wasn't built with performance and robustness in mind. Instead of the Flask development server, for this deployment I decided to use gunicorn, which is also a pure Python web server, but unlike Flask's, it is a robust production server that is used by a lot of people, while at the same time it is very easy to use. [ref](https://blog.miguelgrinberg.com/post/the-flask-mega-tutorial-part-xvii-deployment-on-linux)
@@ -109,7 +118,15 @@ server {
     location / {
         proxy_pass http://localhost:8000;
     }
+
+   location /static {
+        # handle static files directly, without forwarding to the application
+        alias /home/ubuntu/yotter/app/static;
+        expires 30d;
+    }
 }
 ```
+
+* Run `sudo service nginx reload`
 
 [Follow this instructions to install certbot and generate an ssl certificate](https://certbot.eff.org/lets-encrypt/ubuntufocal-nginx)
