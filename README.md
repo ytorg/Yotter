@@ -95,10 +95,10 @@ You can test this new version.
     > Now you are inside of the virtual environment for python. All instructions wiht [env] indicate that must be done inside the env if you decided to create one. From now on, you will always need to start the application from within the virtual env.
     
 5. [env] Update pip
-    - `python3 pip install --upgrade pip`
+    - `pip install --upgrade pip`
     
 6. [env] Install the required libraries:
-    - `python3 pip install -r requirements.txt`
+    - `pip install -r requirements.txt`
        > If you get errors, try running `source venv/bin/activate` again of use `--user` option.
        
 7. [env] Initialize and prepare the database.
