@@ -37,7 +37,7 @@ REGISTRATIONS = True
 ##########################
 #### Global variables ####
 ##########################
-ALLOWED_EXTENSIONS = {'json'}
+ALLOWED_EXTENSIONS = {'json', 'db'}
 
 #########################
 #### Twitter Logic ######
@@ -449,6 +449,8 @@ def importdata():
                 importNewPipeSubscriptions(file)
             elif option == 'youtube':
                 importYoutubeSubscriptions(file)
+            elif option == 'freetube':
+                importFreeTubeSubscriptions(file)
             return redirect(request.referrer)
 
     return redirect(request.referrer)
@@ -473,6 +475,12 @@ def importYoutubeSubscriptions(file):
     itemlist = minidom.parse(file).getElementsByTagName('outline')
     for item in itemlist[1:]:
         r = followYoutubeChannel(re.search('UC[a-zA-Z0-9_-]{22}', item.attributes['xmlUrl'].value).group())
+
+def importFreeTubeSubscriptions(file):
+    filename = secure_filename(file.filename)
+    data = re.findall('UC[a-zA-Z0-9_-]{22}', file.read().decode('utf-8'))
+    for acc in data:
+        r = followYoutubeChannel(acc)
 
 def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
