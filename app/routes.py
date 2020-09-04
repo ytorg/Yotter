@@ -32,7 +32,6 @@ config = json.load(open('yotter-config.json'))
 ##########################
 NITTERINSTANCE = config['nitterInstance'] # Must be https://.../ 
 YOUTUBERSS = "https://www.youtube.com/feeds/videos.xml?channel_id="
-REGISTRATIONS = config['registrations']
 
 ##########################
 #### Global variables ####
@@ -487,12 +486,12 @@ def allowed_file(filename):
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
-    global REGISTRATIONS
     count = db.session.query(User).count()
     if current_user.is_authenticated:
         return redirect(url_for('index'))
 
-    if count >= config['maxInstanceUsers']:
+    REGISTRATIONS = True
+    if count >= config['maxInstanceUsers'] or config['maxInstanceUsers'] == 0:
         REGISTRATIONS = False
         
     form = RegistrationForm()
@@ -500,7 +499,6 @@ def register():
         if User.query.filter_by(username=form.username.data).first():
             flash("This username is taken! Try with another.")
             return redirect(request.referrer)
-
 
         user = User(username=form.username.data)
         user.set_password(form.password.data)
