@@ -4,19 +4,19 @@ from flask_login import UserMixin
 from werkzeug.security import generate_password_hash, check_password_hash
 
 followers = db.Table('followers',
-    db.Column('follower_id', db.Integer, db.ForeignKey('User.id')),
-    db.Column('followed_id', db.Integer, db.ForeignKey('User.id'))
+    db.Column('follower_id', db.Integer, db.ForeignKey('user.id')),
+    db.Column('followed_id', db.Integer, db.ForeignKey('user.id'))
 )
 
 channel_association = db.Table('channel_association',
-    db.Column('channel_id', db.String(30), db.ForeignKey('channel.id')),
-    db.Column('User_id', db.Integer, db.ForeignKey('User.id'))
-) # Association: CHANNEL --followed by--> [UserS]
+    db.Column('channel_id', db.String, db.ForeignKey('channel.id')),
+    db.Column('user_id', db.Integer, db.ForeignKey('user.id'))
+) # Association: CHANNEL --followed by--> [USERS]
 
 twitter_association = db.Table('twitter_association',
-    db.Column('account_id', db.String(30), db.ForeignKey('twitterAccount.id')),
-    db.Column('User_id', db.Integer, db.ForeignKey('User.id'))
-) # Association: ACCOUNT --followed by--> [UserS]
+    db.Column('account_id', db.String, db.ForeignKey('twitterAccount.id')),
+    db.Column('user_id', db.Integer, db.ForeignKey('user.id'))
+) # Association: ACCOUNT --followed by--> [USERS]
 
 class User(UserMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
