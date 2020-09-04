@@ -1,6 +1,4 @@
 {
 	"nitterInstance": "https://nitter.net/",
-	"registrations": true,
-	"maxInstanceUsers": 1,
-	"proxyAll": true
+	"maxInstanceUsers": 1
 }

@@ -17,9 +17,12 @@ Yotter is possible thanks to several open-source projects that are listed on the
 * [Screenshots](#screenshots)
 * [Privacy and Security](#-privacy)
 * [Self hosting](#-self-hosting)
-    * [Install & Test](#-test)
+    * Install & Test
+        * [Normal installation](#-test)
+        * [Docker installation](#using-docker)
     * [Hosting on a server](#-hosting-on-a-server)
     * [Update](#-updating-to-newer-versions)
+    * [Configure server](#configure-the-server)
 * [Powered by](#-powered-by)
 * [Donate](#-donate)
 
@@ -152,6 +155,13 @@ A quick deployment
 
 6. Done! You are on latest version.
 > **See [CHANGELOG](CHANGELOG.md) for a list of changes.**
+
+### Configure the server
+You will find in the root folder of the project a file named `yotter-config.json`. This is the global config file for the Yotter server.
+
+Currently available config is:
+* **nitterInstance**: Nitter instance that will be used when fetching Twitter content.
+* **maxInstanceUsers**: Max users on the instance. When set to `0` it closes registrations.
 
 ### ⛽ Powered by:
 * [Nitter](https://nitter.net/)
