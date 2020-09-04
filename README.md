@@ -14,15 +14,15 @@ Yotter is possible thanks to several open-source projects that are listed on the
 ## Index:
 * [Why](#why)
 * [Features](#features)
-* [Screenshots](#-screenshots)
+* [Screenshots](#screenshots)
 * [Privacy and Security](#-privacy)
 * [Self hosting](#-self-hosting)
     * Install & Test
-        * [Normal installation](#-test)
-        * [Docker installation](#-using-docker)
-    * [Hosting on a server](#-hosting-on-a-server)
-    * [Update](#-updating-to-newer-versions)
-    * [Configure server](#-configure-the-server)
+        * [Normal installation](#test)
+        * [Docker installation](#using-docker)
+    * [Hosting on a server](#hosting-on-a-server)
+    * [Update](#updating-to-newer-versions)
+    * [Configure server](#configure-the-server)
 * [Powered by](#-powered-by)
 * [Donate](#-donate)
 
