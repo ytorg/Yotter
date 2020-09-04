@@ -372,6 +372,13 @@ def login():
         return redirect(next_page)
     return render_template('login.html', title='Sign In', form=form)
 
+#Proxy images through server
+@app.route('/img/<url>', methods=['GET', 'POST'])
+@login_required
+def img(url):
+    pic = requests.get(url.replace("~", "/"))
+    return Response(pic,mimetype="image/png")
+
 @app.route('/logout')
 def logout():
     logout_user()
@@ -553,7 +560,7 @@ def getFeed(urls):
                     for post in userFeed[:-1]:
                         date_time_str = post.find('span', attrs={'class':'tweet-date'}).find('a')['title'].replace(",","")
                         time = datetime.datetime.now() - datetime.datetime.strptime(date_time_str, '%d/%m/%Y %H:%M:%S')
-                        if time.days >=8:
+                        if time.days >=7:
                             continue
 
                         if post.find('div', attrs={'class':'pinned'}):
@@ -608,8 +615,6 @@ def getPosts(account):
             for post in userFeed[:-1]:
                 date_time_str = post.find('span', attrs={'class':'tweet-date'}).find('a')['title'].replace(",","")
                 time = datetime.datetime.now() - datetime.datetime.strptime(date_time_str, '%d/%m/%Y %H:%M:%S')
-                if time.days >=8:
-                    continue
 
                 if post.find('div', attrs={'class':'pinned'}):
                     if post.find('div', attrs={'class':'pinned'}).find('span', attrs={'icon-pin'}):
@@ -660,7 +665,7 @@ def getYoutubePosts(ids):
             for vid in rssFeed.entries:
                 time = datetime.datetime.now() - datetime.datetime(*vid.published_parsed[:6])
 
-                if time.days >=8:
+                if time.days >=7:
                     continue
                 
                 video = ytPost()
@@ -671,7 +676,7 @@ def getYoutubePosts(ids):
                 video.channelUrl = vid.author_detail.href
                 video.id = vid.yt_videoid
                 video.videoTitle = vid.title
-                video.videoThumb = vid.media_thumbnail[0]['url']
+                video.videoThumb = vid.media_thumbnail[0]['url'].replace('/', '~')
                 video.views = vid.media_statistics['views']
                 video.description = vid.summary_detail.value
                 video.description = re.sub(r'^https?:\/\/.*[\r\n]*', '', video.description[0:120]+"...", flags=re.MULTILINE)
