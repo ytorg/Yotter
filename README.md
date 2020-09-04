@@ -113,7 +113,7 @@ You can test this new version.
     
 9. Go to "http://localhost:5000/" and enjoy.
 
-### Using Docker:
+### 🐋 Using Docker:
 A quick deployment
 
 1. Install Docker:
@@ -156,14 +156,14 @@ A quick deployment
 6. Done! You are on latest version.
 > **See [CHANGELOG](CHANGELOG.md) for a list of changes.**
 
-### Configure the server
+### ⚙️ Configure the server
 You will find in the root folder of the project a file named `yotter-config.json`. This is the global config file for the Yotter server.
 
 Currently available config is:
 * **nitterInstance**: Nitter instance that will be used when fetching Twitter content.
 * **maxInstanceUsers**: Max users on the instance. When set to `0` it closes registrations.
 
-# ⛽ Powered by:
+## ⛽ Powered by:
 * [Nitter](https://nitter.net/)
 * [youtube-dl](https://github.com/ytdl-org/youtube-dl)
 * [Flask](https://flask.palletsprojects.com/)
@@ -174,7 +174,7 @@ Currently available config is:
 * [Video.js](https://videojs.com/)
 * [My fork of youtube_search](https://github.com/pluja/youtube_search-fork)
 
-# 💌 Donate
+## 💌 Donate
 This project is completely free and Open Source and will always be.
 
 Funding will be used 100% for opening and mantaining an online public instance of Yotter, this will be hosted on Netcup and will (at first) be the *VPS 500 G8*. I mention all of this in case you want to check the prices.
@@ -184,7 +184,7 @@ Funding will be used 100% for opening and mantaining an online public instance o
 #### Fiat:
 - <a href="https://liberapay.com/pluja/donate"><img alt="Donate using Liberapay" src="https://liberapay.com/assets/widgets/donate.svg"></a>
 
-# 🖼️ Screenshots
+## 🖼️ Screenshots
 <p align="center"> <img width="720" src="https://i.imgur.com/6AfXO57.png"> </img></p> 
 <p align="center"> <img width="720" src="https://i.imgur.com/jipjySH.png"> </img></p> 
 <p align="center"> <img width="720" src="https://i.imgur.com/JMUW6VH.png"> </img></p> 
