@@ -9,6 +9,12 @@
 - Play tweet videos from Parasitter.
 - Create following lists.
 
+## [0.2.3] - 2020-09-04
+### Added
+- [x] Youtube: Proxy all images through Yotter.
+- [x] General: Add server config file.
+- [x] General: @Sn0wed1 added a Docker file and Docker installation instructions.
+
 ## [0.2.2] - 2020-08-27
 ### Changed
 - [x] Twitter: Scrap nitter pages instead of using RSS.
