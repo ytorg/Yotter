@@ -12,6 +12,7 @@ from werkzeug.urls import url_parse
 from youtube_dl import YoutubeDL
 from numerize import numerize
 from bs4 import BeautifulSoup
+from xml.dom import minidom
 from app import app, db
 from re import findall
 import random, string
@@ -440,12 +441,14 @@ def importdata():
         if file.filename == '':
             flash('No selected file')
             return redirect(request.referrer)
-        if file and allowed_file(file.filename):
+        if file and allowed_file(file.filename) or 'subscription_manager' in file.filename:
             option = request.form['import_format']
             if option == 'yotter':
                 importYotterSubscriptions(file)
             elif option == 'newpipe':
                 importNewPipeSubscriptions(file)
+            elif option == 'youtube':
+                importYoutubeSubscriptions(file)
             return redirect(request.referrer)
 
     return redirect(request.referrer)
@@ -464,6 +467,12 @@ def importNewPipeSubscriptions(file):
     data = json.load(file)
     for acc in data['subscriptions']:
         r = followYoutubeChannel(re.search('(UC[a-zA-Z0-9_-]{22})|(?<=user\/)[a-zA-Z0-9_-]+', acc['url']).group())
+
+def importYoutubeSubscriptions(file):
+    filename = secure_filename(file.filename)
+    itemlist = minidom.parse(file).getElementsByTagName('outline')
+    for item in itemlist[1:]:
+        r = followYoutubeChannel(re.search('UC[a-zA-Z0-9_-]{22}', item.attributes['xmlUrl'].value).group())
 
 def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
