@@ -114,7 +114,8 @@ You can test this new version.
 9. Go to "http://localhost:5000/" and enjoy.
 
 ### Using Docker:
-A quick deployment
+##### Building using the Dockerfile
+> (May not work on Windows)
 
 1. Install Docker:
     - `https://docs.docker.com/engine/install/`
@@ -132,6 +133,15 @@ A quick deployment
     - `docker run -p 5000:5000 yotter`
     
 6. Go to "http://localhost:5000/" and enjoy.
+
+##### Pulling image from Docker Hub
+1. Install Docker:
+    - `https://docs.docker.com/engine/install/`
+
+2. Run the container:
+    - `docker run -p 5000:5000 sn0wed/yotter:alpha`
+    
+3. Go to "http://localhost:5000/" and enjoy.
 
 ### 🔗 Hosting on a server:
 
