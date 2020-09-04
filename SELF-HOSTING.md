@@ -24,6 +24,8 @@
 
 * `pip install -r requirements.txt`
 
+> You can edit the `yotter-config` file
+
 5. Install gunicorn (production web server for Python apps) and pymysql:
 `pip install gunicorn pymysql`
 
