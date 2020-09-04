@@ -12,6 +12,7 @@ from werkzeug.urls import url_parse
 from youtube_dl import YoutubeDL
 from numerize import numerize
 from bs4 import BeautifulSoup
+from xml.dom import minidom
 from app import app, db
 from re import findall
 import random, string
@@ -31,12 +32,12 @@ config = json.load(open('yotter-config.json'))
 ##########################
 NITTERINSTANCE = config['nitterInstance'] # Must be https://.../ 
 YOUTUBERSS = "https://www.youtube.com/feeds/videos.xml?channel_id="
-REGISTRATIONS = config['registrations']
+REGISTRATIONS = True
 
 ##########################
 #### Global variables ####
 ##########################
-ALLOWED_EXTENSIONS = {'json'}
+ALLOWED_EXTENSIONS = {'json', 'db'}
 
 #########################
 #### Twitter Logic ######
@@ -440,13 +441,21 @@ def importdata():
         if file.filename == '':
             flash('No selected file')
             return redirect(request.referrer)
-        if file and allowed_file(file.filename):
-            importAccounts(file)
+        if file and allowed_file(file.filename) or 'subscription_manager' in file.filename:
+            option = request.form['import_format']
+            if option == 'yotter':
+                importYotterSubscriptions(file)
+            elif option == 'newpipe':
+                importNewPipeSubscriptions(file)
+            elif option == 'youtube':
+                importYoutubeSubscriptions(file)
+            elif option == 'freetube':
+                importFreeTubeSubscriptions(file)
             return redirect(request.referrer)
 
     return redirect(request.referrer)
 
-def importAccounts(file):
+def importYotterSubscriptions(file):
     filename = secure_filename(file.filename)
     data = json.load(file)
     for acc in data['twitter']:
@@ -454,6 +463,24 @@ def importAccounts(file):
     
     for acc in data['youtube']:
         r = followYoutubeChannel(acc['channelId'])
+
+def importNewPipeSubscriptions(file):
+    filename = secure_filename(file.filename)
+    data = json.load(file)
+    for acc in data['subscriptions']:
+        r = followYoutubeChannel(re.search('(UC[a-zA-Z0-9_-]{22})|(?<=user\/)[a-zA-Z0-9_-]+', acc['url']).group())
+
+def importYoutubeSubscriptions(file):
+    filename = secure_filename(file.filename)
+    itemlist = minidom.parse(file).getElementsByTagName('outline')
+    for item in itemlist[1:]:
+        r = followYoutubeChannel(re.search('UC[a-zA-Z0-9_-]{22}', item.attributes['xmlUrl'].value).group())
+
+def importFreeTubeSubscriptions(file):
+    filename = secure_filename(file.filename)
+    data = re.findall('UC[a-zA-Z0-9_-]{22}', file.read().decode('utf-8'))
+    for acc in data:
+        r = followYoutubeChannel(acc)
 
 def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
