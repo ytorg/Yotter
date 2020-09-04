@@ -31,7 +31,7 @@ config = json.load(open('yotter-config.json'))
 ##########################
 NITTERINSTANCE = config['nitterInstance'] # Must be https://.../ 
 YOUTUBERSS = "https://www.youtube.com/feeds/videos.xml?channel_id="
-REGISTRATIONS = config['registrations']
+REGISTRATIONS = True
 
 ##########################
 #### Global variables ####
