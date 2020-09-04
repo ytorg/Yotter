@@ -139,7 +139,7 @@ You can test this new version.
     - `https://docs.docker.com/engine/install/`
 
 2. Run the container:
-    - `docker run -p 5000:5000 sn0wed/yotter:ghbuild`
+    - `docker run -p 5000:5000 sn0wed/yotter:alpha`
     
 3. Go to "http://localhost:5000/" and enjoy.
 
