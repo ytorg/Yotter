@@ -1,7 +1,7 @@
 <h1> UNDER CONSTRUCTION </h1>
 <a href="https://github.com/pluja/Yotter/tree/master"><img alt="Installation Working" src="https://img.shields.io/badge/Working-2020.09.04-green.svg"></img></a>
 <br>
-<a href="https://github.com/pluja/Yotter/tree/master"><img alt="Tested on Ubuntu" src="https://img.shields.io/badge/Tested On-Ubuntu-blue.svg"></img></a>
+<a href="https://github.com/pluja/Yotter/tree/master"><img alt="Tested on Ubuntu" src="https://img.shields.io/badge/Tested On-Ubuntu 20.04LTS-blue.svg"></img></a>
 
 #### Step 1: Base setup
 1. Connect to your server via SSH or direct access.
