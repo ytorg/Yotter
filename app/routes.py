@@ -486,6 +486,7 @@ def allowed_file(filename):
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
+    form = RegistrationForm()
     if current_user.is_authenticated:
         return redirect(url_for('index'))
 
@@ -496,7 +497,7 @@ def register():
             REGISTRATIONS = False
     except:
         REGISTRATIONS = True
-    form = RegistrationForm()
+
     if form.validate_on_submit():
         if User.query.filter_by(username=form.username.data).first():
             flash("This username is taken! Try with another.")
@@ -508,6 +509,7 @@ def register():
         db.session.commit()
         flash('Congratulations, you are now a registered user!')
         return redirect(url_for('login'))
+        
     return render_template('register.html', title='Register', registrations=REGISTRATIONS, form=form)
 
 @app.route('/error/<errno>')
