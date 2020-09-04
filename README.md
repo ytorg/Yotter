@@ -134,7 +134,9 @@ A quick deployment
 6. Go to "http://localhost:5000/" and enjoy.
 
 ### 🔗 Hosting on a server:
-`SOON`
+
+#### [VISIT THIS FILE FOR INSTRUCTIONS](https://github.com/pluja/Yotter/SELF-HOSTING.md)
+
 
 ### 🐓 Updating to newer versions:
 **IMPORTANT: Before updating to newer versions, always export your data on `Settings>Export Data`. A major version update could have changes on the whole database and you may be forced to remove and reset the database (only when running locally)!**
