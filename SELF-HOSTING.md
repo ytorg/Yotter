@@ -100,3 +100,16 @@ The Yotter application server powered by gunicorn is now running privately port 
 * `sudo rm /etc/nginx/sites-enabled/default`
 
 Create a new Nginx site, you can run `sudo nano /etc/nginx/sites-enabled/yotter`
+
+And write this on it:
+```
+server {
+    server_name  <yourdomain>;
+
+    location / {
+        proxy_pass http://localhost:8000;
+    }
+}
+```
+
+[Follow this instructions to install certbot and generate an ssl certificate](https://certbot.eff.org/lets-encrypt/ubuntufocal-nginx)
