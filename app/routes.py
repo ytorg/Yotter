@@ -486,14 +486,16 @@ def allowed_file(filename):
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
-    count = db.session.query(User).count()
     if current_user.is_authenticated:
         return redirect(url_for('index'))
 
     REGISTRATIONS = True
-    if count >= config['maxInstanceUsers'] or config['maxInstanceUsers'] == 0:
-        REGISTRATIONS = False
-        
+    try:
+        count = db.session.query(User).count()
+        if count >= config['maxInstanceUsers'] or config['maxInstanceUsers'] == 0:
+            REGISTRATIONS = False
+    except:
+        REGISTRATIONS = True
     form = RegistrationForm()
     if form.validate_on_submit():
         if User.query.filter_by(username=form.username.data).first():
