@@ -441,12 +441,16 @@ def importdata():
             flash('No selected file')
             return redirect(request.referrer)
         if file and allowed_file(file.filename):
-            importAccounts(file)
+            option = request.form['import_format']
+            if option == 'yotter':
+                importYotterSubscriptions(file)
+            elif option == 'newpipe':
+                importNewPipeSubscriptions(file)
             return redirect(request.referrer)
 
     return redirect(request.referrer)
 
-def importAccounts(file):
+def importYotterSubscriptions(file):
     filename = secure_filename(file.filename)
     data = json.load(file)
     for acc in data['twitter']:
@@ -454,6 +458,12 @@ def importAccounts(file):
     
     for acc in data['youtube']:
         r = followYoutubeChannel(acc['channelId'])
+
+def importNewPipeSubscriptions(file):
+    filename = secure_filename(file.filename)
+    data = json.load(file)
+    for acc in data['subscriptions']:
+        r = followYoutubeChannel(re.search('(UC[a-zA-Z0-9_-]{22})|(?<=user\/)[a-zA-Z0-9_-]+', acc['url']).group())
 
 def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS

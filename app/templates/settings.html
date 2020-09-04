@@ -40,7 +40,14 @@
                 <form action = "{{ url_for('importdata') }}" method = "POST" enctype = "multipart/form-data">
                     <input type = "file" name = "file"/>
                     <input type = "submit"/>
-                </form> 
+                    <br>
+                    <label class="radio-inline">
+                        <input type="radio" name="import_format" id="yotter" value="yotter" checked> Yotter
+                    </label>
+                    <label class="radio-inline">
+                        <input type="radio" name="import_format" id="newpipe" value="newpipe"> NewPipe
+                    </label>
+                </form>
                 <div class="description">Import from JSON export.</div>
             </div>
         </div>
