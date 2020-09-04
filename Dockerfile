@@ -11,5 +11,5 @@ RUN flask db init \
   && flask db migrate\
   && flask db upgrade
 
-CMD flask run --host 0.0.0.0
+CMD [ "flask", "run", "--host", "0.0.0.0" ]
 EXPOSE 5000
