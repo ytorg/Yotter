@@ -1,4 +1,5 @@
 <h1> UNDER CONSTRUCTION </h1>
+<a href="https://github.com/pluja/Yotter/tree/master"><img alt="Formerly named Parasitter" src="https://img.shields.io/badge/Tested&Working-2020.09.04-green.svg"></img></a>
 
 #### Step 1: Base setup
 1. Connect to your server via SSH or direct access.
