@@ -15,13 +15,16 @@ Yotter is possible thanks to several open-source projects that are listed on the
 * [Why](#why)
 * [Features](#features)
 * [Screenshots](#screenshots)
-* [Privacy and Security](#-privacy)
-* [Self hosting](#-self-hosting)
-    * [Install & Test](#-test)
-    * [Hosting on a server](#-hosting-on-a-server)
-    * [Update](#-updating-to-newer-versions)
-* [Powered by](#-powered-by)
-* [Donate](#-donate)
+* [Privacy and Security](#privacy)
+* [Self hosting](#self-hosting)
+    * Install & Test
+        * [Normal installation](#test)
+        * [Docker installation](#using-docker)
+    * [Hosting on a server](#hosting-on-a-server)
+    * [Update](#updating-to-newer-versions)
+    * [Configure server](configure-the-server)
+* [Powered by](#powered-by)
+* [Donate](#donate)
 
 ## Why
 At first I started working on this project as a solution for following Twitter accounts (a thing that can't be done with Nitter) and getting a Twitter-like feed. Weeks later the leader of Invidious, Omar Roth, announced that he was stepping away from the project. As an Invidious active user, this made me think that a new alternative was needed for the community and also an alternative with an easier language for most people (as Invidious is written in Crystal). So I started developing a 'written-in-python Invidious alternative' and it went quite well.
@@ -42,15 +45,15 @@ I hope that this project can prosperate, gain contributors, new instances and cr
 
 > And many more to come!
 
-## 🎭 Privacy
-#### 🌐 Connections
+## Privacy
+#### Connections
 Yotter cares about your privacy, and for this it will never make any connection to Twitter or Youtube on the client. Every request is proxied through the Yotter server; video streaming, photos, data gathering, scrapping, etc.
 
 The Yotter server connects to Google (Youtube) and Nitter in order to gather all the necessary data. Then it serves it (proxyed through itself) to the client. This means that as a client, you will never connect to Google - the Yotter server will do it for you. So if you want to set up a Yotter server for privacy reasons I recommend you to set it up on a remote VPS so you don't share your IP with Google or use a VPN on the server. 
 
 If you don't mind exposing your IP making requests to Google then you can set it up wherever you want. Even with this method you will **avoid all trackers, ads, heavy-loaded pages, etc**. - Even with this method, you can stay safe if you use a VPN to hide your IP.
 
-#### 🛡️ Your data
+#### Your data
 The only things the database stores are:
 * Hash of the password
 * Username
@@ -60,7 +63,7 @@ The only things the database stores are:
 
 This data will never be used for any other purpose than offering the service to the user. It's not sent anywhere, never.
 
-#### 🔐 Security
+#### Security
 Only the hash of your password is stored on the database. Also, no personal information of any kind is required nor kept, if a hacker gets access to the database the only thing they could do would be to follow/unfollow some accounts. So there's no motivation in 'hacking' Yotter.
 
 I always recommend self-hosting, as you will be the only person with access to the data.
@@ -70,9 +73,9 @@ I always recommend self-hosting, as you will be the only person with access to t
 #### Others
 If you want to use a specific Nitter instance you can replace it on the file `app/routes.py`.
 
-## 🏠 Self hosting
+## Self hosting
 
-### 🐣 Test
+### Test
 You can test this new version.
 
 ##### IMPORTANT: Connections to googlevideo will be made to stream the videos. It is recommended to use a VPS server or a VPN to preserve your privacy. This version is intended for a remote server.
@@ -131,9 +134,10 @@ A quick deployment
 6. Go to "http://localhost:5000/" and enjoy.
 
 ### 🔗 Hosting on a server:
-`SOON`
 
-### 🐓 Updating to newer versions:
+#### [VISIT THIS FILE FOR INSTRUCTIONS](https://github.com/pluja/Yotter/blob/dev-indep/SELF-HOSTING.md)
+
+### Updating to newer versions:
 **IMPORTANT: Before updating to newer versions, always export your data on `Settings>Export Data`. A major version update could have changes on the whole database and you may be forced to remove and reset the database (only when running locally)!**
 
 1. Navigate to the git repository (the one you cloned when installing).
@@ -153,7 +157,14 @@ A quick deployment
 6. Done! You are on latest version.
 > **See [CHANGELOG](CHANGELOG.md) for a list of changes.**
 
-### ⛽ Powered by:
+### Configure the server
+You will find in the root folder of the project a file named `yotter-config.json`. This is the global config file for the Yotter server.
+
+Currently available config is:
+* **nitterInstance**: Nitter instance that will be used when fetching Twitter content. Format must be `**https://**<NitterInstance.tld>**/**`
+* **maxInstanceUsers**: Max users on the instance. When set to `0` it closes registrations.
+
+## Powered by:
 * [Nitter](https://nitter.net/)
 * [youtube-dl](https://github.com/ytdl-org/youtube-dl)
 * [Flask](https://flask.palletsprojects.com/)
@@ -164,7 +175,7 @@ A quick deployment
 * [Video.js](https://videojs.com/)
 * [My fork of youtube_search](https://github.com/pluja/youtube_search-fork)
 
-### 💌 Donate
+## Donate
 This project is completely free and Open Source and will always be.
 
 Funding will be used 100% for opening and mantaining an online public instance of Yotter, this will be hosted on Netcup and will (at first) be the *VPS 500 G8*. I mention all of this in case you want to check the prices.
@@ -174,7 +185,7 @@ Funding will be used 100% for opening and mantaining an online public instance o
 #### Fiat:
 - <a href="https://liberapay.com/pluja/donate"><img alt="Donate using Liberapay" src="https://liberapay.com/assets/widgets/donate.svg"></a>
 
-## 🖼️ Screenshots
+## Screenshots
 <p align="center"> <img width="720" src="https://i.imgur.com/6AfXO57.png"> </img></p> 
 <p align="center"> <img width="720" src="https://i.imgur.com/jipjySH.png"> </img></p> 
 <p align="center"> <img width="720" src="https://i.imgur.com/JMUW6VH.png"> </img></p> 

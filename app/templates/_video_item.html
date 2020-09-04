@@ -1,6 +1,6 @@
 <div class="card">
     <div class="image">
-        <img alt="Thumbnail" src="{{video.videoThumb}}">
+        <img alt="Thumbnail" src="/img/{{video.videoThumb.replace('/', '~')}}">
     </div>
     <div class="content">
         <a class="video-title break-word" href="{{url_for('watch', v=video.id, _method='GET')}}">{{video.videoTitle}}</a>

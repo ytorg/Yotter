@@ -12,6 +12,7 @@ from werkzeug.urls import url_parse
 from youtube_dl import YoutubeDL
 from numerize import numerize
 from bs4 import BeautifulSoup
+from xml.dom import minidom
 from app import app, db
 from re import findall
 import random, string
@@ -22,18 +23,21 @@ import bleach
 import urllib
 import json
 import re
-
 ##########################
 #### Config variables ####
 ##########################
-NITTERINSTANCE = "https://nitter.net/" # Must be https://.../ 
+config = json.load(open('yotter-config.json'))
+##########################
+#### Config variables ####
+##########################
+NITTERINSTANCE = config['nitterInstance'] # Must be https://.../ 
 YOUTUBERSS = "https://www.youtube.com/feeds/videos.xml?channel_id="
-REGISTRATIONS = True
+REGISTRATIONS = config['registrations']
 
 ##########################
 #### Global variables ####
 ##########################
-ALLOWED_EXTENSIONS = {'json'}
+ALLOWED_EXTENSIONS = {'json', 'db'}
 
 #########################
 #### Twitter Logic ######
@@ -372,6 +376,13 @@ def login():
         return redirect(next_page)
     return render_template('login.html', title='Sign In', form=form)
 
+#Proxy images through server
+@app.route('/img/<url>', methods=['GET', 'POST'])
+@login_required
+def img(url):
+    pic = requests.get(url.replace("~", "/"))
+    return Response(pic,mimetype="image/png")
+
 @app.route('/logout')
 def logout():
     logout_user()
@@ -430,13 +441,21 @@ def importdata():
         if file.filename == '':
             flash('No selected file')
             return redirect(request.referrer)
-        if file and allowed_file(file.filename):
-            importAccounts(file)
+        if file and allowed_file(file.filename) or 'subscription_manager' in file.filename:
+            option = request.form['import_format']
+            if option == 'yotter':
+                importYotterSubscriptions(file)
+            elif option == 'newpipe':
+                importNewPipeSubscriptions(file)
+            elif option == 'youtube':
+                importYoutubeSubscriptions(file)
+            elif option == 'freetube':
+                importFreeTubeSubscriptions(file)
             return redirect(request.referrer)
 
     return redirect(request.referrer)
 
-def importAccounts(file):
+def importYotterSubscriptions(file):
     filename = secure_filename(file.filename)
     data = json.load(file)
     for acc in data['twitter']:
@@ -445,19 +464,43 @@ def importAccounts(file):
     for acc in data['youtube']:
         r = followYoutubeChannel(acc['channelId'])
 
+def importNewPipeSubscriptions(file):
+    filename = secure_filename(file.filename)
+    data = json.load(file)
+    for acc in data['subscriptions']:
+        r = followYoutubeChannel(re.search('(UC[a-zA-Z0-9_-]{22})|(?<=user\/)[a-zA-Z0-9_-]+', acc['url']).group())
+
+def importYoutubeSubscriptions(file):
+    filename = secure_filename(file.filename)
+    itemlist = minidom.parse(file).getElementsByTagName('outline')
+    for item in itemlist[1:]:
+        r = followYoutubeChannel(re.search('UC[a-zA-Z0-9_-]{22}', item.attributes['xmlUrl'].value).group())
+
+def importFreeTubeSubscriptions(file):
+    filename = secure_filename(file.filename)
+    data = re.findall('UC[a-zA-Z0-9_-]{22}', file.read().decode('utf-8'))
+    for acc in data:
+        r = followYoutubeChannel(acc)
+
 def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
+    global REGISTRATIONS
+    count = db.session.query(User).count()
     if current_user.is_authenticated:
         return redirect(url_for('index'))
 
+    if count >= config['maxInstanceUsers']:
+        REGISTRATIONS = False
+        
     form = RegistrationForm()
     if form.validate_on_submit():
         if User.query.filter_by(username=form.username.data).first():
             flash("This username is taken! Try with another.")
             return redirect(request.referrer)
+
 
         user = User(username=form.username.data)
         user.set_password(form.password.data)
@@ -553,7 +596,7 @@ def getFeed(urls):
                     for post in userFeed[:-1]:
                         date_time_str = post.find('span', attrs={'class':'tweet-date'}).find('a')['title'].replace(",","")
                         time = datetime.datetime.now() - datetime.datetime.strptime(date_time_str, '%d/%m/%Y %H:%M:%S')
-                        if time.days >=8:
+                        if time.days >=7:
                             continue
 
                         if post.find('div', attrs={'class':'pinned'}):
@@ -608,8 +651,6 @@ def getPosts(account):
             for post in userFeed[:-1]:
                 date_time_str = post.find('span', attrs={'class':'tweet-date'}).find('a')['title'].replace(",","")
                 time = datetime.datetime.now() - datetime.datetime.strptime(date_time_str, '%d/%m/%Y %H:%M:%S')
-                if time.days >=8:
-                    continue
 
                 if post.find('div', attrs={'class':'pinned'}):
                     if post.find('div', attrs={'class':'pinned'}).find('span', attrs={'icon-pin'}):
@@ -660,7 +701,7 @@ def getYoutubePosts(ids):
             for vid in rssFeed.entries:
                 time = datetime.datetime.now() - datetime.datetime(*vid.published_parsed[:6])
 
-                if time.days >=8:
+                if time.days >=7:
                     continue
                 
                 video = ytPost()
@@ -671,7 +712,7 @@ def getYoutubePosts(ids):
                 video.channelUrl = vid.author_detail.href
                 video.id = vid.yt_videoid
                 video.videoTitle = vid.title
-                video.videoThumb = vid.media_thumbnail[0]['url']
+                video.videoThumb = vid.media_thumbnail[0]['url'].replace('/', '~')
                 video.views = vid.media_statistics['views']
                 video.description = vid.summary_detail.value
                 video.description = re.sub(r'^https?:\/\/.*[\r\n]*', '', video.description[0:120]+"...", flags=re.MULTILINE)
