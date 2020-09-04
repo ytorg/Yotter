@@ -18,8 +18,8 @@ Yotter is possible thanks to several open-source projects that are listed on the
 * [Privacy and Security](#-privacy)
 * [Self hosting](#-self-hosting)
     * Install & Test
-        * [Normal installation](#test)
-        * [Docker installation](#using-docker)
+        * [Normal installation](#-test)
+        * [Docker installation](#-using-docker)
     * [Hosting on a server](#hosting-on-a-server)
     * [Update](#updating-to-newer-versions)
     * [Configure server](#configure-the-server)
