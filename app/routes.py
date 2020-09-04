@@ -22,13 +22,16 @@ import bleach
 import urllib
 import json
 import re
-
 ##########################
 #### Config variables ####
 ##########################
-NITTERINSTANCE = "https://nitter.net/" # Must be https://.../ 
+config = json.load(open('yotter-config.json'))
+##########################
+#### Config variables ####
+##########################
+NITTERINSTANCE = config['nitterInstance'] # Must be https://.../ 
 YOUTUBERSS = "https://www.youtube.com/feeds/videos.xml?channel_id="
-REGISTRATIONS = True
+REGISTRATIONS = config['registrations']
 
 ##########################
 #### Global variables ####
@@ -457,14 +460,20 @@ def allowed_file(filename):
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
+    global REGISTRATIONS
+    count = db.session.query(User).count()
     if current_user.is_authenticated:
         return redirect(url_for('index'))
 
+    if count >= config['maxInstanceUsers']:
+        REGISTRATIONS = False
+        
     form = RegistrationForm()
     if form.validate_on_submit():
         if User.query.filter_by(username=form.username.data).first():
             flash("This username is taken! Try with another.")
             return redirect(request.referrer)
+
 
         user = User(username=form.username.data)
         user.set_password(form.password.data)
