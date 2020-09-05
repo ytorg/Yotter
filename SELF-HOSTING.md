@@ -63,7 +63,7 @@ Now you should be on the MySQL prompt line (`mysql>`). So let's create the datab
 
 > Change `<db-password>` for a password of your like. It will be the password for the dabase user `yotter`. Don't choose the same password as the root user of MySQL for security.
 
-> The password for the **yotter** user needs to match the password that you included in the `DATABASE_URL` variable in the `.env` file. If you didn't change it, you can change it now.
+> The password `<db-password` for the **yotter** user needs to match the password that you included in the `DATABASE_URL` variable in the `.env` file. If you didn't change it, you can change it now.
 
 ```
 mysql> create database yotter character set utf8 collate utf8_bin;
@@ -94,8 +94,8 @@ The supervisor utility uses configuration files that tell it what programs to mo
 
 ```
 [program:yotter]
-command=/home/ubuntu/yotter/venv/bin/gunicorn -b localhost:8000 -w 4 yotter:app
-directory=/home/ubuntu/yotter
+command=/home/ubuntu/Yotter/venv/bin/gunicorn -b localhost:8000 -w 4 yotter:app
+directory=/home/ubuntu/Yotter
 user=ubuntu
 autostart=true
 autorestart=true
@@ -124,7 +124,7 @@ server {
 
    location /static {
         # handle static files directly, without forwarding to the application
-        alias /home/ubuntu/yotter/app/static;
+        alias /home/ubuntu/Yotter/app/static;
         expires 30d;
     }
 }
