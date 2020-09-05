@@ -1,4 +1,5 @@
 {
 	"nitterInstance": "https://nitter.net/",
-	"maxInstanceUsers": 10
+	"maxInstanceUsers": 10,
+	"serverLocation": "Germany"
 }
