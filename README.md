@@ -149,7 +149,7 @@ You can test this new version.
     
 3. Go to "http://localhost:5000/" and enjoy.
 
-### 🔗 Hosting on a server:
+### Hosting on a server:
 
 #### [VISIT THIS FILE FOR INSTRUCTIONS](https://github.com/pluja/Yotter/blob/dev-indep/SELF-HOSTING.md)
 
