@@ -1,11 +1,30 @@
 <a href="https://github.com/pluja/Yotter"><img alt="Installation Working" src="https://img.shields.io/badge/Status-Working 2020.09.05-green.svg"></img></a>
 <a href="https://github.com/pluja/Yotter"><img alt="Tested on Ubuntu" src="https://img.shields.io/badge/Tested On-Ubuntu Server 20.04LTS-blue.svg"></img></a>
 
-> Using the `root` user is not recommended for this installation.
+# Why should I self host?
+Self-hosting gives you the whole power over the service and the data. You can set up a server for your own personal use or share it with friends and family. Or, why not go further and share it with the whole world?
 
-#### Step 1: Base setup
+When you self-host you make internet stronger and more censorship resistant. If one Yotter instance goes down for any reason, there will be all other instances online and ready to host new users.
+
+## Pre-Installation
+
+You will need a server of your own, or you can rent a VPS server on any service you like. Minimum requirements for up to 5 users are 2GB of RAM and a Linux Server. It is better if the server is dedicated as whole to Yotter as it will improve performance and security.
+
+First of all, you will need to set up a new user on the server. For security reasons you should never use a `root` user to set up a service. If you already have a non-root server you can use that one and skip the following steps.
+
+We will create a user named `ubuntu` as I will be setting this up on an ubuntu machine. So, if you choose a different username make sure you replace it on future commands. We will create and login to the user as follows:
+
+```
+$ adduser --gecos "" ubuntu
+$ usermod -aG sudo ubuntu
+$ su ubuntu
+```
+
+Now you should be logged in. Make sure to set up a good password. It is recommended to use ssh keys to log-in remotelly and disable the password login on all users.
+
+### Step 1: Base setup
 1. Connect to your server via SSH or direct access.
-    * (Recommended) Set up password-less login with ssh-keys.
+    - [x] (Recommended) Set up password-less login with ssh-keys.
 
 2. Install base dependencies:
 * `sudo apt-get -y update`
