@@ -34,7 +34,7 @@ I hope that this project can prosperate, gain contributors, new instances and cr
 
 # Features:
 - [x] No Ads.
-- [x] No JavaScript.
+- [x] No Javascript needed*
 - [x] Minimalist.
 - [x] Search on Twitter and Youtube.
 - [x] Zero connections to Google/Twitter on the client.
@@ -45,6 +45,7 @@ I hope that this project can prosperate, gain contributors, new instances and cr
 - [x] Tor-friendly.
 - [x] Terminal-browser friendly.
 
+*Video player is VideoJS, which uses JavaScript. But if JavaScript is disabled Yotter still works perfectly and uses the default HTML video player.
 > And many more to come!
 
 # Privacy
