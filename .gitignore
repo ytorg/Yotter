@@ -146,6 +146,8 @@ dmypy.json
 
 # Added
 data_export.json
+SELF-HOSTING.md
+README.md
 /misc
 misc/*
 /misc/*
