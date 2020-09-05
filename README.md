@@ -24,7 +24,7 @@ Yotter is possible thanks to several open-source projects that are listed on the
     * [Hosting on a server](#hosting-on-a-server)
     * [Update](#updating-to-newer-versions)
     * [Configure server](configure-the-server)
-* [Contributing](#contributing)
+* [Contributing and contact](#contributing)
 * [Powered by](#powered-by)
 * [Donate](#donate)
 
@@ -187,6 +187,9 @@ Contributors are always welcome. You can help in many ways: Coding, organizing, 
 We have a [Matrix](https://matrix.org/) room where we discuss anything related with Yotter, feel free to enter the room and start talking or reading. You can choose a Matrix client from [this list of Matrix clients](https://matrix.org/clients/). Also you will need to choose an instance to host your account, you can find Matrix instances [here](https://www.hello-matrix.net/public_servers.php).
 
 <a href="https://matrix.to/#/!wqJnbUtEfitxtOsLFj:privacytools.io?via=privacytools.io&via=matrix.org"><img alt="Join Matrix" src="https://img.shields.io/badge/Join Room-Matrix-black.svg">
+   
+ #### Other platforms:
+ <a href="https://reddit.com/r/Yotter"><img alt="Join Matrix" src="https://img.shields.io/badge/Reddit-r/Yotter-orange.svg">
 
 # Powered by:
 * [Nitter](https://nitter.net/)
