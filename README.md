@@ -74,7 +74,7 @@ I always recommend self-hosting, as you will be the only person with access to t
 # Public Instances
 | name |server location|registrations?|
 | ------------ | ------------ | ------------ |
-| [yotter.xyz](https://yotter.xyz/)  |Germany|Open|
+| -  |Germany|Open|
 
 # Self hosting
 
