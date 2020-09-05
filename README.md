@@ -16,6 +16,7 @@ Yotter is possible thanks to several open-source projects that are listed on the
 * [Features](#features)
 * [Screenshots](#screenshots)
 * [Privacy and Security](#privacy)
+* [Public instances](#public-instances)
 * [Self hosting](#self-hosting)
     * Install & Test
         * [Normal installation](#test)
@@ -72,6 +73,11 @@ I always recommend self-hosting, as you will be the only person with access to t
 
 #### Others
 If you want to use a specific Nitter instance you can replace it on the file `app/routes.py`.
+
+## Public Instances
+| name |server location|registrations?|
+| ------------ | ------------ | ------------ |
+| [yotter.xyz](https://yotter.xyz/)  |Germany|Open|
 
 ## Self hosting
 
