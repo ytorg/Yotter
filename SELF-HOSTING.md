@@ -1,5 +1,4 @@
 <a href="https://github.com/pluja/Yotter"><img alt="Installation Working" src="https://img.shields.io/badge/Status-Working 2020.09.05-green.svg"></img></a>
-
 <a href="https://github.com/pluja/Yotter"><img alt="Tested on Ubuntu" src="https://img.shields.io/badge/Tested On-Ubuntu Server 20.04LTS-blue.svg"></img></a>
 
 > Using the `root` user is not recommended for this installation.
