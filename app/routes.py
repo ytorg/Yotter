@@ -392,7 +392,8 @@ def logout():
 def settings():
     instanceInfo = {
         "totalUsers":db.session.query(User).count(),
-        "location":config['serverLocation']
+        "location":config['serverLocation'],
+        "serverName":config['serverName']
     }
     return render_template('settings.html', info=instanceInfo)
 
