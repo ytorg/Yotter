@@ -14,7 +14,7 @@
 
 * `sudo apt-get -y install python3 python3-venv python3-dev`
 
-* `sudo apt-get -y install mysql-server supervisor nginx git make`
+* `sudo apt-get -y install mysql-server supervisor nginx git`
 
 > When installing MySQL-server it will prompt for a root password. Set up a password of your like, this will be the MySQL databases master password and will be required later, so don't forget it!
 
@@ -38,7 +38,12 @@
 5. Install gunicorn (production web server for Python apps) and pymysql:
 `pip install gunicorn pymysql`
 
-6. Set up `.env`
+6. Set up the database tables:
+* `flask db init`
+* `flask db migrate`
+* `flask db upgrade`
+
+7. Set up `.env`
     1. (PRE) Generate a random string and copy it to clipboard:
         `python3 -c "import uuid; print(uuid.uuid4().hex)"`
 
@@ -70,9 +75,7 @@ mysql> quit;
 
 If your set up was correct, you should now be able to run:
 
-`flask db init`
-
-`flask db upgrade`
+* `flask db upgrade`
 
 #### Step 3: Setting up Gunicorn and Supervisor
 When you run the server with flask run, you are using a web server that comes with Flask. This server is very useful during development, but it isn't a good choice to use for a production server because it wasn't built with performance and robustness in mind. Instead of the Flask development server, for this deployment I decided to use gunicorn, which is also a pure Python web server, but unlike Flask's, it is a robust production server that is used by a lot of people, while at the same time it is very easy to use. [ref](https://blog.miguelgrinberg.com/post/the-flask-mega-tutorial-part-xvii-deployment-on-linux)
