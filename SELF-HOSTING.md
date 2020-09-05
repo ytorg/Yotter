@@ -31,7 +31,7 @@
 * `pip install cryptography`
 * `pip install -r requirements.txt`
 
-> You can edit the `yotter-config` file
+> You can edit the `yotter-config.json` file
 
 5. Install gunicorn (production web server for Python apps) and pymysql:
 `pip install gunicorn pymysql`
@@ -130,4 +130,15 @@ server {
 
 * Run `sudo service nginx reload`
 
-[Follow this instructions to install certbot and generate an ssl certificate](https://certbot.eff.org/lets-encrypt/ubuntufocal-nginx)
+[Follow this instructions to install certbot and generate an ssl certificate so your server can use HTTPS](https://certbot.eff.org/lets-encrypt/ubuntufocal-nginx)
+
+## Updating the server
+Updating the server should always be pretty easy:
+
+```
+(venv) $ git pull
+(venv) $ sudo supervisorctl stop yotter
+(venv) $ flask db upgrade
+(venv) $ pip install -r requirements.txt
+(venv) $ sudo supervisorctl start yotter
+```
