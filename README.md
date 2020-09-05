@@ -176,8 +176,10 @@ I always recommend self-hosting, as you will be the only person with access to t
 You will find in the root folder of the project a file named `yotter-config.json`. This is the global config file for the Yotter server.
 
 Currently available config is:
+* **serverName**: Name of the server. It will be shown along the interface.
 * **nitterInstance**: Nitter instance that will be used when fetching Twitter content. Format must be `https://<NitterInstance.tld>/`
 * **maxInstanceUsers**: Max users on the instance. When set to `0` it closes registrations.
+* **location**: Location of the server.
 
 # Contributing
 Contributors are always welcome. You can help in many ways: Coding, organizing, designing, [donating](#donate), maintaining... You choose what you want to help with!
