@@ -9,12 +9,12 @@ followers = db.Table('followers',
 )
 
 channel_association = db.Table('channel_association',
-    db.Column('channel_id', db.String(30), db.ForeignKey('channel.id')),
+    db.Column('channel_id', db.Integer, db.ForeignKey('channel.id')),
     db.Column('user_id', db.Integer, db.ForeignKey('user.id'))
 ) # Association: CHANNEL --followed by--> [USERS]
 
 twitter_association = db.Table('twitter_association',
-    db.Column('account_id', db.String(30), db.ForeignKey('twitterAccount.id')),
+    db.Column('account_id', db.Integer, db.ForeignKey('twitterAccount.id')),
     db.Column('user_id', db.Integer, db.ForeignKey('user.id'))
 ) # Association: ACCOUNT --followed by--> [USERS]
 
