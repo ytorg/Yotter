@@ -81,7 +81,11 @@ I always recommend self-hosting, as you will be the only person with access to t
 
 # Self hosting
 
+If you want to set up a public server you should follow the instructions [HERE](#hosting-on-a-server). The following instructions are for personal use only.
+
 ## Local
+
+You can run Yotter locally on your machine for personal use. You should use a VPN in order to cloak your IP.
 
 ##### IMPORTANT: Connections from the server to googlevideo will be made to stream the videos. It is recommended to use a VPN to preserve your privacy. Understand that the best way of using Yotter is [running on a remote server](#hosting-on-a-server).
 
@@ -119,6 +123,9 @@ I always recommend self-hosting, as you will be the only person with access to t
 9. Go to "http://localhost:5000/" and enjoy.
 
 ## Using Docker:
+
+Note: Not for a production server.
+
 ##### Building using the Dockerfile
 > (May not work on Windows)
 
@@ -148,8 +155,9 @@ I always recommend self-hosting, as you will be the only person with access to t
     
 3. Go to "http://localhost:5000/" and enjoy.
 
-## Hosting on a server:
+# Hosting on a server:
 
+If you want to set up a Yotter public instance, follow this instructions.
 #### [VISIT THIS FILE FOR INSTRUCTIONS](https://github.com/pluja/Yotter/blob/dev-indep/SELF-HOSTING.md)
 
 ## Updating to newer versions:

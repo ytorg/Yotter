@@ -165,3 +165,18 @@ Updating the server should always be pretty easy:
 (venv) $ pip install -r requirements.txt
 (venv) $ sudo supervisorctl start yotter
 ```
+
+## Other configurations
+
+### Removing log-in restrictions
+> (NOT TESTED -  COULD CRASH THE APP) Note that some routes make usage of the `current_user` variable to look if the current user is following some user or not, if you remove the restriction for such routes the app will crash. This will be solved on future releases.
+
+For the example, let's allow for anyone to watch a video on our instance. Even if they aren't registered users. First we need to find the route that we want to allow, you can do it by navigating to the page and taking a look at the URL. Anything after the first `/` is the app route. When we're watching a video, the route is `/watch?v=<videoId>`.
+
+Now on the file `routes.py` we will search for the code that the server runs when we navigate to that route. You can use the Find function on your text editor and search for `/watch`. Now, you will see that right below the definition of the route, `@app.route('/watch')`, there is a `@login_required` line. If you delete that line, no restriction will now be applied to that route.
+
+But you must know that videos and images are proxied through the instance. So we will need to allow another route. For video streaming, the route is `/stream` and for images it is `/img`. So you just need to delete the `login_required` from those two other routes.
+
+You can now reload the server and you will see that, without logging in, you can now watch videos.
+
+
