@@ -160,6 +160,7 @@ Updating the server should always be pretty easy:
 ```
 (venv) $ git pull
 (venv) $ sudo supervisorctl stop yotter
+(venv) $ flask db migrate
 (venv) $ flask db upgrade
 (venv) $ pip install -r requirements.txt
 (venv) $ sudo supervisorctl start yotter
