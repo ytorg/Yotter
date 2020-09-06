@@ -81,7 +81,7 @@ I always recommend self-hosting, as you will be the only person with access to t
 
 # Self hosting
 
-If you want to set up a public server you should follow the instructions [HERE](#hosting-on-a-server)
+If you want to set up a public server you should follow the instructions [HERE](#hosting-on-a-server). The following instructions are for personal use only.
 
 ## Local
 
