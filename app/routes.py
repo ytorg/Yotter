@@ -372,7 +372,6 @@ def login():
         current_user.last_seen = datetime.datetime.utcnow()
         db.session.commit()
         next_page = request.args.get('next')
-        print(current_user.last_seen)
         if not next_page or url_parse(next_page).netloc != '':
             next_page = url_for('index')
         return redirect(next_page)
