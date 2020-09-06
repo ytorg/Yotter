@@ -45,6 +45,8 @@ ALLOWED_EXTENSIONS = {'json', 'db'}
 @app.route('/index')
 @login_required
 def index():
+    current_user.last_seen = datetime.datetime.utcnow()
+    db.session.commit()
     return render_template('home.html')
 
 @app.route('/twitter')
@@ -369,8 +371,6 @@ def login():
             flash('Invalid username or password')
             return redirect(url_for('login'))
         login_user(user, remember=form.remember_me.data)
-        current_user.last_seen = datetime.datetime.utcnow()
-        db.session.commit()
         next_page = request.args.get('next')
         if not next_page or url_parse(next_page).netloc != '':
             next_page = url_for('index')
