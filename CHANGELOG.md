@@ -9,6 +9,21 @@
 - Play tweet videos from Parasitter.
 - Create following lists.
 
+## [0.2.4] - 2020.09.06
+### Changed
+- [x] Remove non implemented settings from settings page.
+- [x] Changed video streaming chunk size.
+
+### Added
+- [x] Add instance info on settings page.
+- [x] Documentation: Contributing section.
+- [x] Option to delete an account.
+- [x] Show video title on browser tab title on `/watch`.
+- [x] Ability for admins to allow non-registered users to use the service.
+
+### Fixed
+- [x] Video descriptions overflowing the description box.
+
 ## [0.2.3] - 2020-09-04
 ### Added
 - [x] Youtube: Proxy all images through Yotter.
