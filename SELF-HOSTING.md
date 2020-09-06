@@ -171,8 +171,12 @@ Updating the server should always be pretty easy:
 ### Removing log-in restrictions
 > (NOT TESTED -  COULD CRASH THE APP) Note that some routes make usage of the `current_user` variable to look if the current user is following some user or not, if you remove the restriction for such routes the app will crash. This will be solved on future releases.
 
-If you want to remove the log-in restriction for any app route (i.e `/watch?v=<videoId>`) so anyone can access without needing an account, you need to delete some lines from the `routes.py` file.
+For the example, let's allow for anyone to watch a video on our instance. Even if they aren't registered users. First we need to find the route that we want to allow, you can do it by navigating to the page and taking a look at the URL. Anything after the first `/` is the app route. When we're watching a video, the route is `/watch?v=<videoId>`.
 
-Open the `app/routes.py` file with your favourite editor and find the route you want to remove the restriction. Say we want to allow any user to watch a video through our Yotter instance, so we want to remove the restriction for the `/watch...` route. Find the `@app.route('/watch')` on the `routes.py` file. You will see that right below the definition of the route there si a `@login_required` line. If you delete that line, no restriction will now be applied to that route.
+Now on the file `routes.py` we will search for the code that the server runs when we navigate to that route. You can use the Find function on your text editor and search for `/watch`. Now, you will see that right below the definition of the route, `@app.route('/watch')`, there is a `@login_required` line. If you delete that line, no restriction will now be applied to that route.
+
+But you must know that videos and images are proxied through the instance. So we will need to allow another route. For video streaming, the route is `/stream` and for images it is `/img`. So you just need to delete the `login_required` from those two other routes.
+
+You can now reload the server and you will see that, without logging in, you can now watch videos.
 
 
