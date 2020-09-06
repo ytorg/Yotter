@@ -323,7 +323,7 @@ def watch():
         'id':id,
         'averageRating': str((float(data['average_rating'])/5)*100)
     }
-    return render_template("video.html", video=video)
+    return render_template("video.html", video=video, title='{}'.format(video['title']))
 
 def markupString(string):
     string = string.replace("\n\n", "<br><br>").replace("\n", "<br>")
