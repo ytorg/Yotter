@@ -346,7 +346,7 @@ def stream():
         req = requests.get(data['formats'][-1]['url'], stream = True)
         headers.add('Accept-Ranges','bytes')
         headers.add('Content-Length', str(int(req.headers['Content-Length'])+1))
-        response = Response(req.iter_content(chunk_size=12*1024), mimetype=req.headers['Content-Type'], content_type=req.headers['Content-Type'], direct_passthrough=True, headers=headers)
+        response = Response(req.iter_content(chunk_size=1024*1024), mimetype=req.headers['Content-Type'], content_type=req.headers['Content-Type'], direct_passthrough=True, headers=headers)
         #enable browser file caching with etags
         response.cache_control.public  = True
         response.cache_control.max_age = int(60000)
