@@ -459,6 +459,16 @@ def importdata():
 
     return redirect(request.referrer)
 
+@app.route('/deleteme', methods=['GET', 'POST'])
+@login_required
+def deleteme():
+    user = User.query.filter_by(username=current_user.username).first()
+    db.session.delete(user)
+    db.session.commit()
+    logout_user()
+    return redirect(url_for('index'))
+
+
 def importYotterSubscriptions(file):
     filename = secure_filename(file.filename)
     data = json.load(file)

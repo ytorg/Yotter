@@ -48,3 +48,14 @@
 .menu{
     width: 100% !important;
 }
+
+
+
+.control-me {
+    visibility: hidden;
+    cursor: not-allowed;
+}
+#toggle:checked ~ .control-me {
+    visibility: visible;
+    cursor: pointer;
+}
