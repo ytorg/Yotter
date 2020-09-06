@@ -3,5 +3,5 @@
 	"nitterInstance": "https://nitter.net/",
 	"maxInstanceUsers": 10,
 	"serverLocation": "Germany",
-	"restrictPublicUsage":false
+	"restrictPublicUsage":true
 }
