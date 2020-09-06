@@ -165,3 +165,14 @@ Updating the server should always be pretty easy:
 (venv) $ pip install -r requirements.txt
 (venv) $ sudo supervisorctl start yotter
 ```
+
+## Other configurations
+
+### Removing log-in restrictions
+> (NOT TESTED -  COULD CRASH THE APP) Note that some routes make usage of the `current_user` variable to look if the current user is following some user or not, if you remove the restriction for such routes the app will crash. This will be solved on future releases.
+
+If you want to remove the log-in restriction for any app route (i.e `/watch?v=<videoId>`) so anyone can access without needing an account, you need to delete some lines from the `routes.py` file.
+
+Open the `app/routes.py` file with your favourite editor and find the route you want to remove the restriction. Say we want to allow any user to watch a video through our Yotter instance, so we want to remove the restriction for the `/watch...` route. Find the `@app.route('/watch')` on the `routes.py` file. You will see that right below the definition of the route there si a `@login_required` line. If you delete that line, no restriction will now be applied to that route.
+
+
