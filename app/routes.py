@@ -242,7 +242,7 @@ def ytsearch():
                 'thumbnail':'https:{}'.format(c['thumbnails'][0]),
                 'subCount':c['suscriberCountText'].split(" ")[0]
             })
-        return render_template('ytsearch.html', form=form, btform=button_form, channels=channels, videos=videos)
+        return render_template('ytsearch.html', form=form, btform=button_form, channels=channels, videos=videos, restricted=config['restrictPublicUsage'])
 
     else:
         return render_template('ytsearch.html', form=form)
@@ -301,7 +301,7 @@ def channel(id):
     data = feedparser.parse(data.content)
 
     channelData = YoutubeSearch.channelInfo(id)
-    return render_template('channel.html', form=form, btform=button_form, channel=channelData[0], videos=channelData[1])
+    return render_template('channel.html', form=form, btform=button_form, channel=channelData[0], videos=channelData[1], restricted=config['restrictPublicUsage'])
 
 @app.route('/watch', methods=['GET'])
 @login_required

@@ -2,5 +2,6 @@
 	"serverName": "Yotter.xyz",
 	"nitterInstance": "https://nitter.net/",
 	"maxInstanceUsers": 10,
-	"serverLocation": "Germany"
+	"serverLocation": "Germany",
+	"restrictPublicUsage":false
 }

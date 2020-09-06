@@ -20,6 +20,7 @@
 
                     {% for res in channels %}
                     <div class="item">
+                        {% if restricted or current_user.is_authenticated %}
                         <div class="right floated content">
                             {% if not current_user.is_following_yt(res.channelId) %}
                                 <p>
@@ -37,6 +38,7 @@
                                 </p>
                             {% endif %}
                         </div>
+                        {% endif %}
                         <img alt="Avatar" class="ui avatar image" src="{{ res.thumbnail }}">
                         <div class="content">
                             <a class = "header" href="{{ url_for('channel', id=res.channelId)}}">{{res.username}}</a>

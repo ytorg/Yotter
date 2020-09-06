@@ -18,6 +18,7 @@
                     </div>   
             </div>
         </div>
+        {% if restricted or current_user.is_authenticated %}
         <div class="center aligned extra content">
             {% if not current_user.is_following_yt(channel.id) %}
                 <p>
@@ -35,6 +36,7 @@
                 </p>
             {% endif %}           
         </div>
+        {% endif %}
         </div>
     </div>
 
