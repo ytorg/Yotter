@@ -23,7 +23,7 @@ Yotter is possible thanks to several open-source projects that are listed on the
         * [Docker installation](#using-docker)
     * [Hosting on a server](#hosting-on-a-server)
     * [Update](#updating-to-newer-versions)
-    * [Configure server](configure-the-server)
+    * [Configure server](#configure-the-server)
 * [Contributing and contact](#contributing)
 * [Powered by](#powered-by)
 * [Donate](#donate)
