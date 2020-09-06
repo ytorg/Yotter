@@ -369,7 +369,10 @@ def login():
             flash('Invalid username or password')
             return redirect(url_for('login'))
         login_user(user, remember=form.remember_me.data)
+        current_user.last_seen = datetime.datetime.utcnow()
+        db.session.commit()
         next_page = request.args.get('next')
+        print(current_user.last_seen)
         if not next_page or url_parse(next_page).netloc != '':
             next_page = url_for('index')
         return redirect(next_page)
@@ -526,6 +529,7 @@ def register():
         return redirect(url_for('login'))
         
     return render_template('register.html', title='Register', registrations=REGISTRATIONS, form=form)
+        
 
 @app.route('/error/<errno>')
 def error(errno):
