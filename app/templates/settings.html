@@ -2,7 +2,7 @@
 
 {% block content %}
 <br>
-<div style="margin-bottom: 1em;" class="ui one column centered grid">
+<div class="ui center aligned text container">
     <h2 class="ui icon header">
         <i class="settings icon"></i>
         <div class="content">
@@ -12,31 +12,26 @@
     </h2>
 </div>
 
+<h2 class="ui centered header">
+    Imports can take up to 2 minutes.
+    <div class="sub header">You can still use Yotter.</div>
+  </h2>
 
-<div class="ui one column centered grid" style="margin-bottom: 1.4em;">
-    <div class="ui icon message" style=" width: 55%;">
-        <i class="info circle icon"></i>
-        <div class="content">
-        <div class="header">
-            Imports can take up to 2 minutes.
-        </div>
-        <p>But you can still use Yotter.</p>
-        </div>
-    </div>
-</div>
-
-<div class="ui one column centered grid">
-    <div class="ui relaxed divided list">
-        <div class="item">
-            <i class="large download middle aligned icon"></i>
-            <div class="content">
-            <a href="{{ url_for('export') }}" class="header">Export Data</a>
-            <div class="description">Export data into JSON file</div>
+<div class="ui center aligned text container">
+    <div class="ui segments">
+        <div class="ui segment">
+            <div class="item">
+                <i class="large download middle aligned icon"></i>
+                <div class="content">
+                    <div class="description"><h5 class="ui header">Export data into JSON file</h5></div>
+                    <a href="{{ url_for('export') }}" class="header">Export Data</a>
+                </div>
             </div>
         </div>
-        <div class="item">
+        <div class="ui blue segment">
             <i class="large upload middle aligned icon"></i>
             <div class="content">
+                <div class="description"><h5 class="ui header">Import suscription data</h5></div>
                 <form action = "{{ url_for('importdata') }}" method = "POST" enctype = "multipart/form-data">
                     <input type = "file" name = "file"/>
                     <input type = "submit"/>
@@ -54,9 +49,9 @@
                         <input type="radio" name="import_format" id="freetube" value="freetube"> FreeTube
                     </label>
                 </form>
-                <div class="description">Import subscription data.</div>
             </div>
         </div>
+    </div>
 
         <!--<div class="item">
             <i class="large moon middle aligned icon"></i>
@@ -96,7 +91,9 @@
             <div class="ui segment">
                 <p><b>Server location:</b> {{info.location}}</p>
             </div>
-        </div>
+            <div class="ui segment">
+                <p><a href="https://github.com/pluja/Yotter#donate">Consider making a donation</a></p>
+            </div>
     </div>
 </div>
 {% endblock %}
