@@ -39,7 +39,7 @@ Now you should be logged in. Make sure to set up a good password. It is recommen
 
 * `sudo apt-get -y install mysql-server supervisor nginx git`
 
-> When installing MySQL-server it will prompt for a root password. Set up a password of your like, this will be the MySQL databases master password and will be required later, so don't forget it!
+> When installing MySQL-server it will prompt for a root password. This is the password for the root user of MySQL. Set up a password of your like, this will be the MySQL databases master password and will be required later, so don't forget it!
 
 If after the MySQL-server installation you have not been prompted to create a password for the `root` user, run `sudo mysql_secure_installation`
 
@@ -81,7 +81,9 @@ Make sure you change `<RandomString>` for the previously generated random string
 * Open the MySQL prompt line (Use the previously set MySQL root password!)
     `mysql -u root -p`
 
-> If you have problems with the root password try running `sudo mysql` and then run this query: `ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY 'YOUR_PASSWORD';`. This changes the password for the user `root` by `<YOUR_PASSWORD>`
+> Note that you are being prompted for the password of the MySQL root user, the one you set up on step 1.2, not the password you wrote on the `.env` file. The password on the `.env` is the password for the MySQL Yotter database.
+
+> If you still have problems with the root user password try running `sudo mysql` and then run this query: `ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY '<YOUR_PASSWORD>';`. This changes the password for the MySQL user `root` by `<YOUR_PASSWORD>`
 
 Now you should be on the MySQL prompt line (`mysql>`). So let's create the databases:
 
