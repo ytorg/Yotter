@@ -45,6 +45,7 @@ ALLOWED_EXTENSIONS = {'json', 'db'}
 @app.route('/index')
 @login_required
 def index():
+    current_user.last_seen = datetime.datetime.utcnow()
     return render_template('home.html')
 
 @app.route('/twitter')
@@ -389,8 +390,18 @@ def logout():
 @app.route('/settings')
 @login_required
 def settings():
+    active = 1
+    for user in User.query.all():
+        if not user.last_seen == None:
+            t = datetime.datetime.utcnow() - user.last_seen
+            s = t.total_seconds()
+            m = s/60
+            if m < 40:
+                active = active+1
+
     instanceInfo = {
         "totalUsers":db.session.query(User).count(),
+        "active":active,
         "location":config['serverLocation'],
         "serverName":config['serverName']
     }
@@ -734,3 +745,4 @@ def getYoutubePosts(ids):
                 video.description = re.sub(r'^https?:\/\/.*[\r\n]*', '', video.description[0:120]+"...", flags=re.MULTILINE)
                 videos.append(video)
     return videos
+    
