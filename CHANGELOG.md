@@ -13,6 +13,8 @@
 ### Changed
 - [x] Remove non implemented settings from settings page.
 - [x] Changed video streaming chunk size.
+- [x] Video streaming now has a smaller load for the server.
+- [x] Video streaming is (a bit) more efficient - YoutubeDL executed on /watch instead.
 
 ### Added
 - [x] Add instance info on settings page.
