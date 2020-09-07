@@ -81,7 +81,7 @@ Make sure you change `<RandomString>` for the previously generated random string
 * Open the MySQL prompt line (Use the previously set MySQL root password!)
     `mysql -u root -p`
 
-> If you have problems with the root password try running `sudo mysql` and then run this query: `ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY 'YOUR_PASSWORD';`. This changes the password for the user `root` by `YOUR_PASSWORD`
+> If you have problems with the root password try running `sudo mysql` and then run this query: `ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY 'YOUR_PASSWORD';`. This changes the password for the user `root` by `<YOUR_PASSWORD>`
 
 Now you should be on the MySQL prompt line (`mysql>`). So let's create the databases:
 
