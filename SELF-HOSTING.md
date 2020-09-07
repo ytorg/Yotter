@@ -10,6 +10,8 @@ When you self-host you make internet stronger and more censorship resistant. If 
 
 You will need a server of your own, or you can rent a VPS server on any service you like. Minimum requirements for about 20 users are 2GB of RAM and a Linux Server. It is better if the server is dedicated as whole to Yotter as it will improve performance and security.
 
+Everything that appears between `</>` needs to be changed by you. So for example if you see `<password>` you should change it for `weakDummyPassword` without keeping the `</>`.
+
 First of all, you will need to set up a new user on the server. For security reasons you should never use a `root` user to set up a service. If you already have a non-root user you can use that one and skip the following steps.
 
 We will create a user named `ubuntu` as I will be setting this up on an ubuntu machine. So, if you choose a different username make sure you replace it on future commands. We will create and login to the user as follows:
@@ -73,7 +75,7 @@ If after the MySQL-server installation you have not been prompted to create a pa
         SECRET_KEY=<RandomString>
         DATABASE_URL=mysql+pymysql://yotter:<db-password>@localhost:3306/yotter
         ```
-Make sure you change `<RandomString>` and `>db-password>`. `<db-password>` should be different from the password of the database root user (the one you set up on step 1.2). This password will be needed later.
+Make sure you change `<RandomString>` for the previously generated random string. You can paste it as is, without any `"" or ''`. Also change `<db-password>`. `<db-password>` should be different from the password of the database root user (the one you set up on step 1.2). This password will be needed later.
 
 #### Step 2: Setting up the MySQL Database:
 * Open the MySQL prompt line (Use the previously set MySQL root password!)
