@@ -23,7 +23,7 @@
 - [x] Option to delete an account.
 - [x] Show video title on browser tab title on `/watch`.
 - [x] Ability for admins to allow non-registered users to use the service.
-- [x] Prepared for adding last_seen - See #?
+- [x] Prepared for adding last_seen - See #35
 
 ### Fixed
 - [x] Video descriptions overflowing the description box.
