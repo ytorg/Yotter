@@ -667,7 +667,6 @@ def getPosts(account):
     if userFeed != []:
             for post in userFeed[:-1]:
                 date_time_str = post.find('span', attrs={'class':'tweet-date'}).find('a')['title'].replace(",","")
-                time = datetime.datetime.now() - datetime.datetime.strptime(date_time_str, '%d/%m/%Y %H:%M:%S')
 
                 if post.find('div', attrs={'class':'pinned'}):
                     if post.find('div', attrs={'class':'pinned'}).find('span', attrs={'icon-pin'}):

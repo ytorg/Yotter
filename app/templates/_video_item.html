@@ -3,7 +3,11 @@
         <img alt="Thumbnail" src="/img/{{video.videoThumb.replace('/', '~')}}">
     </div>
     <div class="content">
+        {% if video.views == "Livestream" %}
+        <a class="video-title break-word" href="#">{{video.videoTitle}}</a>
+        {% else %}
         <a class="video-title break-word" href="{{url_for('watch', v=video.id, _method='GET')}}">{{video.videoTitle}}</a>
+        {% endif %}
         <div class="meta">
             <a class="break-word" href="{{url_for('channel', id=video.channelId)}}">{{video.channelName}}</a>
         </div>
@@ -12,14 +16,29 @@
         </div>
     </div>
     <div class="extra content">
-        <span class="right floated">
-            <i class="eye icon"></i>
-            ‎‎{{video.views}}
-        </span>
-        <span class="right floated">
-            <i class="clock icon"></i>
-            {{video.timeStamp}}‎‎‎‎            ‎‎‎
-        </span>
+        {% if video.views == "Livestream" %}
+            <span class="right floated">
+                <i class="red circle icon"></i>
+                ‎‎{{video.views}}
+            </span>
+        {% else %}
+            <span class="right floated">
+                <i class="eye icon"></i>
+                ‎‎{{video.views}}
+            </span>
+        {% endif %}
+
+        {% if video.timeStamp == "Scheduled" %}
+            <span class="right floated">
+                <i class="blue clock icon"></i>
+                {{video.timeStamp}}‎‎‎‎            ‎‎‎
+            </span>
+        {% else %}
+            <span class="right floated">
+                <i class="clock icon"></i>
+                {{video.timeStamp}}‎‎‎‎            ‎‎‎
+            </span>
+        {% endif %}
         <span>
         </span>
     </div>
