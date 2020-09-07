@@ -14,10 +14,13 @@ First of all, you will need to set up a new user on the server. For security rea
 
 We will create a user named `ubuntu` as I will be setting this up on an ubuntu machine. So, if you choose a different username make sure you replace it on future commands. We will create and login to the user as follows:
 
+> The user needs to have a personal folder (i.e /home/ubuntu).
+
 ```
 # adduser --gecos "" ubuntu
 # usermod -aG sudo ubuntu
 # su ubuntu
+$ cd
 ```
 
 Now you should be logged in. Make sure to set up a good password. It is recommended to use ssh keys to log-in remotelly and disable the password login on all users.
