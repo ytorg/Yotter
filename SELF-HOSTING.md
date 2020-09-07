@@ -103,6 +103,8 @@ If your set up was correct, you should now be able to run:
 
 * `flask db upgrade`
 
+> If you get "No such command" error, run `source env/bin/activate` and try again.
+
 #### Step 3: Setting up Gunicorn and Supervisor
 When you run the server with flask run, you are using a web server that comes with Flask. This server is very useful during development, but it isn't a good choice to use for a production server because it wasn't built with performance and robustness in mind. Instead of the Flask development server, for this deployment I decided to use gunicorn, which is also a pure Python web server, but unlike Flask's, it is a robust production server that is used by a lot of people, while at the same time it is very easy to use. [ref](https://blog.miguelgrinberg.com/post/the-flask-mega-tutorial-part-xvii-deployment-on-linux)
 
@@ -116,7 +118,7 @@ The supervisor utility uses configuration files that tell it what programs to mo
 
 * Create a yotter.conf file on `/etc/supervisor/conf.d/`:
 
-> You can run `nano /etc/supervisor/conf.d/yotter.conf` and paste the text below:
+> You can run `sudo nano /etc/supervisor/conf.d/yotter.conf` and paste the text below:
 
 > Make sure to fit any path and user to your system.
 
@@ -163,10 +165,18 @@ You will also need to change the `</path/to>` after `alias` to fit your system. 
 
 Once done, you can run `sudo service nginx reload`
 
-Now you need to install an SSL certificate on your server so you can use HTTPS:
+Now you need to install an SSL certificate on your server so you can use HTTPS. If you are running Ubuntu 20LTS or already have `snap` installed, you can proceed as follows:
+
+1. `sudo snap install --classic certbot`
+
+> Note that you will have to create an 'A Record' on the DNS of your domain to point to the IP of your server for this next step. If you don't know how to do it, [this guide might help you](https://www.namecheap.com/support/knowledgebase/article.aspx/319/2237/how-can-i-set-up-an-a-address-record-for-my-domain) as on most services the procedure is similar.
+Now we will run certbot and we need to tell that we run an nginx server. Here you will be prompted which domain you want to create and install the certificate for, select your domain:
+2. `sudo certbot --nginx`
+
+
 [Follow this instructions to install certbot and generate an ssl certificate so your server can use HTTPS](https://certbot.eff.org/lets-encrypt/ubuntufocal-nginx)
 
-> Note that you will have to create an 'A Record' on the DNS of your domain to point to the IP of your server.
+
 
 ## Updating the server
 Updating the server should always be pretty easy. These steps need to be run on the Yotter folder and with the python virtual env activated.
