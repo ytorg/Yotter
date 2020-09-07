@@ -9,7 +9,7 @@
 - Play tweet videos from Parasitter.
 - Create following lists.
 
-## [0.2.4] - 2020.09.06
+## [0.2.4] - 2020.09.07
 ### Changed
 - [x] Remove non implemented settings from settings page.
 - [x] Changed video streaming chunk size.
