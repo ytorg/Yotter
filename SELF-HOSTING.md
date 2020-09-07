@@ -8,22 +8,23 @@ When you self-host you make internet stronger and more censorship resistant. If 
 
 ## Pre-Installation
 
-You will need a server of your own, or you can rent a VPS server on any service you like. Minimum requirements for about 15 users are 2GB of RAM and a Linux Server. It is better if the server is dedicated as whole to Yotter as it will improve performance and security.
+You will need a server of your own, or you can rent a VPS server on any service you like. Minimum requirements for about 20 users are 2GB of RAM and a Linux Server. It is better if the server is dedicated as whole to Yotter as it will improve performance and security.
 
 First of all, you will need to set up a new user on the server. For security reasons you should never use a `root` user to set up a service. If you already have a non-root user you can use that one and skip the following steps.
 
 We will create a user named `ubuntu` as I will be setting this up on an ubuntu machine. So, if you choose a different username make sure you replace it on future commands. We will create and login to the user as follows:
 
 ```
-$ adduser --gecos "" ubuntu
-$ usermod -aG sudo ubuntu
-$ su ubuntu
+# adduser --gecos "" ubuntu
+# usermod -aG sudo ubuntu
+# su ubuntu
 ```
 
 Now you should be logged in. Make sure to set up a good password. It is recommended to use ssh keys to log-in remotelly and disable the password login on all users.
 
 ### Step 1: Base setup
 1. Connect to your server via SSH or direct access.
+    - `ssh ubuntu@<ipaddress>`
     - [x] (Recommended) Set up password-less login with ssh-keys.
 
 2. Install base dependencies:
@@ -35,7 +36,7 @@ Now you should be logged in. Make sure to set up a good password. It is recommen
 
 > When installing MySQL-server it will prompt for a root password. Set up a password of your like, this will be the MySQL databases master password and will be required later, so don't forget it!
 
-> If after the MySQL-server installation you have not been prompted a password for the `root` user, run `sudo mysql_secure_installation`
+If after the MySQL-server installation you have not been prompted to create a password for the `root` user, run `sudo mysql_secure_installation`
 
 3. Clone this repository and acccess folder:
 * `git clone https://github.com/pluja/Yotter`
@@ -144,18 +145,24 @@ server {
 
    location /static {
         # handle static files directly, without forwarding to the application
-        alias /home/ubuntu/Yotter/app/static;
+        alias </path/to>/Yotter/app/static;
         expires 30d;
     }
 }
 ```
+Make sure to replace `<yourdomain>` by the domain you are willing to use for your instance (i.e example.com). 
 
-* Run `sudo service nginx reload`
+You will also need to change the `</path/to>` after `alias` to fit your system. You have to point to the Yotter folder, in this set up it would be `/home/ubuntu` as it is the location where we cloned the Yotter app. This alias is created to handle static files directly, without forwarding to the application.
 
+Once done, you can run `sudo service nginx reload`
+
+Now you need to install an SSL certificate on your server so you can use HTTPS:
 [Follow this instructions to install certbot and generate an ssl certificate so your server can use HTTPS](https://certbot.eff.org/lets-encrypt/ubuntufocal-nginx)
 
+> Note that you will have to create an 'A Record' on the DNS of your domain to point to the IP of your server.
+
 ## Updating the server
-Updating the server should always be pretty easy:
+Updating the server should always be pretty easy. These steps need to be run on the Yotter folder and with the python virtual env activated.
 
 ```
 (venv) $ git pull
