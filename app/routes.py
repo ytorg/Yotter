@@ -321,7 +321,8 @@ def watch():
         'authorUrl':data['uploader_url'],
         'channelId': data['uploader_id'],
         'id':id,
-        'averageRating': str((float(data['average_rating'])/5)*100)
+        'averageRating': str((float(data['average_rating'])/5)*100),
+        'videoUrl': data['formats'][-1]['url']
     }
     return render_template("video.html", video=video, title='{}'.format(video['title']))
 
@@ -334,19 +335,17 @@ def markupString(string):
     return string
 
 ## PROXY videos through Yotter server to the client.
-@app.route('/stream', methods=['GET', 'POST'])
+@app.route('/stream/<url>', methods=['GET', 'POST'])
 @login_required
-def stream():
+def stream(url):
     #This function proxies the video stream from GoogleVideo to the client.
-    id = request.args.get('v', None)
+    url = url.replace('YotterSlash', '/')
     headers = Headers()    
-    if(id):
-        ydl = YoutubeDL()
-        data = ydl.extract_info("{id}".format(id=id), download=False)
-        req = requests.get(data['formats'][-1]['url'], stream = True)
+    if(url):
+        req = requests.get(url, stream = True)
         headers.add('Accept-Ranges','bytes')
         headers.add('Content-Length', str(int(req.headers['Content-Length'])+1))
-        response = Response(req.iter_content(chunk_size=1024*1024), mimetype=req.headers['Content-Type'], content_type=req.headers['Content-Type'], direct_passthrough=True, headers=headers)
+        response = Response(req.iter_content(chunk_size=10*1024), mimetype=req.headers['Content-Type'], content_type=req.headers['Content-Type'], direct_passthrough=True, headers=headers)
         #enable browser file caching with etags
         response.cache_control.public  = True
         response.cache_control.max_age = int(60000)
