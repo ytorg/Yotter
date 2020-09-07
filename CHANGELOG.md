@@ -15,6 +15,7 @@
 - [x] Changed video streaming chunk size.
 - [x] Video streaming now has a smaller load for the server.
 - [x] Video streaming is (a bit) more efficient - YoutubeDL executed on /watch instead.
+- [x] Settings page improved.
 
 ### Added
 - [x] Add instance info on settings page.
@@ -22,6 +23,7 @@
 - [x] Option to delete an account.
 - [x] Show video title on browser tab title on `/watch`.
 - [x] Ability for admins to allow non-registered users to use the service.
+- [x] Prepared for adding last_seen - See #?
 
 ### Fixed
 - [x] Video descriptions overflowing the description box.
