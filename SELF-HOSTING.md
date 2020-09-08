@@ -6,6 +6,16 @@ Self-hosting gives you the whole power over the service and the data. You can se
 
 When you self-host you make internet stronger and more censorship resistant. If one Yotter instance goes down for any reason, there will be all other instances online and ready to host new users.
 
+# Index
+* [Pre-Installation](#pre-installation)
+* [Installation](#installation)
+    * [Docker Installation](#docker)
+    * [Manual Installation](#manual-installation)
+* [Nginx and HTTPS](#nginx-set-up-and-HTTPS)
+* [Update](#updating-the-server)
+* [Others](#other configurations)
+
+
 ## Pre-Installation
 
 You will need a server of your own, or you can rent a VPS server on any service you like. Minimum requirements for about 20 users are 2GB of RAM and a Linux Server. It is better if the server is dedicated as whole to Yotter as it will improve performance and security.
@@ -27,7 +37,21 @@ If you now type `pwd` and hit enter, you shuould see that the current path is `/
 
 Now you should be logged in. Make sure to set up a good password. It is recommended to use ssh keys to log-in remotelly and disable the password login on all users.
 
-### Step 1: Base setup
+## Installation
+
+### Docker
+> This instructions are provisional, some things may be missing!
+1. Install `docker` and `docker-compose`.
+2. Run the following commands:
+```
+git clone https://github.com/pluja/Yotter && cd Yotter
+docker-compose up -d
+```
+3. Configure Nginx
+
+### Manual installation
+
+#### Step 1: Base setup
 1. Connect to your server via SSH or direct access.
     - `ssh ubuntu@<ipaddress>`
     - [x] (Recommended) Set up password-less login with ssh-keys.
@@ -136,7 +160,7 @@ killasgroup=true
 After you write this configuration file, you have to reload the supervisor service for it to be imported:
 `sudo supervisorctl reload`
 
-#### Step 4: Set up Nginx
+### Nginx set up and HTTPS
 The Yotter application server powered by gunicorn is now running privately port 8000. Now we need to expose the application to the outside world by enabling public facing web server on ports 80 and 443, the two ports too need to be opened on the firewall to handle the web traffic of the application. I want this to be a secure deployment, so I'm going to configure port 80 to forward all traffic to port 443, which is going to be encrypted. [ref](https://blog.miguelgrinberg.com/post/the-flask-mega-tutorial-part-xvii-deployment-on-linux).
 
 * `sudo rm /etc/nginx/sites-enabled/default`
@@ -175,8 +199,6 @@ Now we will run certbot and we need to tell that we run an nginx server. Here yo
 
 
 [Follow this instructions to install certbot and generate an ssl certificate so your server can use HTTPS](https://certbot.eff.org/lets-encrypt/ubuntufocal-nginx)
-
-
 
 ## Updating the server
 Updating the server should always be pretty easy. These steps need to be run on the Yotter folder and with the python virtual env activated.
