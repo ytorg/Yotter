@@ -1,2 +1,7 @@
 .git
+.gitignore
 Dockerfile
+docker-compose.yml
+LICENSE
+*.md
+yotter-config.json
