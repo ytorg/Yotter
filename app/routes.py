@@ -649,7 +649,7 @@ def getFeed(urls):
                         newPost.twitterName = post.find('a', attrs={'class':'fullname'}).text
                         newPost.timeStamp = datetime.datetime.strptime(date_time_str, '%d/%m/%Y %H:%M:%S')
                         newPost.date = post.find('span', attrs={'class':'tweet-date'}).find('a').text
-                        newPost.content = markupString(Markup(post.find('div',  attrs={'class':'tweet-content'})))
+                        newPost.content = Markup(post.find('div',  attrs={'class':'tweet-content'}))
                         
                         if post.find('div', attrs={'class':'retweet-header'}):
                             newPost.username = post.find('div', attrs={'class':'retweet-header'}).find('div', attrs={'class':'icon-container'}).text
