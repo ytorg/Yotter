@@ -344,7 +344,9 @@ def stream(url):
     url = url.replace('YotterSlash', '/')
     headers = Headers()
     if(url):
-        req = requests.get(url, stream = True)
+        s = requests.Session()
+        s.verify = True
+        req = s.get(url, stream = True)
         headers.add('Range', request.headers['Range'])
         headers.add('Accept-Ranges','bytes')
         headers.add('Content-Length', str(int(req.headers['Content-Length'])+1))
