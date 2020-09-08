@@ -333,7 +333,7 @@ def markupString(string):
     string = string.replace("https://youtube.com/", "")
     string = string.replace("https://www.youtube.com/", "")
     string = string.replace("https://twitter.com/", "/u/")
-    return string
+    return Markup(string)
 
 ## PROXY videos through Yotter server to the client.
 @app.route('/stream/<url>', methods=['GET', 'POST'])
@@ -341,12 +341,13 @@ def markupString(string):
 def stream(url):
     #This function proxies the video stream from GoogleVideo to the client.
     url = url.replace('YotterSlash', '/')
-    headers = Headers()    
+    headers = Headers()
     if(url):
         req = requests.get(url, stream = True)
+        headers.add('Range', request.headers['Range'])
         headers.add('Accept-Ranges','bytes')
         headers.add('Content-Length', str(int(req.headers['Content-Length'])+1))
-        response = Response(req.iter_content(chunk_size=10*1024), mimetype=req.headers['Content-Type'], content_type=req.headers['Content-Type'], direct_passthrough=True, headers=headers)
+        response = Response(req.iter_content(chunk_size=10*1024), content_range=req.headers['Content-Range'], mimetype=req.headers['Content-Type'], content_type=req.headers['Content-Type'], direct_passthrough=True, headers=headers)
         #enable browser file caching with etags
         response.cache_control.public  = True
         response.cache_control.max_age = int(60000)
@@ -354,6 +355,15 @@ def stream(url):
     else:
         flash("Something went wrong loading the video... Try again.")
         return redirect(url_for('youtube'))
+
+def download_file(streamable):
+    with streamable as stream:
+        stream.raise_for_status()
+        for chunk in stream.iter_content(chunk_size=8192):
+            yield chunk
+
+    
+
 
 #########################
 #### General Logic ######
@@ -636,7 +646,7 @@ def getFeed(urls):
                         newPost.twitterName = post.find('a', attrs={'class':'fullname'}).text
                         newPost.timeStamp = datetime.datetime.strptime(date_time_str, '%d/%m/%Y %H:%M:%S')
                         newPost.date = post.find('span', attrs={'class':'tweet-date'}).find('a').text
-                        newPost.content = Markup(post.find('div',  attrs={'class':'tweet-content'}))
+                        newPost.content = markupString(Markup(post.find('div',  attrs={'class':'tweet-content'})))
                         
                         if post.find('div', attrs={'class':'retweet-header'}):
                             newPost.username = post.find('div', attrs={'class':'retweet-header'}).find('div', attrs={'class':'icon-container'}).text
