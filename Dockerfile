@@ -12,8 +12,10 @@ RUN pip install --no-cache-dir -r requirements.txt
 COPY . .
 
 RUN flask db init \
-  && flask db migrate\
+  && flask db migrate \
   && flask db upgrade
 
-CMD [ "gunicorn", "-b", "0.0.0.0:5000", "-w", "4", "yotter:app" ]
+CMD flask db upgrade \
+  && gunicorn -b 0.0.0.0:5000 -w 4 yotter:app
+
 EXPOSE 5000

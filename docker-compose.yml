@@ -1,0 +1,28 @@
+version: '3.4'
+services:
+  mariadb:
+    image: mariadb:latest
+    environment:
+      MYSQL_ROOT_PASSWORD: changeme
+      MYSQL_DATABASE: yotter
+      MYSQL_USER: yotter
+      MYSQL_PASSWORD: changeme
+    restart: on-failure
+    volumes:
+     - /var/lib/mysql
+    healthcheck:
+     test: ["CMD", "mysqladmin", "ping", "--silent"]
+  yotter:
+    image: yotter
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:5000:5000"
+    environment:
+      DATABASE_URL: mysql+pymysql://yotter:changeme@mariadb:3306/yotter
+    depends_on:
+      - mariadb
+    ports:
+      - "5000:5000"
+    volumes:
+     - /usr/src/app/migrations
+     - ./yotter-config.json:/usr/src/app/yotter-config.json
