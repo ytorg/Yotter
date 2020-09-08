@@ -1,7 +1,11 @@
 {
 	"serverName": "Yotter.xyz",
 	"nitterInstance": "https://nitter.net/",
-	"maxInstanceUsers": 10,
+	"maxInstanceUsers": 30,
 	"serverLocation": "Germany",
-	"restrictPublicUsage":true
+	"restrictPublicUsage":true,
+	"maintenance_mode":false,
+	"show_admin_message":false,
+	"admin_message_title":"Message from the admin",
+	"admin_message":"Message from the admin text"
 }

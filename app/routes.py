@@ -46,7 +46,8 @@ ALLOWED_EXTENSIONS = {'json', 'db'}
 @login_required
 def index():
     current_user.set_last_seen()
-    return render_template('home.html')
+    db.session.commit()
+    return render_template('home.html', config=config)
 
 @app.route('/twitter')
 @login_required
@@ -64,7 +65,7 @@ def twitter():
     else:
         profilePic = posts[0].userProfilePic
     print("--- {} seconds fetching twitter feed---".format(time.time() - start_time))
-    return render_template('twitter.html', title='Yotter | Twitter', posts=posts, avatar=avatarPath, profilePic = profilePic, followedCount=followCount, form=form)
+    return render_template('twitter.html', title='Yotter | Twitter', posts=posts, avatar=avatarPath, profilePic = profilePic, followedCount=followCount, form=form, config=config)
 
 @app.route('/savePost/<url>', methods=['POST'])
 @login_required
@@ -91,7 +92,7 @@ def savePost(url):
 @login_required
 def saved():
     savedPosts = current_user.saved_posts().all()
-    return render_template('saved.html', title='Saved', savedPosts=savedPosts)
+    return render_template('saved.html', title='Saved', savedPosts=savedPosts, config=config)
 
 @app.route('/deleteSaved/<id>', methods=['POST'])
 @login_required
@@ -151,7 +152,7 @@ def following():
     form = EmptyForm()
     followCount = len(current_user.twitter_following_list())
     accounts = current_user.twitter_following_list()
-    return render_template('following.html', accounts = accounts, count = followCount, form = form)
+    return render_template('following.html', accounts = accounts, count = followCount, form = form, config=config)
 
 @app.route('/search', methods=['GET', 'POST'])
 @login_required
@@ -161,12 +162,12 @@ def search():
         user = form.username.data
         results = twitterUserSearch(user)
         if results:
-            return render_template('search.html', form = form, results = results)
+            return render_template('search.html', form = form, results = results, config=config)
         else:
             flash("User {} not found...".format(user))
             return redirect(request.referrer)
     else:
-        return render_template('search.html', form = form)
+        return render_template('search.html', form = form, config=config)
 
 @app.route('/u/<username>')
 @app.route('/<username>')
@@ -184,7 +185,7 @@ def u(username):
     if not posts:
         user['profilePic'] = avatarPath
 
-    return render_template('user.html', posts=posts, user=user, form=form)
+    return render_template('user.html', posts=posts, user=user, form=form, config=config)
 
 #########################
 #### Youtube Logic ######
@@ -199,7 +200,7 @@ def youtube():
     if videos:
         videos.sort(key=lambda x: x.date, reverse=True)
     print("--- {} seconds fetching youtube feed---".format(time.time() - start_time))
-    return render_template('youtube.html', title="Yotter | Youtube", videos=videos, followCount=followCount)
+    return render_template('youtube.html', title="Yotter | Youtube", videos=videos, followCount=followCount, config=config)
 
 @app.route('/ytfollowing', methods=['GET', 'POST'])
 @login_required
@@ -208,7 +209,7 @@ def ytfollowing():
     channelList = current_user.youtube_following_list()
     channelCount = len(channelList)
     
-    return render_template('ytfollowing.html', form=form, channelList=channelList, channelCount=channelCount)
+    return render_template('ytfollowing.html', form=form, channelList=channelList, channelCount=channelCount, config=config)
 
 @app.route('/ytsearch', methods=['GET', 'POST'])
 @login_required
@@ -244,7 +245,7 @@ def ytsearch():
                 'thumbnail':'https:{}'.format(c['thumbnails'][0]),
                 'subCount':c['suscriberCountText'].split(" ")[0]
             })
-        return render_template('ytsearch.html', form=form, btform=button_form, channels=channels, videos=videos, restricted=config['restrictPublicUsage'])
+        return render_template('ytsearch.html', form=form, btform=button_form, channels=channels, videos=videos, restricted=config['restrictPublicUsage'], config=config)
 
     else:
         return render_template('ytsearch.html', form=form)
@@ -303,7 +304,7 @@ def channel(id):
     data = feedparser.parse(data.content)
 
     channelData = YoutubeSearch.channelInfo(id)
-    return render_template('channel.html', form=form, btform=button_form, channel=channelData[0], videos=channelData[1], restricted=config['restrictPublicUsage'])
+    return render_template('channel.html', form=form, btform=button_form, channel=channelData[0], videos=channelData[1], restricted=config['restrictPublicUsage'], config=config)
 
 @app.route('/watch', methods=['GET'])
 @login_required
@@ -326,7 +327,7 @@ def watch():
         'averageRating': str((float(data['average_rating'])/5)*100),
         'videoUrl': data['formats'][-1]['url']
     }
-    return render_template("video.html", video=video, title='{}'.format(video['title']))
+    return render_template("video.html", video=video, title='{}'.format(video['title']), config=config)
 
 def markupString(string):
     string = string.replace("\n\n", "<br><br>").replace("\n", "<br>")
@@ -383,7 +384,7 @@ def login():
         if not next_page or url_parse(next_page).netloc != '':
             next_page = url_for('index')
         return redirect(next_page)
-    return render_template('login.html', title='Sign In', form=form)
+    return render_template('login.html', title='Sign In', form=form, config=config)
 
 #Proxy images through server
 @app.route('/img/<url>', methods=['GET', 'POST'])
@@ -400,10 +401,13 @@ def logout():
 @app.route('/settings')
 @login_required
 def settings():
-    active = 1
-    for user in User.query.all():
-        if not user.last_seen == None:
-            t = datetime.datetime.utcnow() - user.last_seen
+    active = 0
+    users = db.session.query(User).all()
+    for u in users:
+        if u.last_seen == None:
+            u.set_last_seen()
+            db.session.commit()        
+        else:
             s = t.total_seconds()
             m = s/60
             if m < 40:
@@ -412,10 +416,8 @@ def settings():
     instanceInfo = {
         "totalUsers":db.session.query(User).count(),
         "active":active,
-        "location":config['serverLocation'],
-        "serverName":config['serverName']
     }
-    return render_template('settings.html', info=instanceInfo)
+    return render_template('settings.html', info=instanceInfo, config=config)
 
 @app.route('/export')
 @login_required
@@ -545,12 +547,12 @@ def register():
         flash('Congratulations, you are now a registered user!')
         return redirect(url_for('login'))
         
-    return render_template('register.html', title='Register', registrations=REGISTRATIONS, form=form)
+    return render_template('register.html', title='Register', registrations=REGISTRATIONS, form=form, config=config)
         
 
 @app.route('/error/<errno>')
 def error(errno):
-    return render_template('{}.html'.format(str(errno)))
+    return render_template('{}.html'.format(str(errno)), config=config)
 
 def getTimeDiff(t):
     diff = datetime.datetime.now() - datetime.datetime(*t[:6])
