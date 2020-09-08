@@ -14,7 +14,7 @@
 - [x] Remove non implemented settings from settings page.
 - [x] Changed video streaming chunk size.
 - [x] Video streaming now has a smaller load for the server.
-- [x] Video streaming is (a bit) more efficient - YoutubeDL executed on /watch instead.
+- [x] Video streaming is (a bit) more efficient - YoutubeDL moved on /watch instead.
 - [x] Settings page improved.
 
 ### Added
@@ -24,9 +24,11 @@
 - [x] Show video title on browser tab title on `/watch`.
 - [x] Ability for admins to allow non-registered users to use the service.
 - [x] Prepared for adding last_seen - See #35
+- [x] Video streaming headers - #27
 
 ### Fixed
 - [x] Video descriptions overflowing the description box.
+- [x] Twitter: mentioned users on feed lead to broken links.
 
 ## [0.2.3] - 2020-09-04
 ### Added
