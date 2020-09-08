@@ -16,6 +16,7 @@
 - [x] Video streaming now has a smaller load for the server.
 - [x] Video streaming is (a bit) more efficient - YoutubeDL moved on /watch instead.
 - [x] Settings page improved.
+- [x] Default DB to .env or environment DATABASE_URI and fallback to app.db.
 
 ### Added
 - [x] Add instance info on settings page.
@@ -23,7 +24,8 @@
 - [x] Option to delete an account.
 - [x] Show video title on browser tab title on `/watch`.
 - [x] Ability for admins to allow non-registered users to use the service.
-- [x] Prepared for adding last_seen - See #35
+- [x] Added last_seen - See #35
+- [x] See last 40 minutes active users on settings.
 - [x] Video streaming headers - #27
 
 ### Fixed
