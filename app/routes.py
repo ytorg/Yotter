@@ -348,7 +348,7 @@ def stream(url):
         headers.add('Range', request.headers['Range'])
         headers.add('Accept-Ranges','bytes')
         headers.add('Content-Length', str(int(req.headers['Content-Length'])+1))
-        response = Response(req.iter_content(chunk_size=10*1024), content_range=req.headers['Content-Range'], mimetype=req.headers['Content-Type'], content_type=req.headers['Content-Type'], direct_passthrough=True, headers=headers)
+        response = Response(req.iter_content(chunk_size=10*1024), mimetype=req.headers['Content-Type'], content_type=req.headers['Content-Type'], direct_passthrough=True, headers=headers)
         #enable browser file caching with etags
         response.cache_control.public  = True
         response.cache_control.max_age = int(60000)
@@ -362,9 +362,6 @@ def download_file(streamable):
         stream.raise_for_status()
         for chunk in stream.iter_content(chunk_size=8192):
             yield chunk
-
-    
-
 
 #########################
 #### General Logic ######
