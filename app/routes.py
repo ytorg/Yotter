@@ -408,6 +408,7 @@ def settings():
             u.set_last_seen()
             db.session.commit()        
         else:
+            t = datetime.datetime.utcnow() - us.last_seen
             s = t.total_seconds()
             m = s/60
             if m < 40:
