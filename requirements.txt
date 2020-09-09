@@ -54,6 +54,6 @@ wrapt==1.12.1
 WTForms==2.3.3
 yarl==1.5.1
 youtube-dl==2020.9.6
-youtube-search-fork==1.2.3
+youtube-search-fork==1.2.5
 zope.event==4.4
 zope.interface==5.1.0
