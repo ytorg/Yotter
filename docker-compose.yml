@@ -1,13 +1,13 @@
-version: '3.4'
+version: '3.8'
 services:
   mariadb:
-    image: mariadb:latest
+    image: mariadb:10.5
     environment:
       MYSQL_ROOT_PASSWORD: changeme
       MYSQL_DATABASE: yotter
       MYSQL_USER: yotter
       MYSQL_PASSWORD: changeme
-    restart: on-failure
+    restart: unless-stopped
     volumes:
      - /var/lib/mysql
     healthcheck:
