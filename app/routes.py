@@ -669,7 +669,10 @@ def getFeed(urls):
                             if quote.find('a', attrs={'class':'still-image'}):
                                 newPost.replyAttachedImg = NITTERINSTANCE+quote.find('a', attrs={'class':'still-image'})['href'][1:]
                             
-                            newPost.replyingUser=quote.find('a',  attrs={'class':'username'}).text
+                            if quote.find('div', attrs={'class':'unavailable-quote'}):
+                                newPost.replyingUser="Unavailable"
+                            else:
+                                newPost.replyingUser=quote.find('a',  attrs={'class':'username'}).text
                             post.find('div', attrs={'class':'quote'}).decompose()
 
                         if post.find('div',  attrs={'class':'attachments'}):
