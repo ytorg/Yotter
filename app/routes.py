@@ -752,8 +752,10 @@ def getYoutubePosts(ids):
             rssFeed=feedparser.parse(resp.content)
             for vid in rssFeed.entries:
                 try:
+                    # Try to get time diff
                     time = datetime.datetime.now() - datetime.datetime(*vid.published_parsed[:6])
                 except:
+                    # If youtube rss fucks it up set time to 0.
                     time = datetime.datetime.now() - datetime.datetime.now()
 
                 if time.days >=7:
@@ -763,7 +765,7 @@ def getYoutubePosts(ids):
                 try:
                     video.date = vid.published_parsed
                 except:
-                    video.date = datetime.datetime.utcnow()
+                    video.date = datetime.datetime.utcnow().timetuple()
                 try:
                     video.timeStamp = getTimeDiff(vid.published_parsed)
                 except:
