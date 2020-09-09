@@ -41,12 +41,16 @@ ALLOWED_EXTENSIONS = {'json', 'db'}
 #########################
 #### Twitter Logic ######
 #########################
+@app.before_request
+def before_request():
+    if current_user.is_authenticated:
+        current_user.set_last_seen()
+        db.session.commit()
+
 @app.route('/')
 @app.route('/index')
 @login_required
 def index():
-    current_user.set_last_seen()
-    db.session.commit()
     return render_template('home.html', config=config)
 
 @app.route('/twitter')
@@ -281,18 +285,23 @@ def followYoutubeChannel(channelId):
 def ytunfollow(channelId):
     form = EmptyForm()
     if form.validate_on_submit():
-        r =  unfollowYoutubeChannel(channelId)
+        unfollowYoutubeChannel(channelId)
     return redirect(request.referrer)
 
 def unfollowYoutubeChannel(channelId):
     try:
         channel = youtubeFollow.query.filter_by(channelId=channelId).first()
+        name = channel.channelName
         db.session.delete(channel)
         db.session.commit()
-        flash("{} unfollowed!".format(channel.channelName))
+        channel = youtubeFollow.query.filter_by(channelId=channelId).first()
+        if channel:
+            db.session.delete(channel)
+            db.session.commit()
+        print(channel)
+        flash("{} unfollowed!".format(name))
     except:
         flash("There was an error unfollowing the user. Try again.")
-    return redirect(request.referrer)
 
 @app.route('/channel/<id>', methods=['GET'])
 @app.route('/user/<id>', methods=['GET'])
@@ -411,7 +420,7 @@ def settings():
             t = datetime.datetime.utcnow() - u.last_seen
             s = t.total_seconds()
             m = s/60
-            if m < 40:
+            if m < 10:
                 active = active+1
 
     instanceInfo = {
@@ -759,7 +768,7 @@ def getYoutubePosts(ids):
                     video.timeStamp = getTimeDiff(vid.published_parsed)
                 except:
                     video.timeStamp = "Unknown"
-                    
+
                 video.channelName = vid.author_detail.name
                 video.channelId = vid.yt_channelid
                 video.channelUrl = vid.author_detail.href
