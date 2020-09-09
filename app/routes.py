@@ -754,7 +754,7 @@ def getYoutubePosts(ids):
                 try:
                     time = datetime.datetime.now() - datetime.datetime(*vid.published_parsed[:6])
                 except:
-                    time = 0
+                    time = datetime.datetime.now() - datetime.datetime.now()
 
                 if time.days >=7:
                     continue
