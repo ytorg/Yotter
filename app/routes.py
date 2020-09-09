@@ -742,14 +742,24 @@ def getYoutubePosts(ids):
             resp = future.result()
             rssFeed=feedparser.parse(resp.content)
             for vid in rssFeed.entries:
-                time = datetime.datetime.now() - datetime.datetime(*vid.published_parsed[:6])
+                try:
+                    time = datetime.datetime.now() - datetime.datetime(*vid.published_parsed[:6])
+                except:
+                    time = 0
 
                 if time.days >=7:
                     continue
                 
                 video = ytPost()
-                video.date = vid.published_parsed
-                video.timeStamp = getTimeDiff(vid.published_parsed)
+                try:
+                    video.date = vid.published_parsed
+                except:
+                    video.date = datetime.datetime.utcnow()
+                try:
+                    video.timeStamp = getTimeDiff(vid.published_parsed)
+                except:
+                    video.timeStamp = "Unknown"
+                    
                 video.channelName = vid.author_detail.name
                 video.channelId = vid.yt_channelid
                 video.channelUrl = vid.author_detail.href
