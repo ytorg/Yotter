@@ -7,6 +7,7 @@ from requests_futures.sessions import FuturesSession
 from werkzeug.datastructures import Headers
 from concurrent.futures import as_completed
 from werkzeug.utils import secure_filename
+from youtube_data import videos as ytvids
 from youtube_search import YoutubeSearch
 from werkzeug.urls import url_parse
 from youtube_dl import YoutubeDL
@@ -298,7 +299,6 @@ def unfollowYoutubeChannel(channelId):
         if channel:
             db.session.delete(channel)
             db.session.commit()
-        print(channel)
         flash("{} unfollowed!".format(name))
     except:
         flash("There was an error unfollowing the user. Try again.")
@@ -319,22 +319,20 @@ def channel(id):
 @login_required
 def watch():
     id = request.args.get('v', None)
-    ydl = YoutubeDL()
-    data = ydl.extract_info(id, False)
-    if data['formats'][-1]['url'].find("manifest.googlevideo") > 0:
-        flash("Livestreams are not yet supported!")
-        return redirect(url_for('youtube'))
-
+    info = ytvids.get_video_info(id)
     video = {
-        'title':data['title'],
-        'description':Markup(markupString(data['description'])),
-        'viewCount':data['view_count'],
-        'author':data['uploader'],
-        'authorUrl':data['uploader_url'],
-        'channelId': data['uploader_id'],
+        'title':info['video']['title'],
+        'description':Markup(markupString(info['video']['description'])),
+        'viewCount':info['video']['views'],
+        'author':info['video']['author'],
+        'authorUrl':"/channel/{}".format(info['owner']['id']),
+        'channelId': info['owner']['id'],
         'id':id,
-        'averageRating': str((float(data['average_rating'])/5)*100),
-        'videoUrl': data['formats'][-1]['url']
+        'averageRating': str((float(info['video']['rating'])/5)*100),
+        'videoUrl': info['video']['url'],
+        'isLive': info['video']['isLive'],
+        'isUpcoming': info['video']['isUpcoming'],
+        'thumbnail': info['video']['thumbnail']
     }
     return render_template("video.html", video=video, title='{}'.format(video['title']), config=config)
 
@@ -755,21 +753,30 @@ def getYoutubePosts(ids):
                     # Try to get time diff
                     time = datetime.datetime.now() - datetime.datetime(*vid.published_parsed[:6])
                 except:
-                    # If youtube rss fucks it up set time to 0.
-                    time = datetime.datetime.now() - datetime.datetime.now()
+                    # If youtube rss does not have parsed time, generate it. Else set time to 0.
+                    try:
+                        time = datetime.datetime.now() - datetime.datetime(datetime.datetime.strptime(vid.published, '%y-%m-%dT%H:%M:%S+00:00'))
+                    except:
+                        time = datetime.datetime.now() - datetime.datetime.now()
 
-                if time.days >=7:
+                if time.days >=6:
                     continue
                 
                 video = ytPost()
                 try:
                     video.date = vid.published_parsed
                 except:
-                    video.date = datetime.datetime.utcnow().timetuple()
+                    try:
+                        video.date = datetime.datetime.strptime(vid.published, '%y-%m-%dT%H:%M:%S+00:00').timetuple()
+                    except:
+                        video.date = datetime.datetime.utcnow().timetuple()
                 try:
                     video.timeStamp = getTimeDiff(vid.published_parsed)
                 except:
-                    video.timeStamp = "Unknown"
+                    if time != 0:
+                        video.timeStamp = "{} days".format(str(time.days))
+                    else:
+                        video.timeStamp = "Unknown"
 
                 video.channelName = vid.author_detail.name
                 video.channelId = vid.yt_channelid
