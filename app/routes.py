@@ -322,7 +322,7 @@ def watch():
     info = ytvids.get_video_info(id)
     hostName = urllib.parse.urlparse(info['video']['url']).netloc
     # Use nginx
-    url = info['video']['url'].replace(hostName, "yotter.xyz")+"&hostname="+hostName
+    url = info['video']['url'].replace(hostName, config['serverName'])+"&hostname="+hostName
     video={
         'title':info['video']['title'],
         'description':Markup(markupString(info['video']['description'])),
