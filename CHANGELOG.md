@@ -4,7 +4,6 @@
 - [ ] Configuration page: Dark mode
 
 ##### Long term
-- See cited posts (if any).
 - Share a tweet.
 - Play tweet videos from Parasitter.
 - Create following lists.
