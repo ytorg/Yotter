@@ -181,9 +181,17 @@ server {
         alias </path/to>/Yotter/app/static;
         expires 30d;
     }
+    
+    location /videoplayback {
+       proxy_buffering off;
+       resolver 1.1.1.1;
+       proxy_pass https://$arg_hostname;
+       proxy_set_header Host $arg_hostname;
+       add_header Access-Control-Allow-Origin *;
+     }
 }
 ```
-Make sure to replace `<yourdomain>` by the domain you are willing to use for your instance (i.e example.com). 
+Make sure to replace `<yourdomain>` by the domain you are willing to use for your instance (i.e example.com). You can now edit `yotter-config.json` and set `nginxVideoStream` to `true`.
 
 You will also need to change the `</path/to>` after `alias` to fit your system. You have to point to the Yotter folder, in this set up it would be `/home/ubuntu` as it is the location where we cloned the Yotter app. This alias is created to handle static files directly, without forwarding to the application.
 
