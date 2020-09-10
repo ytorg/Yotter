@@ -184,11 +184,14 @@ If you want to set up a Yotter public instance, follow this instructions.
 You will find in the root folder of the project a file named `yotter-config.json`. This is the global config file for the Yotter server.
 
 Currently available config is:
-* **serverName**: Name of the server. It will be shown along the interface.
+* **serverName**: Name of the server. Format: `example.com`
 * **nitterInstance**: Nitter instance that will be used when fetching Twitter content. Format must be `https://<NitterInstance.tld>/`
 * **maxInstanceUsers**: Max users on the instance. When set to `0` it closes registrations.
-* **location**: Location of the server.
+* **serverLocation**: Location of the server.
 * **restrictPublicUsage**: When set to `false` the instance allows non-registered users to use some routes (i.e /watch?v=..., /ytsearch, /channel...). See [this section](https://github.com/pluja/Yotter/blob/dev-indep/SELF-HOSTING.md#removing-log-in-restrictions)
+* **nginxVideoStream**: Wether or not to use Nginx as streaming engine. It is recommended for public instances. [See this link]()
+* **maintenance_mode**: Activates a message on the server warning users of maintenance mode.
+* **show_admin_message**: Shows a message from the admin with title as `admin_message_title` and body as `admin_message`
 
 # Contributing
 Contributors are always welcome. You can help in many ways: Coding, organizing, designing, [donating](#donate), maintaining... You choose what you want to help with!
