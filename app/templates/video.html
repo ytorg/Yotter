@@ -11,7 +11,11 @@
         controls
         buffered
         preload="none">
-        <source src="{{url_for('stream', url=video.videoUrl.replace('/', 'YotterSlash'))}}" type="video/mp4">
+        {% if config.nginxVideoStream %}
+            <source src="{{video.nginxUrl}}" type="video/mp4">
+        {% else %}
+            <source src="{{url_for('stream', url=video.videoUrl.replace('/', 'YotterSlash'))}}" type="video/mp4">
+        {% endif %}
         </video>
     </div>
 

@@ -320,7 +320,10 @@ def channel(id):
 def watch():
     id = request.args.get('v', None)
     info = ytvids.get_video_info(id)
-    video = {
+    hostName = urllib.parse.urlparse(info['video']['url']).netloc
+    # Use nginx
+    url = info['video']['url'].replace(hostName, "yotter.xyz")+"&hostname="+hostName
+    video={
         'title':info['video']['title'],
         'description':Markup(markupString(info['video']['description'])),
         'viewCount':info['video']['views'],
@@ -329,7 +332,9 @@ def watch():
         'channelId': info['owner']['id'],
         'id':id,
         'averageRating': str((float(info['video']['rating'])/5)*100),
+        'nginxUrl': url,
         'videoUrl': info['video']['url'],
+        'videoHostName': hostName,
         'isLive': info['video']['isLive'],
         'isUpcoming': info['video']['isUpcoming'],
         'thumbnail': info['video']['thumbnail']
