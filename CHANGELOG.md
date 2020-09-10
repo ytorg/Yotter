@@ -9,6 +9,39 @@
 - Play tweet videos from Parasitter.
 - Create following lists.
 
+## [0.2.5] - 2020.09.10
+### How to update
+1. `sudo supervisorctl stop yotter`
+2. `cd </path/to>/Yotter`
+3. `git pull`
+4. `source venv/bin/activate`
+5. `pip install -r requirements.txt`
+6. `sudo nano /etc/nginx/sites-enabled/yotter`
+  * Add the following lines right below the `location /static {.....}` block:
+    ```
+      location /videoplayback {
+        proxy_buffering off;
+          resolver 1.1.1.1;
+          proxy_pass https://$arg_hostname;
+          proxy_set_header Host $arg_hostname;
+          add_header Access-Control-Allow-Origin *;
+      }
+    ```
+    
+   > Your `/etc/nginx/sites-enabled/yotter` file should look something [like this](https://bin.nixnet.services/?d319d06feb1f5756#HgsMgpN9kob7vB5GpUtdTtqZeCdb5SEggLzwr4YAaYo).
+7. Edit your `yotter-config.json` file and enable the `nginxVideoStream` option.
+8. `sudo service nginx reload`
+9. `sudo supervisorctl start yotter`
+`
+
+#### Added
+- [x] Nginx video streaming for better experience - [See how to activate it]()
+- [x] New data extractor module for videos.
+- [x] Show deleted tweets as deleted instead of error.
+
+#### Fixed
+- [x] Youtube feed not loading due to datetime not found
+
 ## [0.2.4] - 2020.09.07
 ### Changed
 - [x] Remove non implemented settings from settings page.
