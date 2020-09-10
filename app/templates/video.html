@@ -4,20 +4,32 @@
 {% extends "base.html" %}
 {% block content %}
 <div class="ui text container">
-    <div class="video-js-responsive-container vjs-hd">
-        <video class="video-js vjs-default-skin" 
-        data-setup='{ "playbackRates": [0.5, 1, 1.25,1.5, 2] }'
-        width="1080"
-        controls
-        buffered
-        preload="none">
-        {% if config.nginxVideoStream %}
-            <source src="{{video.nginxUrl}}" type="video/mp4">
-        {% else %}
-            <source src="{{url_for('stream', url=video.videoUrl.replace('/', 'YotterSlash'))}}" type="video/mp4">
-        {% endif %}
-        </video>
+    {% if video.nginxUrl == "#" and video.isLive %}
+    <div class="ui center aligned text container">
+        <img alt="Empty feed image" class="ui image" src="{{ url_for('static',filename='img/live.png') }}">
     </div>
+    {% elif video.isUpcoming %}
+    <div class="ui center aligned text container">
+        <div class="ui row">
+            <img alt="Empty feed image" class="ui image" src="{{ url_for('static',filename='img/scheduled.png') }}">
+        </div>
+    </div>
+    {%else%}
+        <div class="video-js-responsive-container vjs-hd">
+            <video class="video-js vjs-default-skin" 
+            data-setup='{ "playbackRates": [0.5, 1, 1.25,1.5, 2] }'
+            width="1080"
+            controls
+            buffered
+            preload="none">
+            {% if config.nginxVideoStream %}
+                <source src="{{video.nginxUrl}}" type="video/mp4">
+            {% else %}
+                <source src="{{url_for('stream', url=video.videoUrl.replace('/', 'YotterSlash'))}}" type="video/mp4">
+            {% endif %}
+            </video>
+        </div>
+    {%endif%}
 
     <div class="ui segments">
         <div class="ui segment">

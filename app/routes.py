@@ -321,8 +321,13 @@ def watch():
     id = request.args.get('v', None)
     info = ytvids.get_video_info(id)
     hostName = urllib.parse.urlparse(info['video']['url']).netloc
+    
     # Use nginx
-    url = info['video']['url'].replace(hostName, config['serverName'])+"&hostname="+hostName
+    try:
+        url = info['video']['url'].replace(hostName, config['serverName'])+"&hostname="+hostName
+    except:
+        url = "#"
+
     video={
         'title':info['video']['title'],
         'description':Markup(markupString(info['video']['description'])),

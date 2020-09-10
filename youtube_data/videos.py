@@ -17,19 +17,28 @@ def get_video_primary_info(datad, datai):
     details = datad['videoDetails']
     try:
         isUpcoming = details['isUpcoming']
+        views = "Scheduled video"
     except:
         isUpcoming = False
     
+    if not isUpcoming:
+        views = details['viewCount']
+    
     ydl = YoutubeDL()
-    data = ydl.extract_info(details['videoId'], False)
-    if not details['isLiveContent']:
-        url = data['formats'][-1]['url']
+    try:
+        data = ydl.extract_info(details['videoId'], False)
+        if not details['isLiveContent']:
+            url = data['formats'][-1]['url']
+        else:
+            url = data['formats'][-1]['url']
+    except:
+        url = "#"
     try:
         primaryInfo = {
             "id": details['videoId'],
             "title": details['title'],
             "description": details['shortDescription'],
-            "views": details['viewCount'],
+            "views": views,
             "duration": details['lengthSeconds'],
             "date": item['dateText']['simpleText'],
             "rating": details['averageRating'],
@@ -53,9 +62,10 @@ def get_video_primary_info(datad, datai):
             "rating": details['averageRating'],
             "author": details['author'],
             "isPrivate":False,
-            "isLive":False,
-            "isUpcoming":False,
+            "isLive":details['isLiveContent'],
+            "isUpcoming":isUpcoming,
             "allowRatings":True,
+            "url":url,
             "thumbnail": details['thumbnail']['thumbnails'][0]['url']
         }
     return primaryInfo
