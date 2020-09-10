@@ -68,7 +68,7 @@ def get_video_owner_info(data):
     ownerInfo = {
         "thumbnail": ownerItem['thumbnail']['thumbnails'][0]['url'],
         "username": ownerItem['title']['runs'][0]['text'],
-        "id": "#",
+        "id": ownerItem['title']['runs'][0]['navigationEndpoint']['browseEndpoint']['browseId'],
         "suscriberCount":ownerItem['subscriberCountText']['runs'][0]['text']
     }
     return ownerInfo
