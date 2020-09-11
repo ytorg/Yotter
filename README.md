@@ -78,6 +78,7 @@ I always recommend self-hosting, as you will be the only person with access to t
 | name |server location|registrations?|
 | ------------ | ------------ | ------------ |
 | https://yotter.xyz  |Germany| Limited (45 users)|
+| https://yotter.kavin.rocks  |-| Limited (25 users)|
 
 # Self hosting
 
