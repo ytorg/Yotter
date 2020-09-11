@@ -11,7 +11,6 @@ def get_renderer_key(renderer, key):
             return k[key]
 
 def get_video_primary_info(datad, datai):
-
     contents = datai["contents"]["twoColumnWatchNextResults"]['results']['results']['contents']
     item = get_renderer_key(contents, "videoPrimaryInfoRenderer")
     details = datad['videoDetails']

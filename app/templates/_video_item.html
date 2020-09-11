@@ -16,7 +16,7 @@
         </div>
     </div>
     <div class="extra content">
-        {% if video.views == "Livestream" %}
+        {% if video.isLive == "Livestream" or video.isLive %}
             <span class="right floated">
                 <i class="red circle icon"></i>
                 ‎‎{{video.views}}
@@ -28,7 +28,7 @@
             </span>
         {% endif %}
 
-        {% if video.timeStamp == "Scheduled" %}
+        {% if video.timeStamp == "Scheduled" or video.isUpcoming %}
             <span class="right floated">
                 <i class="blue clock icon"></i>
                 {{video.timeStamp}}‎‎‎‎            ‎‎‎

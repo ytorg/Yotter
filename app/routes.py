@@ -7,7 +7,6 @@ from requests_futures.sessions import FuturesSession
 from werkzeug.datastructures import Headers
 from concurrent.futures import as_completed
 from werkzeug.utils import secure_filename
-from youtube_data import videos as ytvids
 from youtube_search import YoutubeSearch
 from werkzeug.urls import url_parse
 from youtube_dl import YoutubeDL
@@ -24,6 +23,10 @@ import bleach
 import urllib
 import json
 import re
+#########################################
+from youtube_data import videos as ytvids
+from youtube_data import search as yts
+#########################################
 ##########################
 #### Config variables ####
 ##########################
@@ -225,32 +228,14 @@ def ytsearch():
         channels = []
         videos = []
 
-        searchTerm = form.channelId.data
-        search = YoutubeSearch(searchTerm)
-        chnns = search.channels_to_dict()
-        vids = search.videos_to_dict()
-        
-        for v in vids:
-            videos.append({
-                'channelName':v['channel'],
-                'videoTitle':v['title'],
-                'description':Markup(v['long_desc']),
-                'id':v['id'],
-                'videoThumb': v['thumbnails'][-1],
-                'channelUrl':v['url_suffix'],
-                'channelId': v['channelId'],
-                'views':v['views'],
-                'timeStamp':v['publishedText']
-            })
+        searchTerms = form.channelId.data
+        page = 1
+        autocorrect = 1
+        sort = 0
+        filters = {"time":0, "type":0, "duration":0}
+        results = yts.search_by_terms(searchTerms, page, autocorrect, sort, filters)
 
-        for c in chnns:
-            channels.append({
-                'username':c['name'],
-                'channelId':c['id'],
-                'thumbnail':'https:{}'.format(c['thumbnails'][0]),
-                'subCount':c['suscriberCountText'].split(" ")[0]
-            })
-        return render_template('ytsearch.html', form=form, btform=button_form, channels=channels, videos=videos, restricted=config['restrictPublicUsage'], config=config)
+        return render_template('ytsearch.html', form=form, btform=button_form, results=results, restricted=config['restrictPublicUsage'], config=config)
 
     else:
         return render_template('ytsearch.html', form=form)
