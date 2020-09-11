@@ -1,4 +1,7 @@
-FROM python:3-alpine AS builder
+FROM python:3-alpine AS base
+
+# Image to Build Dependencies
+FROM base AS builder
 
 WORKDIR /usr/src/app
 
@@ -11,7 +14,8 @@ RUN apk --no-cache add gcc musl-dev libffi-dev openssl-dev libxml2-dev libxslt-d
 RUN pip install --no-cache-dir --prefix=/install wheel cryptography gunicorn pymysql
 RUN pip install --no-cache-dir --prefix=/install -r requirements.txt
 
-FROM python:3-alpine
+# Runtime Environment Image
+FROM base
 
 WORKDIR /usr/src/app
 
