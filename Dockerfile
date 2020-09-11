@@ -1,13 +1,23 @@
-FROM python:3-alpine
+FROM python:3-alpine AS builder
 
 WORKDIR /usr/src/app
 
 COPY requirements.txt ./
 
-RUN apk --no-cache add gcc musl-dev libffi-dev openssl-dev libxml2-dev libxslt-dev file llvm-dev make g++ \
-  && pip install --no-cache-dir wheel cryptography gunicorn pymysql \
-  && pip install --no-cache-dir -r requirements.txt \
-  && apk del gcc musl-dev libffi-dev openssl-dev file llvm-dev make g++
+# Build Dependencies
+RUN apk --no-cache --virtual build-deps add gcc musl-dev libffi-dev openssl-dev libxml2-dev libxslt-dev file llvm-dev make g++
+
+# Python Dependencies
+RUN pip install --no-cache-dir --prefix=/install wheel cryptography gunicorn pymysql
+RUN pip install --no-cache-dir --prefix=/install -r requirements.txt
+
+FROM python:3-alpine
+
+WORKDIR /usr/src/app
+
+# Runtime Dependencies
+RUN apk --no-cache add libxml2 libxslt
+COPY --from=builder /install /usr/local
 
 COPY . .
 
