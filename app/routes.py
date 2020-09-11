@@ -225,20 +225,16 @@ def ytsearch():
     form = ChannelForm()
     button_form = EmptyForm()
     if form.validate_on_submit():
-        channels = []
-        videos = []
-
         searchTerms = form.channelId.data
         page = 1
         autocorrect = 1
         sort = 0
         filters = {"time":0, "type":0, "duration":0}
         results = yts.search_by_terms(searchTerms, page, autocorrect, sort, filters)
-
         return render_template('ytsearch.html', form=form, btform=button_form, results=results, restricted=config['restrictPublicUsage'], config=config)
 
     else:
-        return render_template('ytsearch.html', form=form)
+        return render_template('ytsearch.html', form=form, results=False)
 
 @app.route('/ytfollow/<channelId>', methods=['POST'])
 @login_required
