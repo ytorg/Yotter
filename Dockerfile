@@ -5,7 +5,7 @@ WORKDIR /usr/src/app
 COPY requirements.txt ./
 
 # Build Dependencies
-RUN apk --no-cache --virtual build-deps add gcc musl-dev libffi-dev openssl-dev libxml2-dev libxslt-dev file llvm-dev make g++
+RUN apk --no-cache add gcc musl-dev libffi-dev openssl-dev libxml2-dev libxslt-dev file llvm-dev make g++
 
 # Python Dependencies
 RUN pip install --no-cache-dir --prefix=/install wheel cryptography gunicorn pymysql
