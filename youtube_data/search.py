@@ -1,5 +1,5 @@
+from youtube_data import proto, utils
 from bs4 import BeautifulSoup as bs
-from youtube_data import proto
 from flask import Markup
 import urllib.parse
 import requests
@@ -58,7 +58,7 @@ def get_channel_renderer_item_info(item):
         suscribers = "?"
     
     try:
-        description = get_description_snippet_text(item['descriptionSnippet']['runs'])
+        description = utils.get_description_snippet_text(item['descriptionSnippet']['runs'])
     except KeyError:
         description = ""
 
@@ -97,19 +97,6 @@ def get_videos_from_search(search):
 
     # Sometimes Youtube will return an empty query. Try again.        
     return results
-
-def get_description_snippet_text(ds):
-    string = ""
-    for t in ds:
-        try:
-            if t['bold']:
-                text = "<b>"+t['text']+"</b>"
-            else:
-                text = t['text']
-        except:
-            text = t['text']
-        string = string + text
-    return string
 
 def get_video_renderer_item_info(item):
     published = ""
@@ -154,7 +141,7 @@ def get_video_renderer_item_info(item):
 
     video = {
         'videoTitle':item['title']['runs'][0]['text'],
-        'description':Markup(str(get_description_snippet_text(item['descriptionSnippet']['runs']))),
+        'description':Markup(str(utils.get_description_snippet_text(item['descriptionSnippet']['runs']))),
         'views':views,
         'timeStamp':published,
         'duration':duration,

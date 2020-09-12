@@ -286,6 +286,7 @@ def unfollowYoutubeChannel(channelId):
 
 @app.route('/channel/<id>', methods=['GET'])
 @app.route('/user/<id>', methods=['GET'])
+@app.route('/c/<id>', methods=['GET'])
 @login_required
 def channel(id):
     form = ChannelForm()
