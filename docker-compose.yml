@@ -9,7 +9,7 @@ services:
       MYSQL_PASSWORD: changeme
     restart: unless-stopped
     volumes:
-     - /var/lib/mysql
+     - mysql:/var/lib/mysql
     healthcheck:
      test: ["CMD", "mysqladmin", "ping", "--silent"]
   yotter:
@@ -24,5 +24,8 @@ services:
     ports:
       - "5000:5000"
     volumes:
-     - /usr/src/app/migrations
+     - migrations:/usr/src/app/migrations
      - ./yotter-config.json:/usr/src/app/yotter-config.json
+volumes:
+  mysql:
+  migrations:
