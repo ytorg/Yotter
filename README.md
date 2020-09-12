@@ -78,6 +78,7 @@ I always recommend self-hosting, as you will be the only person with access to t
 | name |server location|registrations?|
 | ------------ | ------------ | ------------ |
 | https://yotter.xyz  |Germany| Limited (45 users)|
+| https://yotter.kavin.rocks/  |India| Limited (25 users)|
 
 # Self hosting
 
@@ -213,6 +214,7 @@ We have a [Matrix](https://matrix.org/) room where we discuss anything related w
 * [microblog](https://github.com/miguelgrinberg/microblog)
 * [Video.js](https://videojs.com/)
 * [My fork of youtube_search](https://github.com/pluja/youtube_search-fork)
+* [Youtube-local](https://github.com/user234683/youtube-local)
 
 # Donate
 This project is completely free and Open Source and will always be.
