@@ -59,3 +59,9 @@
     visibility: visible;
     cursor: pointer;
 }
+
+.scroller {
+    position: fixed;
+    right: 80px;
+    bottom: 30px;
+}
