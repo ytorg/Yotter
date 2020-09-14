@@ -6,8 +6,6 @@
    <a href="https://github.com/pluja/Yotter/tree/master"><img alt="Formerly named Parasitter" src="https://img.shields.io/badge/Formerly-Parasitter-blue.svg"></img></a>
 </p> 
 
-<h2 align="center"> Check out the <a href="https://github.com/ytorg">Yotter Organization</a> on Github. All our work will be moving there as we migrate to React for the UI </h2> 
-
 Yotter allows you to follow and gather all the content from your favorite Twitter and YouTube accounts in a *beautiful* feed so you can stay up to date without compromising your privacy at all. Yotter is written with Python and Flask and uses Semantic-UI as its CSS framework.
 
 Yotter is possible thanks to several open-source projects that are listed on the [Powered by](#powered-by) section. Make sure to check out those awesome projects!
