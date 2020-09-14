@@ -1,6 +1,10 @@
 <div class="card">
     <div class="image">
+        {%if config.nginxVideoStream%}
+        <img alt="Thumbnail" src="{{video.videoThumb}}">
+        {%else%}
         <img alt="Thumbnail" src="/img/{{video.videoThumb.replace('/', '~')}}">
+        {%endif%}
     </div>
     <div class="content">
         {% if video.views == "Livestream" %}

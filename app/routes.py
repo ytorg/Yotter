@@ -775,7 +775,11 @@ def getYoutubePosts(ids):
                 video.channelUrl = vid.author_detail.href
                 video.id = vid.yt_videoid
                 video.videoTitle = vid.title
-                video.videoThumb = vid.media_thumbnail[0]['url'].replace('/', '~')
+                if config['nginxVideoStream']:
+                    hostName = urllib.parse.urlparse(vid.media_thumbnail[0]['url']).netloc
+                    video.videoThumb = vid.media_thumbnail[0]['url'].replace(hostName, config['serverName'])+"?hostname="+hostName
+                else:
+                    video.videoThumb = vid.media_thumbnail[0]['url'].replace('/', '~')
                 video.views = vid.media_statistics['views']
                 video.description = vid.summary_detail.value
                 video.description = re.sub(r'^https?:\/\/.*[\r\n]*', '', video.description[0:120]+"...", flags=re.MULTILINE)
