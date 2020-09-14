@@ -182,7 +182,7 @@ server {
         expires 30d;
     }
     
-    location /videoplayback {
+    location ~ (/videoplayback|/vi/) {
        proxy_buffering off;
        resolver 1.1.1.1;
        proxy_pass https://$arg_hostname;
