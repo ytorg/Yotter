@@ -777,7 +777,7 @@ def getYoutubePosts(ids):
                 video.videoTitle = vid.title
                 if config['nginxVideoStream']:
                     hostName = urllib.parse.urlparse(vid.media_thumbnail[0]['url']).netloc
-                    video.videoThumb = vid.media_thumbnail[0]['url'].replace(hostName, config['serverName'])+"?hostname="+hostName
+                    video.videoThumb = vid.media_thumbnail[0]['url'].replace(hostName, config['serverName']).replace("hqdefault", "mqdefault")+"?hostname="+hostName
                 else:
                     video.videoThumb = vid.media_thumbnail[0]['url'].replace('/', '~')
                 video.views = vid.media_statistics['views']
