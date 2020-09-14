@@ -59,3 +59,13 @@
     visibility: visible;
     cursor: pointer;
 }
+
+
+
+/* Workaround for video thumbnails black bars */
+.video-thumbnail {
+    overflow: hidden;
+}
+.video-thumbnail > img {
+    margin: -28px 0;
+}

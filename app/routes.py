@@ -775,7 +775,7 @@ def getYoutubePosts(ids):
                 video.channelUrl = vid.author_detail.href
                 video.id = vid.yt_videoid
                 video.videoTitle = vid.title
-                video.videoThumb = vid.media_thumbnail[0]['url'].replace('/', '~')
+                video.videoThumb = vid.media_thumbnail[0]['url'].replace('/', '~') # TODO: remove black bars without CSS
                 video.views = vid.media_statistics['views']
                 video.description = vid.summary_detail.value
                 video.description = re.sub(r'^https?:\/\/.*[\r\n]*', '', video.description[0:120]+"...", flags=re.MULTILINE)
