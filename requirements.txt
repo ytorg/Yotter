@@ -35,7 +35,7 @@ numerize==0.12
 numpy==1.19.1
 packaging==20.4
 pylint==2.6.0
-PyMySQL==0.10.0
+PyMySQL==0.10.1
 pyparsing==2.4.7
 python-dateutil==2.8.1
 python-dotenv==0.14.0
