@@ -13,7 +13,7 @@ services:
     healthcheck:
      test: ["CMD", "mysqladmin", "ping", "--silent"]
   yotter:
-    image: yotter
+    image: ytorg/yotter:latest
     restart: unless-stopped
     ports:
       - "127.0.0.1:5000:5000"
