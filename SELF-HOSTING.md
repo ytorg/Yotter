@@ -44,7 +44,7 @@ Now you should be logged in. Make sure to set up a good password. It is recommen
 1. Install `docker` and `docker-compose`.
 2. Run the following commands:
 ```
-git clone https://github.com/pluja/Yotter && cd Yotter
+git clone https://github.com/ytorg/Yotter && cd Yotter
 docker-compose up -d
 ```
 3. Configure Nginx
@@ -68,7 +68,7 @@ docker-compose up -d
 If after the MySQL-server installation you have not been prompted to create a password for the `root` user, run `sudo mysql_secure_installation`
 
 3. Clone this repository and acccess folder:
-* `git clone https://github.com/pluja/Yotter`
+* `git clone https://github.com/ytorg/Yotter`
 
 * `cd Yotter`
 
