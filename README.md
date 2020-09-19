@@ -16,12 +16,7 @@ Yotter is possible thanks to several open-source projects that are listed on the
 * [Screenshots](#screenshots)
 * [Privacy and Security](#privacy)
 * [Public instances](#public-instances)
-* [Self hosting](#self-hosting)
-    * Install & Test
-        * [Normal installation](#test)
-        * [Docker installation](#using-docker)
-    * [Hosting on a server](#hosting-on-a-server)
-    * [Update](#updating-to-newer-versions)
+* [Self hosting](https://github.com/ytorg/Yotter/blob/dev-indep/SELF-HOSTING.md)
     * [Configure server](#configure-the-server)
 * [Contributing and contact](#contributing)
 * [Powered by](#powered-by)
@@ -78,107 +73,6 @@ I always recommend self-hosting, as you will be the only person with access to t
 | ------------ | ------------ | ------------ |
 | https://yotter.xyz  |Germany| Limited (50 users)|
 | https://yotter.kavin.rocks/  |India| Limited (50 users)|
-
-# Self hosting
-
-If you want to set up a public server you should follow the instructions [HERE](#hosting-on-a-server). The following instructions are for personal use only.
-
-## Local
-
-You can run Yotter locally on your machine for personal use. You should use a VPN in order to cloak your IP.
-
-##### IMPORTANT: Connections from the server to googlevideo will be made to stream the videos. It is recommended to use a VPN to preserve your privacy. Understand that the best way of using Yotter is [running on a remote server](#hosting-on-a-server).
-
-1. Install `python3`, `pip3`, `python3-venv` (optional) and `git`.
-
-2. Clone this repository:
-    - `git clone https://github.com/pluja/Yotter.git`
-    
-3. Navigate to the project folder:
-    - `cd Yotter`
-   
-4. Prepare a virtual environment and activate it:
-   > Python lets you create virtual environments. This allows you to avoid installing all the `pip` packages on your system.
-    - `python3 -m venv venv`
-    - `source venv/bin/activate`
-    > Now you are inside of the virtual environment for python. All instructions wiht [env] indicate that must be done inside the env if you decided to create one. From now on, you will always need to start the application from within the virtual env.
-    
-5. [env] Update pip
-    - `pip install --upgrade pip`
-    
-6. [env] Install the required libraries:
-    - `pip install -r requirements.txt`
-       > If you get errors, try running `source venv/bin/activate` again of use `--user` option.
-       
-7. [env] Initialize and prepare the database.
-    - `flask db init`
-    - `flask db migrate`
-    - `flask db upgrade`
-    > If you get *`"No such command db"`*, try running `source venv/bin/activate` again.
-    
-8. [env] Run the application.
-    - `flask run`
-    > You can optionally use `flask run --host 0.0.0.0` so you can use Yotter from other devices from the same network using the host device's IP address and port. ¡Test it from a smartphone!
-    
-9. Go to "http://localhost:5000/" and enjoy.
-
-## Using Docker:
-
-Note: Not for a production server.
-
-##### Building using the Dockerfile
-> (May not work on Windows)
-
-1. Install Docker:
-    - `https://docs.docker.com/engine/install/`
-
-2. Clone this repository:
-    - `git clone https://github.com/pluja/Yotter.git`
-    
-3. Navigate to the project folder:
-    - `cd Yotter`
-
-4. Build the docker image:
-    - `docker build -t yotter .`
-
-5. Run the container:
-    - `docker run -p 5000:5000 yotter`
-    
-6. Go to "http://localhost:5000/" and enjoy.
-
-##### Pulling image from Docker Hub
-1. Install Docker:
-    - `https://docs.docker.com/engine/install/`
-
-2. Run the container:
-    - `docker run -p 5000:5000 sn0wed/yotter:alpha`
-    
-3. Go to "http://localhost:5000/" and enjoy.
-
-# Hosting on a server:
-
-If you want to set up a Yotter public instance, follow this instructions.
-#### [VISIT THIS FILE FOR INSTRUCTIONS](https://github.com/pluja/Yotter/blob/dev-indep/SELF-HOSTING.md)
-
-## Updating to newer versions:
-**IMPORTANT: Before updating to newer versions, always export your data on `Settings>Export Data`. A major version update could have changes on the whole database and you may be forced to remove and reset the database (only when running locally)!**
-
-1. Navigate to the git repository (the one you cloned when installing).
-
-2. Pull new changes:
-    - `git pull`
-    
-4. Install new packages (if any):
-   - `pip install -r requirements.txt`
-   > It may be that there are no new packages to install. In that case, all requirements will be satisfied.
-
-5. Update the database:
-    - `flask db migrate`
-    - `flask db upgrade`
-> If you experience any error in this step, it might be that there were big changes on the database structure. You can solve it by exporting your data, then deleting and resetting the database. Run `rm -rf app.db migrations` and then `flask db init`. Then run step 5 normally.
-
-6. Done! You are on latest version.
-> **See [CHANGELOG](CHANGELOG.md) for a list of changes.**
 
 ## Configure the server
 You will find in the root folder of the project a file named `yotter-config.json`. This is the global config file for the Yotter server.
