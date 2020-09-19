@@ -143,7 +143,7 @@ class youtubeFollow(db.Model):
     __tablename__ = 'channel'
     id = db.Column(db.Integer, primary_key=True)
     channelId = db.Column(db.String(30), nullable=False)
-    channelName = db.Column(db.String(30))
+    channelName = db.Column(db.String(60))
     followers = db.relationship('User', 
                                 secondary=channel_association,
                                 back_populates="youtubeFollowed")
@@ -164,10 +164,10 @@ class twitterFollow(db.Model):
 
 class Post(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    body = db.Column(db.String(140))
+    body = db.Column(db.String(540))
     timestamp = db.Column(db.String(100))
-    url = db.Column(db.String(100), unique=True)
-    username = db.Column(db.String(24))
+    url = db.Column(db.String(250), unique=True)
+    username = db.Column(db.String(50))
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
 
     def __repr__(self):
