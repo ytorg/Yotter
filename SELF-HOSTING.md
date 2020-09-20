@@ -49,6 +49,13 @@ docker-compose up -d
 ```
 3. Configure Nginx with a reverse proxy (Instructions coming soon)
 
+#### Update Docker
+```
+docker-compose down
+docker pull ytorg/yotter
+docker-compose up -d
+```
+
 ### Manual installation
 
 #### Step 1: Base setup
