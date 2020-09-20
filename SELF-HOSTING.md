@@ -80,7 +80,7 @@ If after the MySQL-server installation you have not been prompted to create a pa
 * `pip install cryptography`
 * `pip install -r requirements.txt`
 
-> You can edit the `yotter-config.json` file
+> You can edit the `yotter-config.json` file. [Check out all the options here](https://github.com/ytorg/Yotter/blob/dev-indep/README.md#configure-the-server)
 
 5. Install gunicorn (production web server for Python apps) and pymysql:
 `pip install gunicorn pymysql`
@@ -219,7 +219,7 @@ Updating the server should always be pretty easy. These steps need to be run on 
 (venv) $ pip install -r requirements.txt
 (venv) $ sudo supervisorctl start yotter
 ```
-
+* **IMPORTANT**: Make sure you have all set up on `yotter-config.json` once you finish the update.
 ## Other configurations
 
 ### Removing log-in restrictions
