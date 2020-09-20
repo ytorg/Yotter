@@ -73,7 +73,8 @@ I always recommend self-hosting, as you will be the only person with access to t
 | name |server location|registrations?|
 | ------------ | ------------ | ------------ |
 | https://yotter.xyz  |Germany| Limited (60 users)|
-| https://yotter.kavin.rocks/  |India| Limited (50 users)|
+| https://yotter.kavin.rocks/  |India| Limited (100 users)|
+| https://yotter.jank.media/  |Germany| Limited (100 users)|
 
 ## Configure the server
 You will find in the root folder of the project a file named `yotter-config.json`. This is the global config file for the Yotter server.
