@@ -79,6 +79,16 @@
             <div class="control-me"><a href="/deleteme"><button class="ui red button">Delete account</button></a></div>   
         </div>
 
+        {% if admin %}
+        <div class="ui segment">
+            <h2 class="ui centered header">
+                Admin tools
+            </h2>
+            <label for="toggle">Delete accounts with last login older than {{config.max_old_user_days}} days.</label> <br>
+            <a href="/clear_inactive_users/{{current_user.password_hash}}"><button class="ui red button">Delete</button></a></div>   
+        </div>
+        {% endif %}
+
         <!-- INSTANCE INFO -->
         <h1 class="ui header">{{config.serverName}} Info</h1>
         <div class="ui segments">

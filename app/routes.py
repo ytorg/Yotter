@@ -21,6 +21,7 @@ import feedparser
 import requests
 import bleach
 import urllib
+import math
 import json
 import re
 #########################################
@@ -378,6 +379,9 @@ def login():
         if user is None or not user.check_password(form.password.data):
             flash('Invalid username or password')
             return redirect(url_for('login'))
+        if user.username == config['admin_user']:
+            user.set_admin_user()
+            db.session.commit()
         login_user(user, remember=form.remember_me.data)
         next_page = request.args.get('next')
         if not next_page or url_parse(next_page).netloc != '':
@@ -417,7 +421,28 @@ def settings():
         "totalUsers":db.session.query(User).count(),
         "active":active,
     }
-    return render_template('settings.html', info=instanceInfo, config=config)
+    return render_template('settings.html', info=instanceInfo, config=config, admin=current_user.is_admin)
+
+@app.route('/clear_inactive_users/<phash>')
+@login_required
+def clear_inactive_users(phash):
+    ahash = User.query.filter_by(username=config['admin_user']).first().password_hash
+    if phash == ahash:
+        users = db.session.query(User).all()
+        for u in users:
+            if u.username == config['admin_user']:
+                continue
+            t = datetime.datetime.utcnow() - u.last_seen
+            t = math.floor(t.total_seconds())
+            max_old_s = config['max_old_user_days']*86400
+            if t > max_old_s:
+                user = User.query.filter_by(username=u.username).first()
+                print("deleted "+u.username)
+                db.session.delete(user)
+                db.session.commit()
+    else:
+        flash("You must be admin for this action")
+    return redirect(request.referrer)
 
 @app.route('/export')
 @login_required

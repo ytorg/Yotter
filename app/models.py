@@ -23,6 +23,7 @@ class User(UserMixin, db.Model):
     username = db.Column(db.String(64), index=True, unique=True)
     password_hash = db.Column(db.String(128))
     last_seen = db.Column(db.DateTime, default=datetime.utcnow())
+    is_admin = db.Column(db.Boolean, default=False, nullable=True)
     posts = db.relationship('Post', backref='author', lazy='dynamic')
 
     def __repr__(self):
@@ -30,6 +31,9 @@ class User(UserMixin, db.Model):
 
     def set_last_seen(self):
         self.last_seen = datetime.utcnow()
+    
+    def set_admin_user(self):
+        self.is_admin = True
 
     def set_password(self, password):
         self.password_hash = generate_password_hash(password)
