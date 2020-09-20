@@ -307,7 +307,7 @@ def watch():
     
     # Use nginx
     try:
-        url = info['video']['url'].replace(hostName, config['serverName'])+"&hostname="+hostName
+        url = info['video']['url'].replace(hostName, config['serverName'])+"?hostname="+hostName
     except:
         url = "#"
 
