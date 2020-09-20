@@ -259,7 +259,8 @@ def followYoutubeChannel(channelId):
             return True
         else:
             return False
-    except:
+    except Exception as e:
+        print(e)
         flash("Youtube: Couldn't follow {}. Already followed?".format(channelData[0]['name']))
         return False
 
