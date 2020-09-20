@@ -308,12 +308,12 @@ def watch():
     
     # Use nginx
     try:
-        url = info['video']['url'].replace("https://{}".format(hostName), "")+"?host="+hostName
+        url = info['video']['url'].replace("https://{}".format(hostName), "")+"&host="+hostName
     except:
         url = "#"
     
     try:
-        audioUrl = info['video']['audio']['url'].replace("https://{}".format(audioHostName), "")+"?host="+audioHostName
+        audioUrl = info['video']['audio']['url'].replace("https://{}".format(audioHostName), "")+"&host="+audioHostName
         print(audioUrl)
     except:
         audioUrl = False
