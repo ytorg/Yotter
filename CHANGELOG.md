@@ -8,6 +8,16 @@
 - Play tweet videos from Parasitter.
 - Create following lists.
 
+## [0.2.6] - 2020.09.20
+### How to update
+See [UPDATE](https://github.com/ytorg/Yotter/blob/dev-indep/SELF-HOSTING.md#updating-the-server) if you are on a manual installation. Docker can be updated normally. 
+
+## Added
+- [x] Admin tools - Delete inactive users.
+
+## Changed
+- [x] Database character limits.
+
 ## [0.2.5] - 2020.09.10
 ### How to update
 1. `sudo supervisorctl stop yotter`
