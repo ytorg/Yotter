@@ -14,6 +14,8 @@
 
 2. **IMPORTANT** You will need to change the nginx config file (`/etc/nginx/sites-enabled/yotter`) and it should look [like this](https://bin.nixnet.services/?414267b3cfd753b4#EX8Zwpj4iXTBjkGThCiaV88bYZfzvmmaG2sokLKKYQFu).
 
+3. Reload nginx `sudo service nginx reload`
+
 ## Added
 - [x] Admin tools - Delete inactive users.
 - [x] Youtube: Play only audio.
