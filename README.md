@@ -17,7 +17,7 @@ Yotter is possible thanks to several open-source projects that are listed on the
 * [Privacy and Security](#privacy)
 * [Public instances](#public-instances)
 * [Self hosting](https://github.com/ytorg/Yotter/blob/dev-indep/SELF-HOSTING.md)
-    * [Update the server](#update-the-server)
+    * [Update the server](https://github.com/ytorg/Yotter/blob/dev-indep/SELF-HOSTING.md#updating-the-server)
     * [Configure server](#configure-the-server)
 * [Contributing and contact](#contributing)
 * [Powered by](#powered-by)
@@ -75,8 +75,6 @@ I always recommend self-hosting, as you will be the only person with access to t
 | https://yotter.xyz  |Germany| Limited (50 users)|
 | https://yotter.kavin.rocks/  |India| Limited (50 users)|
 
-## Update the server
-[SEE THIS FILE](https://github.com/ytorg/Yotter/blob/dev-indep/SELF-HOSTING.md#updating-the-server)
 ## Configure the server
 You will find in the root folder of the project a file named `yotter-config.json`. This is the global config file for the Yotter server.
 
