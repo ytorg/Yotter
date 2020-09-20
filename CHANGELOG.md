@@ -10,7 +10,9 @@
 
 ## [0.2.6] - 2020.09.20
 ### How to update
-See [UPDATE](https://github.com/ytorg/Yotter/blob/dev-indep/SELF-HOSTING.md#updating-the-server) if you are on a manual installation. Docker can be updated normally. 
+1. See [UPDATE](https://github.com/ytorg/Yotter/blob/dev-indep/SELF-HOSTING.md#updating-the-server) if you are on a manual installation. Docker can be updated normally.
+
+2. **IMPORTANT** You will need to change the nginx config file (`/etc/nginx/sites-available/yotter`) and it should look [like this](https://bin.nixnet.services/?3bffa936ec1aa2d8#AJWMbuHgzzE7CdsxhCxuHKYV5Nf92vBozxWNJgrktSRi).
 
 ## Added
 - [x] Admin tools - Delete inactive users.
