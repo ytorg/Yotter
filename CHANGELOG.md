@@ -16,6 +16,7 @@
 
 ## Added
 - [x] Admin tools - Delete inactive users.
+- [x] Youtube: Play only audio.
 
 ## Changed
 - [x] Database character limits.
