@@ -47,7 +47,7 @@ Now you should be logged in. Make sure to set up a good password. It is recommen
 git clone https://github.com/ytorg/Yotter && cd Yotter
 docker-compose up -d
 ```
-3. Configure Nginx
+3. Configure Nginx with a reverse proxy (Instructions coming soon)
 
 ### Manual installation
 
