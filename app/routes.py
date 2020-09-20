@@ -318,6 +318,7 @@ def watch():
     except:
         audioUrl = False
 
+    print(info['video']['thumbnail'])
     video={
         'title':info['video']['title'],
         'description':Markup(markupString(info['video']['description'])),
@@ -810,7 +811,7 @@ def getYoutubePosts(ids):
                 video.videoTitle = vid.title
                 if config['nginxVideoStream']:
                     hostName = urllib.parse.urlparse(vid.media_thumbnail[0]['url']).netloc
-                    video.videoThumb = vid.media_thumbnail[0]['url'].replace(hostName, config['serverName']).replace("hqdefault", "mqdefault")+"?hostname="+hostName
+                    video.videoThumb = vid.media_thumbnail[0]['url'].replace("https://{}".format(hostName), "").replace("hqdefault", "mqdefault")+"?host="+hostName
                 else:
                     video.videoThumb = vid.media_thumbnail[0]['url'].replace('/', '~')
                 video.views = vid.media_statistics['views']
