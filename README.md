@@ -37,6 +37,7 @@ I hope that this project can prosperate, gain contributors, new instances and cr
 - [x] Follow Twitter accounts.
 - [x] Follow Youtube accounts.
 - [x] Play Youtube videos on background on Android.
+- [x] Play only audio from youtube to save data.
 - [x] Save your favourite Tweets.
 - [x] Tor-friendly.
 - [x] Terminal-browser friendly.
