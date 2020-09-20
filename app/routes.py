@@ -304,12 +304,19 @@ def watch():
     id = request.args.get('v', None)
     info = ytvids.get_video_info(id)
     hostName = urllib.parse.urlparse(info['video']['url']).netloc
+    audioHostName = urllib.parse.urlparse(info['video']['audio']['url']).netloc
     
     # Use nginx
     try:
-        url = info['video']['url'].replace(hostName, config['serverName'])+"&hostname="+hostName
+        url = info['video']['url'].replace("https://{}".format(hostName), "")+"?host="+hostName
     except:
         url = "#"
+    
+    try:
+        audioUrl = info['video']['audio']['url'].replace("https://{}".format(audioHostName), "")+"?host="+audioHostName
+        print(audioUrl)
+    except:
+        audioUrl = False
 
     video={
         'title':info['video']['title'],
@@ -325,7 +332,8 @@ def watch():
         'videoHostName': hostName,
         'isLive': info['video']['isLive'],
         'isUpcoming': info['video']['isUpcoming'],
-        'thumbnail': info['video']['thumbnail']
+        'thumbnail': info['video']['thumbnail'],
+        'nginxAudioUrl': audioUrl
     }
     return render_template("video.html", video=video, title='{}'.format(video['title']), config=config)
 

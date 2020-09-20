@@ -57,9 +57,17 @@
           </div>
         </div>
 
+        <div class="ui raised center aligned segment break-word">
+            <p><i class="grey music icon"></i><b><a href="{{video.nginxAudioUrl}}">Play Only Audio</a></b></p>
+            <audio controls>
+                <source src="{{video.nginxAudioUrl}}">
+              Your browser does not support the audio element.
+            </audio>
+        </div>
+
         <div class="ui raised segment break-word">
             <p>{{video.description}}</p>
-          </div>
+        </div>
       </div>
 </div>
 <script src="{{ url_for('static',filename='video.min.js') }}"></script>
