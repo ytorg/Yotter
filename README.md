@@ -17,6 +17,7 @@ Yotter is possible thanks to several open-source projects that are listed on the
 * [Privacy and Security](#privacy)
 * [Public instances](#public-instances)
 * [Self hosting](https://github.com/ytorg/Yotter/blob/dev-indep/SELF-HOSTING.md)
+    * [Update the server](https://github.com/ytorg/Yotter/blob/dev-indep/SELF-HOSTING.md#updating-the-server)
     * [Configure server](#configure-the-server)
 * [Contributing and contact](#contributing)
 * [Powered by](#powered-by)
@@ -71,7 +72,7 @@ I always recommend self-hosting, as you will be the only person with access to t
 # Public Instances
 | name |server location|registrations?|
 | ------------ | ------------ | ------------ |
-| https://yotter.xyz  |Germany| Limited (50 users)|
+| https://yotter.xyz  |Germany| Limited (60 users)|
 | https://yotter.kavin.rocks/  |India| Limited (50 users)|
 
 ## Configure the server
@@ -86,6 +87,8 @@ Currently available config is:
 * **nginxVideoStream**: Wether or not to use Nginx as streaming engine. It is recommended for public instances. [See this link]()
 * **maintenance_mode**: Activates a message on the server warning users of maintenance mode.
 * **show_admin_message**: Shows a message from the admin with title as `admin_message_title` and body as `admin_message`
+* **admin_user**: Username of the admin user.
+* **max_old_user_days**: Maximum days for a user to be inactive, otherwise will be deleted if admin uses the action.
 
 # Contributing
 Contributors are always welcome. You can help in many ways: Coding, organizing, designing, [donating](#donate), maintaining... You choose what you want to help with!
