@@ -14,7 +14,7 @@
 
 2. **IMPORTANT** You will need to change the nginx config file (`/etc/nginx/sites-enabled/yotter`) by adding `/a` on the proxy rule so it should look like this:
 ```
-location ~ (/videoplayback|/vi/|/a) {
+location ~ (/videoplayback|/vi/|/a/) {
        proxy_buffering off;
        resolver 1.1.1.1;
        proxy_pass https://$arg_host;
