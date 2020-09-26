@@ -182,6 +182,8 @@ def search():
 @app.route('/<username>')
 @login_required
 def u(username):
+    if len(username.split("/")) > 1:
+
     form = EmptyForm() 
     avatarPath = "img/avatars/{}.png".format(str(random.randint(1,12)))
     user = getTwitterUserInfo(username)
@@ -438,7 +440,7 @@ def settings():
             t = datetime.datetime.utcnow() - u.last_seen
             s = t.total_seconds()
             m = s/60
-            if m < 10:
+            if m < 25:
                 active = active+1
 
     instanceInfo = {
