@@ -73,7 +73,7 @@ I always recommend self-hosting, as you will be the only person with access to t
 # Public Instances
 | name |server location|registrations?|
 | ------------ | ------------ | ------------ |
-| https://yotter.xyz  |Germany| Limited (60 users)|
+| https://yotter.xyz  |Germany| Limited (70 users)|
 | https://yotter.kavin.rocks/  |India| Limited (100 users)|
 | https://yotter.jank.media/  |Germany| Limited (100 users)|
 
@@ -91,6 +91,7 @@ Currently available config is:
 * **show_admin_message**: Shows a message from the admin with title as `admin_message_title` and body as `admin_message`
 * **admin_user**: Username of the admin user.
 * **max_old_user_days**: Maximum days for a user to be inactive, otherwise will be deleted if admin uses the action.
+* **donation_url**: Adds a link to a donation method for the instance.
 
 # Contributing
 Contributors are always welcome. You can help in many ways: Coding, organizing, designing, [donating](#donate), maintaining... You choose what you want to help with!

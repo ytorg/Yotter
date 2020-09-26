@@ -24,7 +24,8 @@ location ~ (/videoplayback|/vi/|/a) {
 ```
 
 3. Reload nginx `sudo service nginx reload`
-
+### Added
+- [x] Admins can add a donation link to the Instance - Check `yotter-config.json` after update.
 ### Fixed
 - [x] Channel images were not proxied.
 
