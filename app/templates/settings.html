@@ -101,8 +101,13 @@
             <div class="ui segment">
                 <p><b>Server location:</b> {{config.serverLocation}}</p>
             </div>
+            {% if config.donate_url %}
             <div class="ui segment">
-                <p><a href="https://github.com/pluja/Yotter#donate">Consider making a donation</a></p>
+                <p><a href="{{config.donate_url}}">Consider making a donation to the instance</a></p>
+            </div>
+            {% endif %}
+            <div class="ui segment">
+                <p><a href="https://github.com/pluja/Yotter#donate">Donate to the Yotter developer</a></p>
             </div>
     </div>
 </div>
