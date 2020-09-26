@@ -182,8 +182,6 @@ def search():
 @app.route('/<username>')
 @login_required
 def u(username):
-    if len(username.split("/")) > 1:
-
     form = EmptyForm() 
     avatarPath = "img/avatars/{}.png".format(str(random.randint(1,12)))
     user = getTwitterUserInfo(username)
