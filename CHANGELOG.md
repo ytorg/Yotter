@@ -8,6 +8,26 @@
 - Play tweet videos from Parasitter.
 - Create following lists.
 
+## [0.2.7] - 2020.09.26
+## How to update:
+1. See [UPDATE](https://github.com/ytorg/Yotter/blob/dev-indep/SELF-HOSTING.md#updating-the-server) if you are on a manual installation. Docker can be updated normally.
+
+2. **IMPORTANT** You will need to change the nginx config file (`/etc/nginx/sites-enabled/yotter`) by adding `/a` on the proxy rule so it should look like this:
+```
+location ~ (/videoplayback|/vi/|/a) {
+       proxy_buffering off;
+       resolver 1.1.1.1;
+       proxy_pass https://$arg_hostname;
+       proxy_set_header Host $arg_hostname;
+       add_header Access-Control-Allow-Origin *;
+}
+```
+
+3. Reload nginx `sudo service nginx reload`
+
+## Fixed
+- [x] Channel images were not proxied.
+
 ## [0.2.6] - 2020.09.20
 ### How to update
 1. See [UPDATE](https://github.com/ytorg/Yotter/blob/dev-indep/SELF-HOSTING.md#updating-the-server) if you are on a manual installation. Docker can be updated normally.
