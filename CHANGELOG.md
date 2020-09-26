@@ -17,8 +17,8 @@
 location ~ (/videoplayback|/vi/|/a) {
        proxy_buffering off;
        resolver 1.1.1.1;
-       proxy_pass https://$arg_hostname;
-       proxy_set_header Host $arg_hostname;
+       proxy_pass https://$arg_host;
+       proxy_set_header Host $arg_host;
        add_header Access-Control-Allow-Origin *;
 }
 ```
@@ -26,6 +26,7 @@ location ~ (/videoplayback|/vi/|/a) {
 3. Reload nginx `sudo service nginx reload`
 ### Added
 - [x] Admins can add a donation link to the Instance - Check `yotter-config.json` after update.
+- [x] You can now use `<instance>/registrations_status/icon` and `<instance>/registrations_status/text` to get registrations info.
 ### Fixed
 - [x] Channel images were not proxied.
 

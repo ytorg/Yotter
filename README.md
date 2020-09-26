@@ -71,11 +71,11 @@ I always recommend self-hosting, as you will be the only person with access to t
 > Important note: The **client** never connects to Google / Youtube however, the server does in order to gather all the necessary things!
 
 # Public Instances
-| name |server location|registrations?|
-| ------------ | ------------ | ------------ |
-| https://yotter.xyz  |Germany| Limited (70 users)|
-| https://yotter.kavin.rocks/  |India| Limited (100 users)|
-| https://yotter.jank.media/  |Germany| Limited (100 users)|
+| name |server location|max users|registrations|
+| ------------ | ------------ | ------------ |------------|
+| https://yotter.xyz  |Germany| 70 users|<img src="https://yotter.xyz/registrations_status/icon?1" width="17">|
+| https://yotter.kavin.rocks/  |India| 100 users |<img src="https://yotter.kavin.rocks/registrations_status/icon?1" width="15">|
+| https://yotter.jank.media/  |Germany| 100 users|<img src="https://yotter.jank.media/registrations_status/icon?1" width="15">|
 
 ## Configure the server
 You will find in the root folder of the project a file named `yotter-config.json`. This is the global config file for the Yotter server.
