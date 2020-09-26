@@ -26,6 +26,7 @@ location ~ (/videoplayback|/vi/|/a) {
 3. Reload nginx `sudo service nginx reload`
 ### Added
 - [x] Admins can add a donation link to the Instance - Check `yotter-config.json` after update.
+- [x] You can now use `<instance>/registrations_status/icon` and `<instance>/registrations_status/text` to get registrations info.
 ### Fixed
 - [x] Channel images were not proxied.
 
