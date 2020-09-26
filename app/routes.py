@@ -179,7 +179,6 @@ def search():
         return render_template('search.html', form = form, config=config)
 
 @app.route('/u/<username>')
-@app.route('/<username>')
 @login_required
 def u(username):
     form = EmptyForm() 
