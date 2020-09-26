@@ -598,13 +598,18 @@ def register():
         
     return render_template('register.html', title='Register', registrations=REGISTRATIONS, form=form, config=config)
 
-@app.route('/registrations_status')
-def registrations_status():
+@app.route('/registrations_status/icon')
+def registrations_status_icon():
     count = db.session.query(User).count()
     if count >= config['maxInstanceUsers'] or config['maxInstanceUsers'] == 0:
-        return url_for('static',filename='img/close.png')
+        return redirect(url_for('static',filename='img/close.png'))
     else:
-        return url_for('static',filename='img/open.png')
+        return redirect(url_for('static',filename='img/open.png'))
+
+@app.route('/registrations_status/text')
+def registrations_status_text():
+    count = db.session.query(User).count()
+    return "{c}/{t}".format(c=count, t=config['maxInstanceUsers'])
 
 @app.route('/error/<errno>')
 def error(errno):
