@@ -4,7 +4,11 @@
     <div class="blue ui centered card">
         <div class="content">
             <div class="center aligned author">
-                <img alt="Avatar" class="ui avatar image" src="/img/{{channel.avatar.replace('/', '~')}}">
+                {%if config.nginxVideoStream%}
+                    <img alt="Thumbnail" src="{{channel.avatar}}">
+                {%else%}
+                    <img alt="Thumbnail" src="/img/{{channel.avatar.replace('/', '~')}}">
+                {%endif%}
             </div>
             <div class="center aligned header"><a href="">{{channel.name}}</a></div>
             <div class="center aligned description">
