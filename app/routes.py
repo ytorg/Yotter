@@ -597,7 +597,14 @@ def register():
         return redirect(url_for('login'))
         
     return render_template('register.html', title='Register', registrations=REGISTRATIONS, form=form, config=config)
-        
+
+@app.route('/registrations_status')
+def registrations_status():
+    count = db.session.query(User).count()
+    if count >= config['maxInstanceUsers'] or config['maxInstanceUsers'] == 0:
+        return url_for('static',filename='img/close.png')
+    else:
+        return url_for('static',filename='img/open.png')
 
 @app.route('/error/<errno>')
 def error(errno):
