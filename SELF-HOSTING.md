@@ -241,3 +241,14 @@ But you must know that videos and images are proxied through the instance. So we
 You can now reload the server and you will see that, without logging in, you can now watch videos.
 
 
+### Increasing the channel name max size on the database (Only installations older than 2020.09.20)
+
+On older versions the character limit for a Youtube suscritpion was 30. This caused some problems with channels that had a longer string for the channel name. Since 2020.09.20 version, this problem was solved, but for older installation the problem persists even if you update to the latest github version.
+
+To solve this, we will need to modify our database and set up new character limits. Don't worry, it's easy.
+
+First you need to open the MySQL prompt. This can be done wiht `mysql -u root -p`. It will prompt you the **mysql database root user password**, note that it is NOT the *sudo* password. Once you're in the MySQL prompt (`mysql>`) you can execute these commands:
+
+1. `connect yotter;` - This will connect you to the yotter database.
+2. `ALTER TABLE channel MODIFY COLUMN channelName VARCHAR(100);` - This alters the field `channelName` from the table `channel` and sets its limit to `100` characters.
+3. `quit;`
