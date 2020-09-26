@@ -302,7 +302,7 @@ def channel(id):
         print(video)
         if config['nginxVideoStream']:
             hostName = urllib.parse.urlparse(video['videoThumb']).netloc
-            video['videoThumb'] = video['videoThumb'].replace("https://{}".format(hostName), "").replace("hqdefault", "mqdefault")+"?host="+hostName
+            video['videoThumb'] = video['videoThumb'].replace("https://{}".format(hostName), "").replace("hqdefault", "mqdefault")+"&host="+hostName
         else:
             video['videoThumb'] = video['videoThumb'].replace('/', '~')
     if config['nginxVideoStream']:
@@ -310,7 +310,7 @@ def channel(id):
         channelData[0]['avatar'] = channelData[0]['avatar'].replace("https://{}".format(hostName), "")+"?host="+hostName
     else:
         channelData[0]['avatar'] = channelData[0]['avatar'].replace('/', '~')
-        
+
     return render_template('channel.html', form=form, btform=button_form, channel=channelData[0], videos=channelData[1], restricted=config['restrictPublicUsage'], config=config)
 
 @app.route('/watch', methods=['GET'])
