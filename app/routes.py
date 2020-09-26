@@ -234,6 +234,12 @@ def ytsearch():
         sort = 0
         filters = {"time":0, "type":0, "duration":0}
         results = yts.search_by_terms(searchTerms, page, autocorrect, sort, filters)
+        for channel in results['channels']:
+            if config['nginxVideoStream']:
+                channel['thumbnail'] = channel['thumbnail'].replace("~", "/")
+                hostName = urllib.parse.urlparse(channel['thumbnail']).netloc
+                channel['thumbnail'] = channel['thumbnail'].replace("https://{}".format(hostName), "")+"&host="+hostName
+                print(channel['thumbnail'])
         return render_template('ytsearch.html', form=form, btform=button_form, results=results, restricted=config['restrictPublicUsage'], config=config)
 
     else:

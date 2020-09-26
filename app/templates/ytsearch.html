@@ -21,7 +21,11 @@
                     {% for res in results.channels %}
                     <div class="item">
                         <div class="image">
-                          <img src="{{ url_for('img', url=res.thumbnail) }}">
+                            {% if config.nginxVideoStream %}
+                                <img src="{{res.thumbnail}}" alt="Avatar">
+                            {% else %}    
+                                <img alt="Avatar" src="{{ url_for('img', url=res.thumbnail) }}">
+                            {% endif %}
                         </div>
                         <div class="content">
                           <a class = "header" href="{{ url_for('channel', id=res.channelId)}}">{{res.username}}</a>
