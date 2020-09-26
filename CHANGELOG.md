@@ -8,6 +8,26 @@
 - Play tweet videos from Parasitter.
 - Create following lists.
 
+## [0.2.7] - 2020.09.26
+### How to update:
+1. See [UPDATE](https://github.com/ytorg/Yotter/blob/dev-indep/SELF-HOSTING.md#updating-the-server) if you are on a manual installation. Docker can be updated normally.
+
+2. **IMPORTANT** You will need to change the nginx config file (`/etc/nginx/sites-enabled/yotter`) by adding `/a` on the proxy rule so it should look like this:
+```
+location ~ (/videoplayback|/vi/|/a) {
+       proxy_buffering off;
+       resolver 1.1.1.1;
+       proxy_pass https://$arg_hostname;
+       proxy_set_header Host $arg_hostname;
+       add_header Access-Control-Allow-Origin *;
+}
+```
+
+3. Reload nginx `sudo service nginx reload`
+
+### Fixed
+- [x] Channel images were not proxied.
+
 ## [0.2.6] - 2020.09.20
 ### How to update
 1. See [UPDATE](https://github.com/ytorg/Yotter/blob/dev-indep/SELF-HOSTING.md#updating-the-server) if you are on a manual installation. Docker can be updated normally.
@@ -16,11 +36,11 @@
 
 3. Reload nginx `sudo service nginx reload`
 
-## Added
+### Added
 - [x] Admin tools - Delete inactive users.
 - [x] Youtube: Play only audio.
 
-## Changed
+### Changed
 - [x] Database character limits.
 
 ## [0.2.5] - 2020.09.10
@@ -46,14 +66,13 @@
 7. Edit your `yotter-config.json` file and enable the `nginxVideoStream` option.
 8. `sudo service nginx reload`
 9. `sudo supervisorctl start yotter`
-`
 
-#### Added
+### Added
 - [x] Nginx video streaming for better experience - [See how to activate it]()
 - [x] New data extractor module for videos.
 - [x] Show deleted tweets as deleted instead of error.
 
-#### Fixed
+### Fixed
 - [x] Youtube feed not loading due to datetime not found
 
 ## [0.2.4] - 2020.09.07
