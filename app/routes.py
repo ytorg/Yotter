@@ -179,8 +179,11 @@ def search():
         return render_template('search.html', form = form, config=config)
 
 @app.route('/u/<username>')
+@app.route('/<username>')
 @login_required
 def u(username):
+    if username = "favicon.ico":
+        return redirect(url_for('static',filename='favicons/favicon.ico'))
     form = EmptyForm() 
     avatarPath = "img/avatars/{}.png".format(str(random.randint(1,12)))
     user = getTwitterUserInfo(username)
