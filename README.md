@@ -91,6 +91,7 @@ Currently available config is:
 * **show_admin_message**: Shows a message from the admin with title as `admin_message_title` and body as `admin_message`
 * **admin_user**: Username of the admin user.
 * **max_old_user_days**: Maximum days for a user to be inactive, otherwise will be deleted if admin uses the action.
+* **donation_url**: Adds a link to a donation method for the instance.
 
 # Contributing
 Contributors are always welcome. You can help in many ways: Coding, organizing, designing, [donating](#donate), maintaining... You choose what you want to help with!
