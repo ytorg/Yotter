@@ -17,8 +17,8 @@
 location ~ (/videoplayback|/vi/|/a) {
        proxy_buffering off;
        resolver 1.1.1.1;
-       proxy_pass https://$arg_hostname;
-       proxy_set_header Host $arg_hostname;
+       proxy_pass https://$arg_host;
+       proxy_set_header Host $arg_host;
        add_header Access-Control-Allow-Origin *;
 }
 ```
