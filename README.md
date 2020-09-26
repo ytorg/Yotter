@@ -73,7 +73,7 @@ I always recommend self-hosting, as you will be the only person with access to t
 # Public Instances
 | name |server location|registrations?|
 | ------------ | ------------ | ------------ |
-| https://yotter.xyz  |Germany| Limited (60 users)|
+| https://yotter.xyz  |Germany| Limited (70 users)|
 | https://yotter.kavin.rocks/  |India| Limited (100 users)|
 | https://yotter.jank.media/  |Germany| Limited (100 users)|
 
