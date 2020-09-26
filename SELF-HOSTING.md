@@ -13,7 +13,7 @@ When you self-host you make internet stronger and more censorship resistant. If 
     * [Manual Installation](#manual-installation)
 * [Nginx and HTTPS](#nginx-set-up-and-HTTPS)
 * [Update](#updating-the-server)
-* [Others](#other configurations)
+* [Others](#other-configurations)
 
 
 ## Pre-Installation
