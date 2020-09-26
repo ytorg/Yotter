@@ -192,8 +192,8 @@ server {
     location ~ (/videoplayback|/vi/|/a) {
        proxy_buffering off;
        resolver 1.1.1.1;
-       proxy_pass https://$arg_hostname;
-       proxy_set_header Host $arg_hostname;
+       proxy_pass https://$arg_host;
+       proxy_set_header Host $arg_host;
        add_header Access-Control-Allow-Origin *;
      }
 }
@@ -202,7 +202,7 @@ Make sure to replace `<yourdomain>` by the domain you are willing to use for you
 
 You will also need to change the `</path/to>` after `alias` to fit your system. You have to point to the Yotter folder, in this set up it would be `/home/ubuntu` as it is the location where we cloned the Yotter app. This alias is created to handle static files directly, without forwarding to the application.
 
-Once done, you can run `sudo service nginx reload`
+Once done, you can run `sudo service nginx reload`. If everything so far went OK, you can now set the `nginxVideoStream` to `true` on the `yotter-config.json` file.
 
 Now you need to install an SSL certificate on your server so you can use HTTPS. If you are running Ubuntu 20LTS or already have `snap` installed, you can proceed as follows:
 
