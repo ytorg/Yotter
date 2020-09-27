@@ -5,7 +5,7 @@ FROM base AS builder
 
 WORKDIR /usr/src/app
 
-COPY requirements.txt ./
+COPY ./requirements.txt /usr/src/app
 
 # Build Dependencies
 RUN apk --no-cache add gcc musl-dev libffi-dev openssl-dev libxml2-dev libxslt-dev file llvm-dev make g++

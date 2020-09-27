@@ -12,6 +12,7 @@ When you self-host you make internet stronger and more censorship resistant. If 
     * [Docker Installation](#docker)
     * [Manual Installation](#manual-installation)
 * [Nginx and HTTPS](#nginx-set-up-and-HTTPS)
+* [Configure the server](#configure-the-server)
 * [Update](#updating-the-server)
 * [Others](#other-configurations)
 
@@ -214,6 +215,22 @@ Now we will run certbot and we need to tell that we run an nginx server. Here yo
 
 
 [Follow this instructions to install certbot and generate an ssl certificate so your server can use HTTPS](https://certbot.eff.org/lets-encrypt/ubuntufocal-nginx)
+
+## Configure the server
+You will find in the root folder of the project a file named `yotter-config.json`. This is the global config file for the Yotter server.
+
+Currently available config is:
+* **serverName**: Name of the server. Format: `example.com`
+* **nitterInstance**: Nitter instance that will be used when fetching Twitter content. Format must be `https://<NitterInstance.tld>/`
+* **maxInstanceUsers**: Max users on the instance. When set to `0` it closes registrations.
+* **serverLocation**: Location of the server.
+* **restrictPublicUsage**: When set to `false` the instance allows non-registered users to use some routes (i.e /watch?v=..., /ytsearch, /channel...). See [this section](https://github.com/pluja/Yotter/blob/dev-indep/SELF-HOSTING.md#removing-log-in-restrictions)
+* **nginxVideoStream**: Wether or not to use Nginx as streaming engine. It is recommended for public instances. [See this link]()
+* **maintenance_mode**: Activates a message on the server warning users of maintenance mode.
+* **show_admin_message**: Shows a message from the admin with title as `admin_message_title` and body as `admin_message`
+* **admin_user**: Username of the admin user.
+* **max_old_user_days**: Maximum days for a user to be inactive, otherwise will be deleted if admin uses the action.
+* **donation_url**: Adds a link to a donation method for the instance.
 
 ## Updating the server
 Updating the server should always be pretty easy. These steps need to be run on the Yotter folder and with the python virtual env activated.

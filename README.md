@@ -18,7 +18,6 @@ Yotter is possible thanks to several open-source projects that are listed on the
 * [Public instances](#public-instances)
 * [Self hosting](https://github.com/ytorg/Yotter/blob/dev-indep/SELF-HOSTING.md)
     * [Update the server](https://github.com/ytorg/Yotter/blob/dev-indep/SELF-HOSTING.md#updating-the-server)
-    * [Configure server](#configure-the-server)
 * [Contributing and contact](#contributing)
 * [Powered by](#powered-by)
 * [Donate](#donate)
@@ -49,9 +48,9 @@ I hope that this project can prosperate, gain contributors, new instances and cr
 #### Connections
 Yotter cares about your privacy, and for this it will never make any connection to Twitter or Youtube on the client. Every request is proxied through the Yotter server; video streaming, photos, data gathering, scrapping, etc.
 
-The Yotter server connects to Google (Youtube) and Nitter in order to gather all the necessary data. Then it serves it (proxyed through itself) to the client. This means that as a client, you will never connect to Google - the Yotter server will do it for you. So if you want to set up a Yotter server for privacy reasons I recommend you to set it up on a remote VPS so you don't share your IP with Google or use a VPN on the server. 
+The Yotter server connects to Google (Youtube) and Nitter in order to gather all the necessary data. Then it serves it (proxyed through itself) to the client. This means that as a client, you will never connect to Google/Youtube/Twitter - the Yotter server will do it for you. So if you want to set up a Yotter server for privacy reasons I recommend you to set it up on a remote VPS so you don't share your IP with, or use a VPN on the server. 
 
-If you don't mind exposing your IP making requests to Google then you can set it up wherever you want. Even with this method you will **avoid all trackers, ads, heavy-loaded pages, etc**. - Even with this method, you can stay safe if you use a VPN to hide your IP.
+If you don't mind exposing your IP making requests to Google then you can set it up wherever you want. Even with this method you will **avoid all trackers, ads, heavy-loaded pages, etc**. - you can still stay safe if you use a VPN to hide your IP.
 
 #### Your data
 The only things the database stores are:
@@ -59,39 +58,23 @@ The only things the database stores are:
 * Username
 * List of followed users
 * List of saved posts
-* Some user configurations (Dark theme, etc)
+* Some user configurations
 
 This data will never be used for any other purpose than offering the service to the user. It's not sent anywhere, never.
 
 #### Security
-Only the hash of your password is stored on the database. Also, no personal information of any kind is required nor kept, if a hacker gets access to the database the only thing they could do would be to follow/unfollow some accounts. So there's no motivation in 'hacking' Yotter.
+Only the hash of your password is stored in the database, so no admin can see your plain-text password ever. Also, no personal information of any kind is required nor kept, if a hacker gets access to the database the only thing they could do would be to follow/unfollow some accounts. So there's no motivation in 'hacking' Yotter.
 
-I always recommend self-hosting, as you will be the only person with access to the data.
+I always recommend self-hosting, as you will be the only person with access to your data.
 
 > Important note: The **client** never connects to Google / Youtube however, the server does in order to gather all the necessary things!
 
 # Public Instances
 | name |server location|max users|registrations|
 | ------------ | ------------ | ------------ |------------|
-| https://yotter.xyz  |Germany| 70 users|<img src="https://yotter.xyz/registrations_status/icon?1" width="17">|
+| https://yotter.xyz  |Germany| 75 users|<img src="https://yotter.xyz/registrations_status/icon?2" width="17">|
 | https://yotter.kavin.rocks/  |India| 100 users |<img src="https://yotter.kavin.rocks/registrations_status/icon?1" width="15">|
 | https://yotter.jank.media/  |Germany| 100 users|<img src="https://yotter.jank.media/registrations_status/icon?1" width="15">|
-
-## Configure the server
-You will find in the root folder of the project a file named `yotter-config.json`. This is the global config file for the Yotter server.
-
-Currently available config is:
-* **serverName**: Name of the server. Format: `example.com`
-* **nitterInstance**: Nitter instance that will be used when fetching Twitter content. Format must be `https://<NitterInstance.tld>/`
-* **maxInstanceUsers**: Max users on the instance. When set to `0` it closes registrations.
-* **serverLocation**: Location of the server.
-* **restrictPublicUsage**: When set to `false` the instance allows non-registered users to use some routes (i.e /watch?v=..., /ytsearch, /channel...). See [this section](https://github.com/pluja/Yotter/blob/dev-indep/SELF-HOSTING.md#removing-log-in-restrictions)
-* **nginxVideoStream**: Wether or not to use Nginx as streaming engine. It is recommended for public instances. [See this link]()
-* **maintenance_mode**: Activates a message on the server warning users of maintenance mode.
-* **show_admin_message**: Shows a message from the admin with title as `admin_message_title` and body as `admin_message`
-* **admin_user**: Username of the admin user.
-* **max_old_user_days**: Maximum days for a user to be inactive, otherwise will be deleted if admin uses the action.
-* **donation_url**: Adds a link to a donation method for the instance.
 
 # Contributing
 Contributors are always welcome. You can help in many ways: Coding, organizing, designing, [donating](#donate), maintaining... You choose what you want to help with!
