@@ -12,7 +12,7 @@ When you self-host you make internet stronger and more censorship resistant. If 
     * [Docker Installation](#docker)
     * [Manual Installation](#manual-installation)
 * [Nginx and HTTPS](#nginx-set-up-and-HTTPS)
-* [Configure the server](#configrue-the-server)
+* [Configure the server](#configure-the-server)
 * [Update](#updating-the-server)
 * [Others](#other-configurations)
 
