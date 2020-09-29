@@ -455,7 +455,7 @@ def settings():
     }
     return render_template('settings.html', info=instanceInfo, config=config, admin=current_user.is_admin)
 
-@app.route('/clear_inactive_users/<phash>')
+'''@app.route('/clear_inactive_users/<phash>')
 @login_required
 def clear_inactive_users(phash):
     ahash = User.query.filter_by(username=config['admin_user']).first().password_hash
@@ -474,7 +474,7 @@ def clear_inactive_users(phash):
                 db.session.commit()
     else:
         flash("You must be admin for this action")
-    return redirect(request.referrer)
+    return redirect(request.referrer)'''
 
 @app.route('/export')
 @login_required
