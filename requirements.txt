@@ -19,7 +19,7 @@ Flask-SQLAlchemy==2.4.4
 Flask-WTF==0.14.3
 future==0.18.2
 gevent==20.9.0
-greenlet==0.4.16
+greenlet==0.4.17
 idna==2.10
 isort==5.5.3
 itsdangerous==1.1.0
