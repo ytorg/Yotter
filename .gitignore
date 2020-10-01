@@ -153,3 +153,7 @@ README.md
 /misc
 misc/*
 /misc/*
+app/cache/*
+app/cache
+./app/cache/*
+./app/cache

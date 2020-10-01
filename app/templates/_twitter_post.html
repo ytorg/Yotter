@@ -23,7 +23,7 @@
             <p>{{post.content}}</p>
         </div>
         <div class="extra content">
-            {% if post.attachedImg != "" %}
+            {% if post.attachedImg %}
                 <img alt="Image attachment" class="ui centered medium image" src="{{post.attachedImg}}">
             {% endif %}
             {% if post.isReply %}
@@ -33,7 +33,7 @@
                         <div class="meta">{{post.replyingUser}}</div>
                         <div class="description break-word">
                         {{post.replyingTweetContent}}
-                        {% if post.replyAttachedImg != "" %}
+                        {% if post.replyAttachedImg %}
                             <img alt="Image attachment" class="ui centered medium image" src="{{post.replyAttachedImg}}">
                         {% endif %}
                         </div>

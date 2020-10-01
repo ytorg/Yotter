@@ -10,6 +10,7 @@ from werkzeug.utils import secure_filename
 from youtube_search import YoutubeSearch
 from werkzeug.urls import url_parse
 from youtube_dl import YoutubeDL
+from flask_caching import Cache
 from numerize import numerize
 from bs4 import BeautifulSoup
 from xml.dom import minidom
@@ -23,11 +24,16 @@ import bleach
 import urllib
 import math
 import json
+import glob
 import re
+import os
 #########################################
 from youtube_data import videos as ytvids
 from youtube_data import search as yts
 #########################################
+
+cache = Cache(config={'CACHE_TYPE': 'simple'})
+cache.init_app(app)
 ##########################
 #### Config variables ####
 ##########################
@@ -55,6 +61,7 @@ def before_request():
 @app.route('/')
 @app.route('/index')
 @login_required
+@cache.cached(timeout=50, key_prefix='home')
 def index():
     return render_template('home.html', config=config)
 
@@ -63,25 +70,41 @@ def index():
 @login_required
 def twitter(page=0):
     page = int(page)
-    start_time = time.time()
     followingList = current_user.twitter_following_list()
     followCount = len(followingList)
     posts = []
     avatarPath = "img/avatars/1.png"
     form = EmptyForm()
+
+    if page == 0:
+        cache_file = glob.glob("app/cache/{}*".format(current_user.username))        
+        if cache_file:
+            os.remove(cache_file[0])        
+        feed = getFeed(followingList)
+        cache_file = "{u}_{d}.json".format(u=current_user.username, d=time.strftime("%Y%m%d-%H%M%S"))
+        with open("app/cache/{}".format(cache_file), 'w') as fp:
+            json.dump(feed, fp)
+    else:        
+        try:
+            cache_file = glob.glob("app/cache/{}*".format(current_user.username))[0]
+            with open(cache_file, 'r') as fp:
+                feed = json.load(fp)
+        except:
+            feed = getFeed(followingList)
+            cache_file = "{u}_{d}.json".format(u=current_user.username, d=time.strftime("%Y%m%d-%H%M%S"))
+            with open("app/cache/{}".format(cache_file), 'w') as fp:
+                json.dump(feed, fp)
+
     posts.extend(getFeed(followingList))
-    posts.sort(key=lambda x: x.timeStamp, reverse=True)
+    posts.sort(key=lambda x: datetime.datetime.strptime(x['timeStamp'], '%d/%m/%Y %H:%M:%S'), reverse=True)
 
     # Items range per page
     page_items = page*10
-    tenmore = page_items+10
-    
+    tenmore = page_items+10    
     # Pagination logic
     init_page = page-3
     if init_page < 0:
         init_page = 0
-    print(init_page)
-
     total_pages = page+5
     max_pages = int(math.ceil(len(posts)/10)) # Total number of pages.
     if total_pages > max_pages:
@@ -96,8 +119,7 @@ def twitter(page=0):
     if not posts:
         profilePic = avatarPath
     else:
-        profilePic = posts[0].userProfilePic
-    print("--- {} seconds fetching twitter feed---".format(time.time() - start_time))
+        profilePic = posts[0]['profilePic']
     return render_template('twitter.html', title='Yotter | Twitter', posts=posts, avatar=avatarPath, profilePic = profilePic, followedCount=followCount, form=form, config=config, pages=total_pages, init_page=init_page, actual_page=page)
 
 @app.route('/savePost/<url>', methods=['POST'])
@@ -459,6 +481,7 @@ def logout():
 
 @app.route('/settings')
 @login_required
+@cache.cached(timeout=50, key_prefix='settings')
 def settings():
     active = 0
     users = db.session.query(User).all()
@@ -736,41 +759,41 @@ def getFeed(urls):
                             if post.find('div', attrs={'class':'pinned'}).find('span', attrs={'icon-pin'}):
                                 continue
 
-                        newPost = twitterPost()
-                        newPost.op = post.find('a', attrs={'class':'username'}).text
-                        newPost.twitterName = post.find('a', attrs={'class':'fullname'}).text
-                        newPost.timeStamp = datetime.datetime.strptime(date_time_str, '%d/%m/%Y %H:%M:%S')
-                        newPost.date = post.find('span', attrs={'class':'tweet-date'}).find('a').text
-                        newPost.content = Markup(post.find('div',  attrs={'class':'tweet-content'}))
+                        newPost = {}
+                        newPost["op"] = post.find('a', attrs={'class':'username'}).text
+                        newPost["twitterName"] = post.find('a', attrs={'class':'fullname'}).text
+                        newPost["timeStamp"] = date_time_str
+                        newPost["date"] = post.find('span', attrs={'class':'tweet-date'}).find('a').text
+                        newPost["content"] = Markup(post.find('div',  attrs={'class':'tweet-content'}))
                         
                         if post.find('div', attrs={'class':'retweet-header'}):
-                            newPost.username = post.find('div', attrs={'class':'retweet-header'}).find('div', attrs={'class':'icon-container'}).text
-                            newPost.isRT = True
+                            newPost["username"] = post.find('div', attrs={'class':'retweet-header'}).find('div', attrs={'class':'icon-container'}).text
+                            newPost["isRT"] = True
                         else:
-                            newPost.username = newPost.op
-                            newPost.isRT = False
+                            newPost["username"] = newPost["op"]
+                            newPost["isRT"] = False
                         
-                        newPost.profilePic = NITTERINSTANCE+post.find('a', attrs={'class':'tweet-avatar'}).find('img')['src'][1:]
-                        newPost.url = NITTERINSTANCE + post.find('a', attrs={'class':'tweet-link'})['href'][1:]
+                        newPost["profilePic"] = NITTERINSTANCE+post.find('a', attrs={'class':'tweet-avatar'}).find('img')['src'][1:]
+                        newPost["url"] = NITTERINSTANCE + post.find('a', attrs={'class':'tweet-link'})['href'][1:]
                         if post.find('div', attrs={'class':'quote'}):
-                            newPost.isReply = True
+                            newPost["isReply"] = True
                             quote = post.find('div', attrs={'class':'quote'})
                             if quote.find('div',  attrs={'class':'quote-text'}):
-                                newPost.replyingTweetContent = Markup(quote.find('div',  attrs={'class':'quote-text'}))
+                                newPost["replyingTweetContent"] = Markup(quote.find('div',  attrs={'class':'quote-text'}))
                                 
                             if quote.find('a', attrs={'class':'still-image'}):
-                                newPost.replyAttachedImg = NITTERINSTANCE+quote.find('a', attrs={'class':'still-image'})['href'][1:]
+                                newPost["replyAttachedImg"] = NITTERINSTANCE+quote.find('a', attrs={'class':'still-image'})['href'][1:]
                             
                             if quote.find('div', attrs={'class':'unavailable-quote'}):
-                                newPost.replyingUser="Unavailable"
+                                newPost["replyingUser"]="Unavailable"
                             else:
-                                newPost.replyingUser=quote.find('a',  attrs={'class':'username'}).text
+                                newPost["replyingUser"]=quote.find('a',  attrs={'class':'username'}).text
                             post.find('div', attrs={'class':'quote'}).decompose()
 
                         if post.find('div',  attrs={'class':'attachments'}):
                             if not post.find(class_='quote'):
                                 if  post.find('div',  attrs={'class':'attachments'}).find('a', attrs={'class':'still-image'}):
-                                    newPost.attachedImg = NITTERINSTANCE + post.find('div',  attrs={'class':'attachments'}).find('a')['href'][1:]
+                                    newPost["attachedImg"] = NITTERINSTANCE + post.find('div',  attrs={'class':'attachments'}).find('a')['href'][1:]
                         feedPosts.append(newPost)
     return feedPosts
 
