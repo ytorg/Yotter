@@ -81,7 +81,7 @@ def twitter(page=0):
     if init_page < 0:
         init_page = 0
     print(init_page)
-    
+
     total_pages = page+5
     max_pages = int(math.ceil(len(posts)/10)) # Total number of pages.
     if total_pages > max_pages:
@@ -98,7 +98,7 @@ def twitter(page=0):
     else:
         profilePic = posts[0].userProfilePic
     print("--- {} seconds fetching twitter feed---".format(time.time() - start_time))
-    return render_template('twitter.html', title='Yotter | Twitter', posts=posts, avatar=avatarPath, profilePic = profilePic, followedCount=followCount, form=form, config=config, pages=total_pages, init_page=init_page)
+    return render_template('twitter.html', title='Yotter | Twitter', posts=posts, avatar=avatarPath, profilePic = profilePic, followedCount=followCount, form=form, config=config, pages=total_pages, init_page=init_page, actual_page=page)
 
 @app.route('/savePost/<url>', methods=['POST'])
 @login_required
