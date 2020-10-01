@@ -69,12 +69,12 @@ def index():
 @app.route('/twitter/<page>')
 @login_required
 def twitter(page=0):
-    page = int(page)
     followingList = current_user.twitter_following_list()
-    followCount = len(followingList)
-    posts = []
-    avatarPath = "img/avatars/1.png"
     form = EmptyForm()
+    followCount = len(followingList)
+    page = int(page)
+    avatarPath = "img/avatars/1.png"
+    posts = []
 
     if page == 0:
         cache_file = glob.glob("app/cache/{}*".format(current_user.username))        
@@ -95,7 +95,7 @@ def twitter(page=0):
             with open("app/cache/{}".format(cache_file), 'w') as fp:
                 json.dump(feed, fp)
 
-    posts.extend(getFeed(followingList))
+    posts.extend(feed)
     posts.sort(key=lambda x: datetime.datetime.strptime(x['timeStamp'], '%d/%m/%Y %H:%M:%S'), reverse=True)
 
     # Items range per page
