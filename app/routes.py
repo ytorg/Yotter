@@ -59,8 +59,10 @@ def index():
     return render_template('home.html', config=config)
 
 @app.route('/twitter')
+@app.route('/twitter/<page>')
 @login_required
-def twitter():
+def twitter(page=0):
+    page = int(page)
     start_time = time.time()
     followingList = current_user.twitter_following_list()
     followCount = len(followingList)
@@ -69,12 +71,21 @@ def twitter():
     form = EmptyForm()
     posts.extend(getFeed(followingList))
     posts.sort(key=lambda x: x.timeStamp, reverse=True)
+
+    npage = page*10
+    tenmore = npage+10
+    pages = int(math.ceil(len(posts)/10))
+    if posts and len(posts) > tenmore:
+        posts = posts[npage:tenmore]
+    else:
+        posts = posts[npage:]
+
     if not posts:
         profilePic = avatarPath
     else:
         profilePic = posts[0].userProfilePic
     print("--- {} seconds fetching twitter feed---".format(time.time() - start_time))
-    return render_template('twitter.html', title='Yotter | Twitter', posts=posts, avatar=avatarPath, profilePic = profilePic, followedCount=followCount, form=form, config=config)
+    return render_template('twitter.html', title='Yotter | Twitter', posts=posts, avatar=avatarPath, profilePic = profilePic, followedCount=followCount, form=form, config=config, pages=pages, actual_page=page)
 
 @app.route('/savePost/<url>', methods=['POST'])
 @login_required

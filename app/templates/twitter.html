@@ -25,4 +25,19 @@
             </a>
         </div>
     </div>
+    <div class="text container center aligned">
+        <div class="ui centered pagination menu">
+            {%for page in range(1, pages)%}
+                {% if page == actual_page%}
+                    <a href="/twitter/{{page}}" class="active item">
+                        {{page}}
+                    </a>
+                {% else %}
+                    <a href="/twitter/{{page}}" class="item">
+                        {{page}}
+                    </a>
+                {% endif %}
+            {% endfor %}
+        </div>
+    </div>
 {% endblock %}
