@@ -20,7 +20,7 @@
             {%endif%}
         </div>
         <div class="description break-word">
-            <p>{{post.content}}</p>
+            <p>{{post.content | safe}}</p>
         </div>
         <div class="extra content">
             {% if post.attachedImg %}
@@ -32,7 +32,7 @@
                         <div class="header">{{post.replyingUser}}</div>
                         <div class="meta">{{post.replyingUser}}</div>
                         <div class="description break-word">
-                        {{post.replyingTweetContent}}
+                        {{post.replyingTweetContent | safe}}
                         {% if post.replyAttachedImg %}
                             <img alt="Image attachment" class="ui centered medium image" src="{{post.replyAttachedImg}}">
                         {% endif %}
