@@ -29,7 +29,8 @@ RUN flask db init \
   && flask db migrate \
   && flask db upgrade
 
-CMD flask db migrate \
+CMD flask db stamp head \
+  && flask db migrate \
   && flask db upgrade \
   && gunicorn -b 0.0.0.0:5000 -w 4 yotter:app
 
