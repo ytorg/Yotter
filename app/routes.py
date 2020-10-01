@@ -72,20 +72,33 @@ def twitter(page=0):
     posts.extend(getFeed(followingList))
     posts.sort(key=lambda x: x.timeStamp, reverse=True)
 
-    npage = page*10
-    tenmore = npage+10
-    pages = int(math.ceil(len(posts)/10))
+    # Items range per page
+    page_items = page*10
+    tenmore = page_items+10
+    
+    # Pagination logic
+    init_page = page-3
+    if init_page < 0:
+        init_page = 0
+    print(init_page)
+    
+    total_pages = page+5
+    max_pages = int(math.ceil(len(posts)/10)) # Total number of pages.
+    if total_pages > max_pages:
+        total_pages = max_pages
+
+    # Posts to render
     if posts and len(posts) > tenmore:
-        posts = posts[npage:tenmore]
+        posts = posts[page_items:tenmore]
     else:
-        posts = posts[npage:]
+        posts = posts[page_items:]
 
     if not posts:
         profilePic = avatarPath
     else:
         profilePic = posts[0].userProfilePic
     print("--- {} seconds fetching twitter feed---".format(time.time() - start_time))
-    return render_template('twitter.html', title='Yotter | Twitter', posts=posts, avatar=avatarPath, profilePic = profilePic, followedCount=followCount, form=form, config=config, pages=pages, actual_page=page)
+    return render_template('twitter.html', title='Yotter | Twitter', posts=posts, avatar=avatarPath, profilePic = profilePic, followedCount=followCount, form=form, config=config, pages=total_pages, init_page=init_page)
 
 @app.route('/savePost/<url>', methods=['POST'])
 @login_required

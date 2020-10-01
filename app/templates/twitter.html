@@ -27,7 +27,7 @@
     </div>
     <div class="text container center aligned">
         <div class="ui centered pagination menu">
-            {%for page in range(1, pages)%}
+            {%for page in range(init_page, pages)%}
                 {% if page == actual_page%}
                     <a href="/twitter/{{page}}" class="active item">
                         {{page}}
