@@ -21,8 +21,6 @@ services:
       DATABASE_URL: mysql+pymysql://yotter:changeme@mariadb:3306/yotter
     depends_on:
       - mariadb
-    ports:
-      - "5000:5000"
     volumes:
      - migrations:/usr/src/app/migrations
      - ./yotter-config.json:/usr/src/app/yotter-config.json
