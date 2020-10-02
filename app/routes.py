@@ -100,7 +100,7 @@ def twitter(page=0):
 
     # Items range per page
     page_items = page*10
-    tenmore = page_items+10    
+    tenmore = page_items+16 
     # Pagination logic
     init_page = page-3
     if init_page < 0:
