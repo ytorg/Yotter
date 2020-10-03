@@ -47,7 +47,6 @@ YOUTUBERSS = "https://www.youtube.com/feeds/videos.xml?channel_id="
 ##########################
 #### Global variables ####
 ##########################
-ALLOWED_EXTENSIONS = {'json', 'db'}
 
 #########################
 #### Twitter Logic ######
@@ -296,27 +295,33 @@ def ytsearch():
 def ytfollow(channelId):
     form = EmptyForm()
     if form.validate_on_submit():
-        r = followYoutubeChannel(channelId)            
+        r = followYoutubeChannel(channelId)
     return redirect(request.referrer)
 
 def followYoutubeChannel(channelId):
-    channelData = YoutubeSearch.channelInfo(channelId, False)
     try:
-        if not current_user.is_following_yt(channelId):
-            follow = youtubeFollow()
-            follow.channelId = channelId
-            follow.channelName = channelData[0]['name']
-            follow.followers.append(current_user)
-            db.session.add(follow)
-            db.session.commit()
-            flash("{} followed!".format(channelData[0]['name']))
-            return True
-        else:
+        channelData = YoutubeSearch.channelInfo(channelId, False)
+        try:
+            if not current_user.is_following_yt(channelId):
+                follow = youtubeFollow()
+                follow.channelId = channelId
+                follow.channelName = channelData[0]['name']
+                follow.followers.append(current_user)
+                db.session.add(follow)
+                db.session.commit()
+                flash("{} followed!".format(channelData[0]['name']))
+                return True
+            else:
+                return False
+        except Exception as e:
+            print(e)
+            flash("Youtube: Couldn't follow {}. Already followed?".format(channelData[0]['name']))
             return False
-    except Exception as e:
-        print(e)
-        flash("Youtube: Couldn't follow {}. Already followed?".format(channelData[0]['name']))
+    except KeyError as ke:
+        print("KeyError: {}:'{}' could not be found".format(ke, channelId))
+        flash("Youtube: ChannelId '{}' is not valid".format(channelId))
         return False
+
 
 @app.route('/ytunfollow/<channelId>', methods=['POST'])
 @login_required
@@ -571,16 +576,12 @@ def importdata():
         if file.filename == '':
             flash('No selected file')
             return redirect(request.referrer)
-        if file and allowed_file(file.filename) or 'subscription_manager' in file.filename:
+        else:
             option = request.form['import_format']
             if option == 'yotter':
                 importYotterSubscriptions(file)
-            elif option == 'newpipe':
-                importNewPipeSubscriptions(file)
             elif option == 'youtube':
                 importYoutubeSubscriptions(file)
-            elif option == 'freetube':
-                importFreeTubeSubscriptions(file)
             return redirect(request.referrer)
 
     return redirect(request.referrer)
@@ -594,36 +595,24 @@ def deleteme():
     logout_user()
     return redirect(url_for('index'))
 
+def importYoutubeSubscriptions(file):
+    filename = secure_filename(file.filename)
+    try:
+        data = re.findall('(UC[a-zA-Z0-9_-]{22})|(?<=user/)[a-zA-Z0-9_-]+', file.read().decode('utf-8'))
+        for acc in data:
+            r = followYoutubeChannel(acc)
+    except Exception as e:
+        print(e)
+        flash("File is not valid.")
 
 def importYotterSubscriptions(file):
     filename = secure_filename(file.filename)
     data = json.load(file)
     for acc in data['twitter']:
         r = followTwitterAccount(acc['username'])
-    
+
     for acc in data['youtube']:
         r = followYoutubeChannel(acc['channelId'])
-
-def importNewPipeSubscriptions(file):
-    filename = secure_filename(file.filename)
-    data = json.load(file)
-    for acc in data['subscriptions']:
-        r = followYoutubeChannel(re.search('(UC[a-zA-Z0-9_-]{22})|(?<=user\/)[a-zA-Z0-9_-]+', acc['url']).group())
-
-def importYoutubeSubscriptions(file):
-    filename = secure_filename(file.filename)
-    itemlist = minidom.parse(file).getElementsByTagName('outline')
-    for item in itemlist[1:]:
-        r = followYoutubeChannel(re.search('UC[a-zA-Z0-9_-]{22}', item.attributes['xmlUrl'].value).group())
-
-def importFreeTubeSubscriptions(file):
-    filename = secure_filename(file.filename)
-    data = re.findall('UC[a-zA-Z0-9_-]{22}', file.read().decode('utf-8'))
-    for acc in data:
-        r = followYoutubeChannel(acc)
-
-def allowed_file(filename):
-    return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
