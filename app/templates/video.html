@@ -37,7 +37,7 @@
         </div>
         <div class="ui horizontal segments">
           <div class="center aligned ui segment">
-            <a target="_blank" href="{{ url_for('channel', id=video.channelId)}}">
+            <a href="{{ url_for('channel', id=video.channelId)}}">
                 {%if video.author.__len__() > 8%}
                     <i class="user icon"></i> {{video.author[0:10]+'...'}}
                 {%else%}

@@ -24,17 +24,17 @@
         </div>
         <div class="extra content">
             {% if post.attachedImg %}
-                <a href="{{post.attachedImg}}"><img alt="Image attachment" class="ui centered fluid rounded medium image" src="{{post.attachedImg}}"></a>
+                <a href="{{post.attachedImg}}"><img alt="Image attachment" class="ui centered fluid rounded medium image" src="{{post.attachedImg}}">
             {% endif %}
             {% if post.isReply %}
                 <div class="ui card">
                     <div class="content">
-                        <div class="header"><a href="/{{post.replyingUser}}">{{post.replyingUser}}</a></div>
-                        <!--<div class="meta">{{post.replyingUser}}</div>-->
+                        <div class="header"><a href="/post.replyingUser">{{post.replyingUser}}</a></div>
+                        <div class="meta">{{post.replyingUser}}</div>
                         <div class="description break-word">
                         {{post.replyingTweetContent | safe}}
                         {% if post.replyAttachedImg %}
-                            <a href="{{post.attachedImg}}"><img alt="Image attachment" class="ui centered fluid rounded medium image" src="{{post.replyAttachedImg}}"></a>
+                            <a target="_blank" href="{{post.replyAttachedImg}}"><img alt="Image attachment" class="ui centered fluid rounded medium image" src="{{post.replyAttachedImg}}"></a>
                         {% endif %}
                         </div>
                     </div>
