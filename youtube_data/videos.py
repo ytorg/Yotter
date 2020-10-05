@@ -122,54 +122,55 @@ def get_video_primary_info(datad, datai):
     contents = datai["contents"]["twoColumnWatchNextResults"]['results']['results']['contents']
     item = get_renderer_key(contents, "videoPrimaryInfoRenderer")
     details = datad['videoDetails']
-    try:
-        isUpcoming = details['isUpcoming']
-        views = "Scheduled video"
-    except:
-        isUpcoming = False
+
     
-    if not isUpcoming:
-        views = details['viewCount']
-    
-    if isUpcoming:
-        premieres = item['dateText']['simpleText']
-    else:
-        premieres = False
     
     ydl = YoutubeDL()
-    try:
+    data = ydl.extract_info(details['videoId'], False)
+    while not data['formats']:
         data = ydl.extract_info(details['videoId'], False)
 
-        ## Get audio
-        audio_urls = []
-        for f in data['formats']:
-            for fid in _formats:
-                if f['format_id'] == fid:
-                    try:
-                        if 'audio' in _formats[fid]['format_note']:
-                            aurl = f['url']
-                            fnote = _formats[fid]['format_note']
-                            bitrate = _formats[fid]['audio_bitrate']
-                            audio_inf = {
-                                "url":aurl,
-                                "id":fnote,
-                                "btr": bitrate
-                            }
-                            audio_urls.append(audio_inf)
-                    except:
-                        continue
-        ## Get video
-        if not details['isLiveContent']:
-            url = data['formats'][-1]['url']
-        else:
-            url = data['formats'][-1]['url']
-    except:
-        url = "#"
-    try:
-        if isUpcoming:
-            audioURL = False
-        else:
+    ## Get audio
+    audio_urls = []
+    for f in data['formats']:
+        for fid in _formats:
+            if f['format_id'] == fid:
+                try:
+                    if 'audio' in _formats[fid]['format_note']:
+                        aurl = f['url']
+                        fnote = _formats[fid]['format_note']
+                        bitrate = _formats[fid]['audio_bitrate']
+                        audio_inf = {
+                            "url":aurl,
+                            "id":fnote,
+                            "btr": bitrate
+                        }
+                        audio_urls.append(audio_inf)
+                except:
+                    continue
+    
+    # Check if is Livestream        
+    if details.get('isLive') and details['lengthSeconds'] == '0':
+        isLive = True
+    else:
+        isLive = False
+
+    # Check if is a Scheduled video
+    if details.get('isUpcoming'):
+        isUpcoming = True
+        views = "Scheduled video"
+        premieres = item['dateText']['simpleText']
+        audioURL = False
+    else:
+        isUpcoming = False
+        premieres = False
+        views = details['viewCount']
+        if not isLive:
             audioURL = audio_urls[-1]
+        else:
+            audioURL = "#"
+
+    try:            
         primaryInfo = {
             "id": details['videoId'],
             "title": details['title'],
@@ -180,20 +181,17 @@ def get_video_primary_info(datad, datai):
             "rating": details['averageRating'],
             "author": details['author'],
             "isPrivate": details['isPrivate'],
-            "isLive": details['isLiveContent'],
+            "isLive": isLive,
             "isUpcoming": isUpcoming,
-            "allowRatings": details['allowRatings'],
             "url":url,
+            "allowRatings": details['allowRatings'],
+            "urls":data['formats'],
             "thumbnail": details['thumbnail']['thumbnails'][0]['url'],
             "audio": audioURL,
             "premieres": premieres
         }
     except:
         # If error take only most common items
-        if isUpcoming:
-            audioURL = False
-        else:
-            audioURL = audio_urls[-1]
         primaryInfo = {
             "id": details['videoId'],
             "title": details['title'],
@@ -204,10 +202,10 @@ def get_video_primary_info(datad, datai):
             "rating": details['averageRating'],
             "author": details['author'],
             "isPrivate":False,
-            "isLive":details['isLiveContent'],
+            "isLive":isLive,
             "isUpcoming":isUpcoming,
             "allowRatings":True,
-            "url":url,
+            "urls":data['formats'],
             "thumbnail": details['thumbnail']['thumbnails'][0]['url'],
             "audio": audioURL,
             "premieres": premieres

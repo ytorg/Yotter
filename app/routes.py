@@ -372,16 +372,28 @@ def channel(id):
 
     return render_template('channel.html', form=form, btform=button_form, channel=channelData[0], videos=channelData[1], restricted=config['restrictPublicUsage'], config=config)
 
+def get_best_urls(urls):
+    '''Gets URLS in youtube format (format_id, url, height) and returns best ones for yotter'''
+    best_formats = ["22", "18", "34", "35", "36", "37", "38", "43", "44", "45", "46"]
+    best_urls=[]
+    for url in urls:
+        for f in best_formats:
+            if url['format_id'] == f:
+                best_urls.append(url)
+    return best_urls
+
 @app.route('/watch', methods=['GET'])
 @login_required
 def watch():
     id = request.args.get('v', None)
     info = ytvids.get_video_info(id)
-    hostName = urllib.parse.urlparse(info['video']['url']).netloc
     # Use nginx
     try:
-        url = info['video']['url'].replace("https://{}".format(hostName), "")+"&host="+hostName
+        for url in info['video']['urls']:
+            hostName = urllib.parse.urlparse(url['url']).netloc
+            url['url'] = url['url'].replace("https://{}".format(hostName), "")+"&host="+hostName
     except:
+        hostName = "#"
         url = "#"
 
     try:
@@ -389,6 +401,11 @@ def watch():
         audioUrl = info['video']['audio']['url'].replace("https://{}".format(audioHostName), "")+"&host="+audioHostName
     except:
         audioUrl = False
+    
+    if info['video']['isUpcoming']:
+        vid_urls=[]
+    else:
+        vid_urls = get_best_urls(info['video']['urls'])
 
     video={
         'title':info['video']['title'],
@@ -399,8 +416,6 @@ def watch():
         'channelId': info['owner']['id'],
         'id':id,
         'averageRating': str((float(info['video']['rating'])/5)*100),
-        'nginxUrl': url,
-        'videoUrl': info['video']['url'],
         'videoHostName': hostName,
         'isLive': info['video']['isLive'],
         'isUpcoming': info['video']['isUpcoming'],
@@ -408,7 +423,7 @@ def watch():
         'nginxAudioUrl': audioUrl,
         'premieres': info['video']['premieres']
     }
-    return render_template("video.html", video=video, title='{}'.format(video['title']), config=config)
+    return render_template("video.html", video=video, title='{}'.format(video['title']), config=config, urls=vid_urls)
 
 def markupString(string):
     string = string.replace("\n\n", "<br><br>").replace("\n", "<br>")
