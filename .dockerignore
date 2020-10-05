@@ -1,5 +1,7 @@
 .git
+.github
 .gitignore
+cache
 Dockerfile
 docker-compose.yml
 LICENSE
