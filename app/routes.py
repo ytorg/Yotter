@@ -397,8 +397,8 @@ def watch():
         url = "#"
 
     try:
-        audioHostName = urllib.parse.urlparse(info['video']['audio']['url'])
-        audioUrl = info['video']['audio']['url'].replace("https://{}".format(audioHostName), "")+"&host="+audioHostName
+        audioHostName = urllib.parse.urlparse(info['video']['audio']).netloc
+        audioUrl = info['video']['audio'].replace("https://{}".format(audioHostName), "")+"&host="+audioHostName
     except:
         audioUrl = False
     

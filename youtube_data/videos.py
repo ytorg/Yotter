@@ -130,7 +130,7 @@ def get_video_primary_info(datad, datai):
         isLive = False
 
     # Check if is a Scheduled video
-    if details.get('isUpcoming'):
+    if details.get('isUpcoming') == True:
         isUpcoming = True
         views = "Scheduled video"
         premieres = item['dateText']['simpleText']
@@ -142,7 +142,7 @@ def get_video_primary_info(datad, datai):
     
     ydl = YoutubeDL()
     
-    if not isUpcoming:
+    if isUpcoming == False:
         data = ydl.extract_info(details['videoId'], False)
         while not data['formats']:
             data = ydl.extract_info(details['videoId'], False)
@@ -167,9 +167,9 @@ def get_video_primary_info(datad, datai):
                     except:
                         continue
         if not isLive:
-                audioURL = audio_urls[-1]
+            audioURL = audio_urls[-1]['url']
         else:
-            audioURL = "#"
+            audioURL = False
     else: # If it is a scheduled video
         audio_urls = False
         formats = False
