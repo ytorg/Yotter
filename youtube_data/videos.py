@@ -139,10 +139,6 @@ def get_video_primary_info(datad, datai):
         isUpcoming = False
         premieres = False
         views = details['viewCount']
-        if not isLive:
-                audioURL = audio_urls[-1]
-        else:
-            audioURL = "#"
     
     ydl = YoutubeDL()
     
@@ -169,7 +165,11 @@ def get_video_primary_info(datad, datai):
                             }
                             audio_urls.append(audio_inf)
                     except:
-                        continue    
+                        continue
+        if not isLive:
+                audioURL = audio_urls[-1]
+        else:
+            audioURL = "#"
     else: # If it is a scheduled video
         audio_urls = False
         formats = False
