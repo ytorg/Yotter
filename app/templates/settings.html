@@ -31,7 +31,7 @@
         <div class="ui blue segment">
             <i class="large upload middle aligned icon"></i>
             <div class="content">
-                <div class="description"><h5 class="ui header">Import suscription data</h5></div>
+                <div class="description"><h5 class="ui header">Import subscription data</h5></div>
                 <form action = "{{ url_for('importdata') }}" method = "POST" enctype = "multipart/form-data">
                     <input type = "file" name = "file"/>
                     <input type = "submit"/>
@@ -39,14 +39,8 @@
                     <label class="radio-inline">
                         <input type="radio" name="import_format" id="yotter" value="yotter" checked> Yotter
                     </label>
-                    <label class="radio-inline">
-                        <input type="radio" name="import_format" id="newpipe" value="newpipe"> NewPipe
-                    </label>
-                    <label class="radio-inline">
+                    <label class="radio-inline" data-tooltip="Includes FreeTube, Invidious and NewPipe.">
                         <input type="radio" name="import_format" id="youtube" value="youtube"> Youtube
-                    </label>
-                    <label class="radio-inline">
-                        <input type="radio" name="import_format" id="freetube" value="freetube"> FreeTube
                     </label>
                 </form>
             </div>
