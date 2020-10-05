@@ -121,38 +121,8 @@ def get_renderer_key(renderer, key):
 def get_video_primary_info(datad, datai):
     contents = datai["contents"]["twoColumnWatchNextResults"]['results']['results']['contents']
     item = get_renderer_key(contents, "videoPrimaryInfoRenderer")
-    details = datad['videoDetails']
+    details = datad['videoDetails']    
 
-    
-    
-    ydl = YoutubeDL()
-    try:
-        data = ydl.extract_info(details['videoId'], False)
-        while not data['formats']:
-            data = ydl.extract_info(details['videoId'], False)
-    except Exception as e:
-        premieres = e
-        
-
-    ## Get audio
-    audio_urls = []
-    for f in data['formats']:
-        for fid in _formats:
-            if f['format_id'] == fid:
-                try:
-                    if 'audio' in _formats[fid]['format_note']:
-                        aurl = f['url']
-                        fnote = _formats[fid]['format_note']
-                        bitrate = _formats[fid]['audio_bitrate']
-                        audio_inf = {
-                            "url":aurl,
-                            "id":fnote,
-                            "btr": bitrate
-                        }
-                        audio_urls.append(audio_inf)
-                except:
-                    continue
-    
     # Check if is Livestream        
     if details.get('isLive') and details['lengthSeconds'] == '0':
         isLive = True
@@ -170,10 +140,39 @@ def get_video_primary_info(datad, datai):
         premieres = False
         views = details['viewCount']
         if not isLive:
-            audioURL = audio_urls[-1]
+                audioURL = audio_urls[-1]
         else:
             audioURL = "#"
+    
+    ydl = YoutubeDL()
+    
+    if not isUpcoming:
+        data = ydl.extract_info(details['videoId'], False)
+        while not data['formats']:
+            data = ydl.extract_info(details['videoId'], False)
+        formats = data['formats']
 
+        ## Get audio
+        audio_urls = []
+        for f in data['formats']:
+            for fid in _formats:
+                if f['format_id'] == fid:
+                    try:
+                        if 'audio' in _formats[fid]['format_note']:
+                            aurl = f['url']
+                            fnote = _formats[fid]['format_note']
+                            bitrate = _formats[fid]['audio_bitrate']
+                            audio_inf = {
+                                "url":aurl,
+                                "id":fnote,
+                                "btr": bitrate
+                            }
+                            audio_urls.append(audio_inf)
+                    except:
+                        continue    
+    else: # If it is a scheduled video
+        audio_urls = False
+        formats = False
     try:            
         primaryInfo = {
             "id": details['videoId'],
@@ -189,7 +188,7 @@ def get_video_primary_info(datad, datai):
             "isUpcoming": isUpcoming,
             "url":url,
             "allowRatings": details['allowRatings'],
-            "urls":data['formats'],
+            "urls":formats,
             "thumbnail": details['thumbnail']['thumbnails'][0]['url'],
             "audio": audioURL,
             "premieres": premieres
@@ -209,7 +208,7 @@ def get_video_primary_info(datad, datai):
             "isLive":isLive,
             "isUpcoming":isUpcoming,
             "allowRatings":True,
-            "urls":data['formats'],
+            "urls":formats,
             "thumbnail": details['thumbnail']['thumbnails'][0]['url'],
             "audio": audioURL,
             "premieres": premieres
