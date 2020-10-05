@@ -204,11 +204,15 @@ def get_video_owner_info(data):
     item = get_renderer_key(contents, "videoSecondaryInfoRenderer")
     ownerItem = item['owner']['videoOwnerRenderer']
 
+    try:
+        sC = ownerItem['subscriberCountText']['runs'][0]['text']
+    except:
+        sC = "Unknown"
     ownerInfo = {
         "thumbnail": ownerItem['thumbnail']['thumbnails'][0]['url'],
         "username": ownerItem['title']['runs'][0]['text'],
         "id": ownerItem['title']['runs'][0]['navigationEndpoint']['browseEndpoint']['browseId'],
-        "suscriberCount":ownerItem['subscriberCountText']['runs'][0]['text']
+        "suscriberCount":sC
     }
     return ownerInfo
 
