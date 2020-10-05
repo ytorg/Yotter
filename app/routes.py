@@ -98,7 +98,7 @@ def twitter(page=0):
     posts.sort(key=lambda x: datetime.datetime.strptime(x['timeStamp'], '%d/%m/%Y %H:%M:%S'), reverse=True)
 
     # Items range per page
-    page_items = page*10
+    page_items = page*16
     offset = page_items+16 
     # Pagination logic
     init_page = page-3
