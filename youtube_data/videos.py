@@ -131,6 +131,11 @@ def get_video_primary_info(datad, datai):
     if not isUpcoming:
         views = details['viewCount']
     
+    if isUpcoming:
+        premieres = item['dateText']['simpleText']
+    else:
+        premieres = False
+    
     ydl = YoutubeDL()
     try:
         data = ydl.extract_info(details['videoId'], False)
@@ -161,6 +166,10 @@ def get_video_primary_info(datad, datai):
     except:
         url = "#"
     try:
+        if isUpcoming:
+            audioURL = False
+        else:
+            audioURL = audio_urls[-1]
         primaryInfo = {
             "id": details['videoId'],
             "title": details['title'],
@@ -176,10 +185,15 @@ def get_video_primary_info(datad, datai):
             "allowRatings": details['allowRatings'],
             "url":url,
             "thumbnail": details['thumbnail']['thumbnails'][0]['url'],
-            "audio": audio_urls[-1]
+            "audio": audioURL,
+            "premieres": premieres
         }
     except:
         # If error take only most common items
+        if isUpcoming:
+            audioURL = False
+        else:
+            audioURL = audio_urls[-1]
         primaryInfo = {
             "id": details['videoId'],
             "title": details['title'],
@@ -195,7 +209,8 @@ def get_video_primary_info(datad, datai):
             "allowRatings":True,
             "url":url,
             "thumbnail": details['thumbnail']['thumbnails'][0]['url'],
-            "audio": audio_urls[-1]
+            "audio": audioURL,
+            "premieres": premieres
         }
     return primaryInfo
 

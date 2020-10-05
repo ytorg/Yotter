@@ -10,8 +10,9 @@
     </div>
     {% elif video.isUpcoming %}
     <div class="ui center aligned text container">
-        <div class="ui row">
-            <img alt="Empty feed image" class="ui image" src="{{ url_for('static',filename='img/scheduled.png') }}">
+        <div class="ui segment">
+                <h4 class="ui header">SCHEDULED VIDEO</h4>
+                <h5 class="ui header">{{video.premieres}}</h5>
         </div>
     </div>
     {%else%}
