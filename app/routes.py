@@ -283,7 +283,7 @@ def ytsearch():
             if config['nginxVideoStream']:
                 channel['thumbnail'] = channel['thumbnail'].replace("~", "/")
                 hostName = urllib.parse.urlparse(channel['thumbnail']).netloc
-                channel['thumbnail'] = channel['thumbnail'].replace("https://{}".format(hostName), "")+"&host="+hostName
+                channel['thumbnail'] = channel['thumbnail'].replace("https://{}".format(hostName), "")+"?host="+hostName
                 print(channel['thumbnail'])
         return render_template('ytsearch.html', form=form, btform=button_form, results=results, restricted=config['restrictPublicUsage'], config=config)
 
