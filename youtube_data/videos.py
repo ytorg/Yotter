@@ -126,9 +126,13 @@ def get_video_primary_info(datad, datai):
     
     
     ydl = YoutubeDL()
-    data = ydl.extract_info(details['videoId'], False)
-    while not data['formats']:
+    try:
         data = ydl.extract_info(details['videoId'], False)
+        while not data['formats']:
+            data = ydl.extract_info(details['videoId'], False)
+    except Exception as e:
+        premieres = e
+        
 
     ## Get audio
     audio_urls = []
