@@ -267,26 +267,41 @@ def ytfollowing():
     
     return render_template('ytfollowing.html', form=form, channelList=channelList, channelCount=channelCount, config=config)
 
+
 @app.route('/ytsearch', methods=['GET', 'POST'])
 @login_required
 def ytsearch():
     form = ChannelForm()
     button_form = EmptyForm()
-    if form.validate_on_submit():
-        searchTerms = form.channelId.data
-        page = 1
-        autocorrect = 1
+    query = request.args.get('q', None)
+    sort = request.args.get('s', None)
+    if sort != None:
+        sort = int(sort)
+    else:
         sort = 0
+
+    page = request.args.get('p', None)
+    if page == None:
+        page = 1
+
+    if query:
+        autocorrect = 1
         filters = {"time":0, "type":0, "duration":0}
-        results = yts.search_by_terms(searchTerms, page, autocorrect, sort, filters)
+        results = yts.search_by_terms(query, page, autocorrect, sort, filters)
+
+        next_page = "/ytsearch?q={q}&s={s}&p={p}".format(q=query, s=sort, p=int(page)+1)
+        if int(page) == 1:
+            prev_page = "/ytsearch?q={q}&s={s}&p={p}".format(q=query, s=sort, p=1)
+        else:
+            prev_page = "/ytsearch?q={q}&s={s}&p={p}".format(q=query, s=sort, p=int(page)-1)
+
         for channel in results['channels']:
             if config['nginxVideoStream']:
                 channel['thumbnail'] = channel['thumbnail'].replace("~", "/")
                 hostName = urllib.parse.urlparse(channel['thumbnail']).netloc
                 channel['thumbnail'] = channel['thumbnail'].replace("https://{}".format(hostName), "")+"?host="+hostName
                 print(channel['thumbnail'])
-        return render_template('ytsearch.html', form=form, btform=button_form, results=results, restricted=config['restrictPublicUsage'], config=config)
-
+        return render_template('ytsearch.html', form=form, btform=button_form, results=results, restricted=config['restrictPublicUsage'], config=config, npage=next_page, ppage=prev_page)
     else:
         return render_template('ytsearch.html', form=form, results=False)
 
