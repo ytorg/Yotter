@@ -300,7 +300,6 @@ def ytsearch():
                 channel['thumbnail'] = channel['thumbnail'].replace("~", "/")
                 hostName = urllib.parse.urlparse(channel['thumbnail']).netloc
                 channel['thumbnail'] = channel['thumbnail'].replace("https://{}".format(hostName), "")+"?host="+hostName
-                print(channel['thumbnail'])
         return render_template('ytsearch.html', form=form, btform=button_form, results=results, restricted=config['restrictPublicUsage'], config=config, npage=next_page, ppage=prev_page)
     else:
         return render_template('ytsearch.html', form=form, results=False)
@@ -373,7 +372,6 @@ def channel(id):
     channelData = YoutubeSearch.channelInfo(id)
 
     for video in channelData[1]:
-        print(video)
         if config['nginxVideoStream']:
             hostName = urllib.parse.urlparse(video['videoThumb']).netloc
             video['videoThumb'] = video['videoThumb'].replace("https://{}".format(hostName), "").replace("hqdefault", "mqdefault")+"&host="+hostName
@@ -390,6 +388,16 @@ def channel(id):
 def get_best_urls(urls):
     '''Gets URLS in youtube format (format_id, url, height) and returns best ones for yotter'''
     best_formats = ["22", "18", "34", "35", "36", "37", "38", "43", "44", "45", "46"]
+    best_urls=[]
+    for url in urls:
+        for f in best_formats:
+            if url['format_id'] == f:
+                best_urls.append(url)
+    return best_urls
+
+def get_live_urls(urls):
+    '''Gets URLS in youtube format (format_id, url, height) and returns best ones for yotter'''
+    best_formats = ["91", "92", "93", "94", "95", "96"]
     best_urls=[]
     for url in urls:
         for f in best_formats:
@@ -421,6 +429,9 @@ def watch():
         vid_urls=[]
     else:
         vid_urls = get_best_urls(info['video']['urls'])
+    
+    if info['video']['isLive']:
+        vid_urls = get_live_urls(info['video']['urls'])
 
     video={
         'title':info['video']['title'],

@@ -4,9 +4,11 @@
 {% extends "base.html" %}
 {% block content %}
 <div class="ui text container">
-    {% if video.nginxUrl == "#" and video.isLive %}
+    {% if video.nginxUrl == "#" %}
     <div class="ui center aligned text container">
-        <img alt="Empty feed image" class="ui image" src="{{ url_for('static',filename='img/live.png') }}">
+        <div class="ui segment">
+                <h4 class="ui header">ERROR WITH VIDEO</h4>
+        </div>
     </div>
     {% elif video.isUpcoming %}
     <div class="ui center aligned text container">
@@ -16,10 +18,18 @@
         </div>
     </div>
     {% elif video.isLive %}
+    <div class="video-js-responsive-container vjs-hd">
+        <video-js id=live width="1080" class="video-js vjs-default-skin" controls buffered>
+            <source
+            src="{{urls[0]['url']}}"
+            type="application/x-mpegURL">
+        </video-js>
+    </div>
         <div class="ui center aligned text container">
             <div class="ui segment">
-                    <h4 class="ui header">LIVESTREAM VIDEO</h4>
-                    <h5 class="ui header">Livestreams are still not supported on Yotter.</h5>
+                    <h3 class="ui header">LIVESTREAM VIDEO</h3>
+                    <h4 class="ui header">FEATURE AVAILABLE SOON</h4>
+                    <h5 class="ui header">Livestreams are under developent and still not supported on Yotter.</h5>
             </div>
         </div>
     {%else%}
@@ -81,4 +91,9 @@
       </div>
 </div>
 <script src="{{ url_for('static',filename='video.min.js') }}"></script>
+<script src="{{ url_for('static',filename='videojs-http-streaming.min.js')}}"></script>
+<script>
+    var player = videojs('live');
+    player.play();
+</script>
 {% endblock %}
