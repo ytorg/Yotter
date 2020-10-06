@@ -72,9 +72,9 @@ I always recommend self-hosting, as you will be the only person with access to y
 # Public Instances
 | name |server location|max users|registrations|
 | ------------ | ------------ | ------------ |------------|
-| https://yotter.xyz  |Germany| 75 users|<img src="https://yotter.xyz/registrations_status/icon?2" width="17">|
-| https://yotter.kavin.rocks/  |India| 100 users |<img src="https://yotter.kavin.rocks/registrations_status/icon?3" width="15">|
-| https://yotter.jank.media/  |Germany| 100 users|<img src="https://yotter.jank.media/registrations_status/icon?3" width="15">|
+| https://yotter.xyz  |Germany| 85 users|<img src="https://yotter.xyz/registrations_status/icon?3" width="17">|
+| https://yotter.kavin.rocks/  |India| 100 users |<img src="https://yotter.kavin.rocks/registrations_status/icon?4" width="15">|
+| https://yotter.jank.media/  |Germany| 100 users|<img src="https://yotter.jank.media/registrations_status/icon?4" width="15">|
 
 # Contributing
 Contributors are always welcome. You can help in many ways: Coding, organizing, designing, [donating](#donate), maintaining... You choose what you want to help with!
