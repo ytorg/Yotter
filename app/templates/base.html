@@ -45,17 +45,18 @@
 
         {% with messages = get_flashed_messages() %}
         {% if messages %}
-            <div class="ui info message">
-                <div class="header">
-                    Information
+            <div class="text centered container ui">
+                <div class="ui info message">
+                    <div class="header">
+                        Information
+                    </div>
+                    <ul class="list">
+                        {% for message in messages %}
+                            <li>{{ message }}</li>
+                        {% endfor %}
+                    </ul>
                 </div>
-                <ul class="list">
-                    {% for message in messages %}
-                        <li>{{ message }}</li>
-                    {% endfor %}
-                </ul>
             </div>
-            </ul>
         {% endif %}
         {% endwith %}
         

@@ -11,13 +11,13 @@
         </div>
     </div>
     {% endif %}
-    <h2 class="ui centered header">Login</h2>
-    <div class="ui grid">
-    <div class="ui one column stackable center aligned page grid" id="container">
-        <div class="row">
+    <h2 class="ui centered header">LOGIN</h2>
+    <div class="text center aligned container ui" id="container">
+        <div class="text center aligned container ui">
             <form class="ui form" action="" method="post" novalidate>
                 {{ form.hidden_tag() }}
                 <p>
+                    <i class="user icon"></i>
                     {{ form.username.label }}<br>
                     {{ form.username(size=32) }}<br>
                     {% for error in form.username.errors %}
@@ -25,6 +25,7 @@
                     {% endfor %}
                 </p>
                 <p>
+                    <i class="key icon"></i>
                     {{ form.password.label }}<br>
                     {{ form.password(size=32) }}<br>
                     {% for error in form.password.errors %}
@@ -35,11 +36,8 @@
                 <p>{{ form.submit() }}</p>
             </form>
         </div>
-        <div class="row">
-            <div class="ui compact centered message">
-                <p>New user? <a href="{{ url_for('register') }}">Click to Register!</a></p>
-            </div>
+        <div class="text center aligned container ui">
+            <a href="{{ url_for('register') }}"><button class="ui button">Register</button></a>
         </div>
-    </div>
 </div>
 {% endblock %}

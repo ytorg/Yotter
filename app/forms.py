@@ -5,10 +5,11 @@ from app.models import User
 
 
 class LoginForm(FlaskForm):
+    style={'class': 'ui primary button'}
     username = StringField('Username', validators=[DataRequired()])
     password = PasswordField('Password', validators=[DataRequired()])
     remember_me = BooleanField('Remember Me')
-    submit = SubmitField('Sign In')
+    submit = SubmitField('Sign In', render_kw=style)
 
 class SearchForm(FlaskForm):
     username = StringField('Username')
