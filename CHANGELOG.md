@@ -1,12 +1,4 @@
-## Unreleased
-- [ ] Configuration page: Disable retweets.
-- [ ] Configuration page: Disable loading media content.
-- [ ] Configuration page: Dark mode
-
-##### Long term
-- Share a tweet.
-- Play tweet videos from Parasitter.
-- Create following lists.
+## Changelog is not updated anymore. [Check commits](https://github.com/ytorg/Yotter/commits/dev-indep) to see new features / fixes.
 
 ## [0.2.7] - 2020.09.26
 ### How to update:
