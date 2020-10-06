@@ -1,16 +1,6 @@
 {% extends "base.html" %}
 
 {% block content %}
-    {% if config.show_admin_message %}
-    <div class="text container ui">
-        <div class="ui warning message">
-            <div class="header">
-                {{config.admin_message_title}}
-            </div>
-                {{config.admin_message}}
-        </div>
-    </div>
-    {% endif %}
     <h2 class="ui centered header">LOGIN</h2>
     <div class="text center aligned container ui" id="container">
         <div class="text center aligned container ui">
