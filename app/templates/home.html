@@ -37,6 +37,17 @@
     }
 </style>
 
+{% if config.show_admin_message %}
+    <div class="text container ui">
+        <div class="ui warning message">
+            <div class="header">
+                {{config.admin_message_title}}
+            </div>
+                {{config.admin_message}}
+        </div>
+    </div>
+{% endif %}
+
 <div style="margin: 2em" class="ui one column centered grid">
     <div class="row">
         <div class="column">

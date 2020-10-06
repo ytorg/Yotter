@@ -23,14 +23,6 @@
                 </div>
             </div>
         {% endif %}
-        {% if config.show_admin_message %}
-            <div class="ui warning message">
-                <div class="header">
-                    {{config.admin_message_title}}
-                </div>
-                    {{config.admin_message}}
-            </div>
-        {% endif %}
         
         <div class="ui icon menu overflow-auto">
             <a href="{{ url_for('index') }}"><div class="item">
