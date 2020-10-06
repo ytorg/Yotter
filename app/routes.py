@@ -75,14 +75,19 @@ def twitter(page=0):
     avatarPath = "img/avatars/1.png"
     posts = []
 
-    if page == 0:
-        cache_file = glob.glob("app/cache/{}*".format(current_user.username))        
+    cache_file = glob.glob("app/cache/{}_*".format(current_user.username))
+
+    time_diff = round(time.time()-os.path.getmtime(cache_file[0]))
+    # If cache file is more than 1 minute old
+    if page == 0 and time_diff > 60:
         if cache_file:
-            os.remove(cache_file[0])        
+            for f in cache_file:
+                os.remove(f)        
         feed = getFeed(followingList)
         cache_file = "{u}_{d}.json".format(u=current_user.username, d=time.strftime("%Y%m%d-%H%M%S"))
         with open("app/cache/{}".format(cache_file), 'w') as fp:
             json.dump(feed, fp)
+    # Else, refresh feed
     else:        
         try:
             cache_file = glob.glob("app/cache/{}*".format(current_user.username))[0]
