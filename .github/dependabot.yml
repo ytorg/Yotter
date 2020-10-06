@@ -5,3 +5,8 @@ updates:
     directory: "/"
     schedule:
       interval: "daily"
+  # Maintain dependencies for pip
+  - package-ecosystem: "pip"
+    directory: "/"
+    schedule:
+      interval: "daily"
