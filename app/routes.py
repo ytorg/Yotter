@@ -819,7 +819,10 @@ def getFeed(urls):
                             if quote.find('div', attrs={'class':'unavailable-quote'}):
                                 newPost["replyingUser"]="Unavailable"
                             else:
-                                newPost["replyingUser"]=quote.find('a',  attrs={'class':'username'}).text
+                                try:
+                                    newPost["replyingUser"]=quote.find('a',  attrs={'class':'username'}).text
+                                except:
+                                    newPost["replyingUser"]="Unavailable"
                             post.find('div', attrs={'class':'quote'}).decompose()
 
                         if post.find('div',  attrs={'class':'attachments'}):

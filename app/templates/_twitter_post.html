@@ -29,7 +29,7 @@
             {% if post.isReply %}
                 <div class="ui card">
                     <div class="content">
-                        <div class="header"><a href="/post.replyingUser">{{post.replyingUser}}</a></div>
+                        <div class="header"><a href="/{{post.replyingUser}}">{{post.replyingUser}}</a></div>
                         <div class="meta">{{post.replyingUser}}</div>
                         <div class="description break-word">
                         {{post.replyingTweetContent | safe}}
