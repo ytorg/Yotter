@@ -397,7 +397,7 @@ def get_best_urls(urls):
     for url in urls:
         for f in best_formats:
             if url['format_id'] == f:
-                best_urls.append(url)
+                    best_urls.append(url)
     return best_urls
 
 def get_live_urls(urls):
@@ -432,11 +432,10 @@ def watch():
     
     if info['video']['isUpcoming']:
         vid_urls=[]
+    elif info['video']['isLive']:
+        vid_urls = get_live_urls(info['video']['urls'])
     else:
         vid_urls = get_best_urls(info['video']['urls'])
-    
-    if info['video']['isLive']:
-        vid_urls = get_live_urls(info['video']['urls'])
 
     video={
         'title':info['video']['title'],
@@ -872,7 +871,10 @@ def getPosts(account):
                     if quote.find('a', attrs={'class':'still-image'}):
                         newPost.replyAttachedImg = NITTERINSTANCE+quote.find('a', attrs={'class':'still-image'})['href'][1:]
                     
-                    newPost.replyingUser=quote.find('a',  attrs={'class':'username'}).text
+                    try:
+                        newPost.replyingUser=quote.find('a',  attrs={'class':'username'}).text
+                    except:
+                        newPost.replyingUser="Unavailable"
                     post.find('div', attrs={'class':'quote'}).decompose()
 
                 if post.find('div',  attrs={'class':'attachments'}):
