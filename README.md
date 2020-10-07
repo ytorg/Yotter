@@ -65,7 +65,7 @@ If you don't mind exposing your IP making requests to Google then you can set it
 
 #### Your data
 The only things the database stores are:
-* Hash of the password
+* Salted hash of the password
 * Username
 * List of followed users
 * List of saved posts
@@ -74,7 +74,7 @@ The only things the database stores are:
 This data will never be used for any other purpose than offering the service to the user. It's not sent anywhere, never.
 
 #### Security
-Only the hash of your password is stored in the database, so no admin can see your plain-text password ever. Also, no personal information of any kind is required nor kept, if a hacker gets access to the database the only thing they could do would be to follow/unfollow some accounts. So there's no motivation in 'hacking' Yotter.
+Only the salted hash of your password is stored in the database, so no admin can see or guess your plain-text password ever. Also, no personal information of any kind is required nor kept, if a hacker gets access to the database the only thing they could do would be to follow/unfollow some accounts. So there's no motivation in 'hacking' Yotter.
 
 I always recommend self-hosting, as you will be the only person with access to your data.
 
