@@ -82,6 +82,7 @@ def concat_texts(strings):
 
 def parse_comment(raw_comment):
     cmnt = {}
+    print(raw_comment)
     raw_comment = raw_comment['commentThreadRenderer']['comment']['commentRenderer']
     imgHostName = urllib.parse.urlparse(raw_comment['authorThumbnail']['thumbnails'][0]['url']).netloc
     cmnt['author'] = raw_comment['authorText']['runs'][0]['text']
@@ -89,6 +90,11 @@ def parse_comment(raw_comment):
     cmnt['channel'] = raw_comment['authorEndpoint']['commandMetadata']['webCommandMetadata']['url']
     cmnt['text'] = Markup(bleach.linkify(concat_texts(raw_comment['contentText']['runs']).replace("\n", "<br>")))
     cmnt['date'] = raw_comment['publishedTimeText']['runs'][0]['text']
+
+    try:
+        cmnt['creatorHeart'] = raw_comment['creatorHeart']['creatorHeartRenderer']['creatorThumbnail']['thumbnails'][0]['url']
+    except:
+        cmnt['creatorHeart'] = False
     
     try:
         cmnt['likes'] = raw_comment['likeCount']

@@ -3,23 +3,28 @@
     <div class="content">
         {% if comment.authorIsChannelOwner %}
         
-        <a class="author" href="{{comment.channel}}"><i class="red user circle icon"></i>{{comment.author}}</a>
+        <a class="author" style="color: red;" href="{{comment.channel}}"><i class="red user circle icon"></i>{{comment.author}}</a>
         {% else %}
         <a class="author" href="{{comment.channel}}">{{comment.author}}</a>
         {% endif %}
-    <div class="metadata">
-        <div class="date">{{comment.date}}</div>
-        <div class="rating">
-            <i class="thumbs up icon"></i>
-            {{comment.likes}}
+        <div class="metadata">
+            <div class="date">{{comment.date}}</div>
         </div>
-        <div class="rating">
-            <i class="comment icon"></i>
-            {{comment.replies}}
+        <div class="text">
+            {{comment.text}}
         </div>
-    </div>
-    <div class="text">
-        {{comment.text}}
-    </div>
+        <div class="metadata">
+            <div class="rating">
+                <i class="comment icon"></i>
+                {{comment.replies}}
+            </div>
+            <div class="rating">
+                <i class="thumbs up icon"></i>
+                {{comment.likes}}
+            </div>
+            {%if comment.creatorHeart != false%}
+                <i class="small red heart icon"></i><img class="ui circular image" style="width: 15px; height: 15px;" src="{{comment.creatorHeart}}">
+            {% endif %}
+        </div>
     </div>
 </div>
