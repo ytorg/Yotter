@@ -30,6 +30,7 @@ import os
 #########################################
 from youtube_data import videos as ytvids
 from youtube_data import search as yts
+from youtube_data import comments as ytcomments
 #########################################
 
 cache = Cache(config={'CACHE_TYPE': 'simple'})
@@ -437,6 +438,16 @@ def watch():
     else:
         vid_urls = get_best_urls(info['video']['urls'])
 
+    # Get comments
+    try:
+        comments = ytcomments.video_comments(id)
+        if comments:
+            comments.sort(key=lambda x: x['likes'], reverse=True)
+        else:
+            comments = False
+    except:
+        comments = False
+
     video={
         'title':info['video']['title'],
         'description':Markup(markupString(info['video']['description'])),
@@ -451,7 +462,8 @@ def watch():
         'isUpcoming': info['video']['isUpcoming'],
         'thumbnail': info['video']['thumbnail'],
         'nginxAudioUrl': audioUrl,
-        'premieres': info['video']['premieres']
+        'premieres': info['video']['premieres'],
+        'comments': comments
     }
     return render_template("video.html", video=video, title='{}'.format(video['title']), config=config, urls=vid_urls)
 

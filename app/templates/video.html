@@ -88,8 +88,17 @@
         <div class="ui raised segment break-word">
             <p>{{video.description}}</p>
         </div>
-      </div>
-</div>
+    </div>
+
+    {% if comments != False %}
+    <div class="ui comments">
+        <h3 class="ui dividing header">Comments</h3>
+        {% for comment in video.comments %}
+                {% include '_video_comment.html' %}
+        {% endfor %}
+    </div>
+    {%endif%}
+            
 <script src="{{ url_for('static',filename='video.min.js') }}"></script>
 <script src="{{ url_for('static',filename='videojs-http-streaming.min.js')}}"></script>
 <script>
