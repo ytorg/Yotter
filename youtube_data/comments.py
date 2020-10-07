@@ -83,8 +83,9 @@ def concat_texts(strings):
 def parse_comment(raw_comment):
     cmnt = {}
     raw_comment = raw_comment['commentThreadRenderer']['comment']['commentRenderer']
+    imgHostName = urllib.parse.urlparse(raw_comment['authorThumbnail']['thumbnails'][0]['url']).netloc
     cmnt['author'] = raw_comment['authorText']['runs'][0]['text']
-    cmnt['thumbnail'] = raw_comment['authorThumbnail']['thumbnails'][0]['url']
+    cmnt['thumbnail'] = raw_comment['authorThumbnail']['thumbnails'][0]['url'].replace("https://{}".format(imgHostName), "")+"?host="+imgHostName
     cmnt['channel'] = raw_comment['authorEndpoint']['commandMetadata']['webCommandMetadata']['url']
     cmnt['text'] = Markup(bleach.linkify(concat_texts(raw_comment['contentText']['runs']).replace("\n", "<br>")))
     cmnt['date'] = raw_comment['publishedTimeText']['runs'][0]['text']
