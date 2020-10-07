@@ -19,7 +19,7 @@ When you self-host you make internet stronger and more censorship resistant. If 
 
 ## Pre-Installation
 
-You will need a server of your own, or you can rent a VPS server on any service you like. Minimum requirements for about 20 users are 2GB of RAM and a Linux Server. It is better if the server is dedicated as whole to Yotter as it will improve performance and security.
+You will need a server of your own, or you can rent a VPS server on any service you like. Minimum requirements for ~100 users are 2GB of RAM and a Linux Server. It is better if the server is dedicated as whole to Yotter as it will improve performance and security.
 
 Everything that appears between `</>` needs to be changed by you. So for example if you see `<password>` you should change it for `weakDummyPassword` without keeping the `</>`.
 
