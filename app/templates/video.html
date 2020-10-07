@@ -101,8 +101,10 @@
             
 <script src="{{ url_for('static',filename='video.min.js') }}"></script>
 <script src="{{ url_for('static',filename='videojs-http-streaming.min.js')}}"></script>
-<script>
-    var player = videojs('live');
-    player.play();
-</script>
+{% if video.isLive %}
+    <script>
+        var player = videojs('live');
+        player.play();
+    </script>
+{% endif %}
 {% endblock %}
