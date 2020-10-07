@@ -13,7 +13,7 @@ Yotter is possible thanks to several open-source projects that are listed on the
 # Index:
 * [Why](#why)
 * [Features](#features)
-* [Screenshots](#screenshots)
+* [FAQ](#FAQ)
 * [Privacy and Security](#privacy)
 * [Public instances](#public-instances)
 * [Self hosting](https://github.com/ytorg/Yotter/blob/dev-indep/SELF-HOSTING.md)
@@ -21,11 +21,16 @@ Yotter is possible thanks to several open-source projects that are listed on the
 * [Contributing and contact](#contributing)
 * [Powered by](#powered-by)
 * [Donate](#donate)
+* [Screenshots](#screenshots)
 
 # Why
-At first I started working on this project as a solution for following Twitter accounts (a thing that can't be done with Nitter) and getting a Twitter-like feed. Weeks later the leader of Invidious, Omar Roth, announced that he was stepping away from the project. As an Invidious active user, this made me think that a new alternative was needed for the community and also an alternative with an easier language for most people (as Invidious is written in Crystal). So I started developing a 'written-in-python Invidious alternative' and it went quite well.
+Youtube and Twitter are well-known by their invasive and data-stealing *'privacy policies'*. You give them a **lot** of data; from ideology to music taste, your likes and dislikes, your free-time schedule, and much more than you think. This much data gives such companies a control over you that you would never thought.
 
-I hope that this project can prosperate, gain contributors, new instances and create a good community around it.
+With the *particular* data about you, they can get money from the highest bidder and target advertisements. This could seem *not-as-bad* but it gets worse. They can sell this data to some company that, with such knowledge about you, could harm your future in a way you can't imagine. What if you are watching self-help videos on Youtube and this data ends on you insurance hands? Would they raise your fee because they consider you are not *emotionally stable*? We can think of thousands of examples like this, where the data ends in the wrong hands and harms you in an unexpected way.
+
+Further more, they don't care about **what you in particular watch**, this is only sold to the highest bidder who then may or may not do the harm. What they care more about is **what people watch** this is the important data and the one that allows to manipulate, bias, censor, etc.
+
+So we need platforms and spaces where we can freely watch and listen content without these watchful eyes upon us. Ideally, everyone would use a free (as in freedom) and decentralized platform like [Peertube](https://joinpeertube.org/), [LBRY](https://lbry.tv/), [Mastodon](https://joinmastodon.org/) or [Pleroma](https://pleroma.social/) but things are not like this. The main multimedia content factory is Youtube and the microblogging king is Twitter. So we will do whatever is possible to be able to watch and read the content and avoid the surveillance that seeks us these days. We will resist.
 
 # Features:
 - [x] No Ads.
@@ -43,6 +48,12 @@ I hope that this project can prosperate, gain contributors, new instances and cr
 
 *Video player is VideoJS, which uses JavaScript. But if JavaScript is disabled Yotter still works perfectly and uses the default HTML video player.
 > And many more to come!
+
+# FAQ
+### What's the difference between this and Invidious?
+At first I started working on this project as a solution for following Twitter accounts (a thing that can't be done with Nitter) and getting a Twitter-like feed. Weeks later the leader of Invidious, Omar Roth, announced that he was stepping away from the project. As an Invidious active user, this made me think that a new alternative was needed for the community and also an alternative with an easier programmin language for most people (as Invidious is written in Crystal). So I started developing a '*written-in-python Invidious alternative*' and it went quite well.
+
+I hope that this project can prosperate, gain contributors, new instances and create a good community around it.
 
 # Privacy
 #### Connections
@@ -104,7 +115,8 @@ These are projects that either make Yotter possible as an essential part of it o
 # Donate
 This project is completely free and Open Source and will always be.
 
-Funding will be used 100% for opening and mantaining an online public instance of Yotter, this will be hosted on Netcup and will (at first) be the *VPS 500 G8*. I mention all of this in case you want to check the prices.
+All donations are used to mantain the [yotter.xyz](https://yotter.xyz/) public instance. [This is the server](https://www.netcup.eu/bestellen/produkt.php?produkt=2598) that I have rented for now.
+
 #### Crypto (preferred):
 - **Bitcoin**: `bc1q5y3g907ju0pt40me7dr9fy5uhfhfgfv9k3kh3z`
 - **Monero**: `48nQGAXaC6eFK2Wo7SVVyF9xL333gDHjzdmRL3XETEqbU3w4CcKjjHVUZPU4W3dg1oJL8be3iGtUAQsgV88dzbS7QNpZjC2`
