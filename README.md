@@ -85,6 +85,7 @@ I always recommend self-hosting, as you will be the only person with access to y
 | https://yotter.xyz/  |Germany| [Check](https://yotter.xyz/registrations_status/text)|<img src="https://yotter.xyz/registrations_status/icon?3" width="17">|
 | https://yotter.kavin.rocks/  |India| [Check](https://yotter.kavin.rocks/registrations_status/text) |<img src="https://yotter.kavin.rocks/registrations_status/icon?5" width="15">|
 | https://yotter.jank.media/  |Germany| [Check](https://yotter.jank.media/registrations_status/text)|<img src="https://yotter.jank.media/registrations_status/icon?5" width="15">|
+| https://aljadra.xyz/  |Germany| [Check](https://aljadra.xyz/registrations_status/text)|<img src="https://aljadra.xyz/registrations_status/icon?1" width="15">|
 
 # Contributing
 Contributors are always welcome. You can help in many ways: Coding, organizing, designing, [donating](#donate), maintaining... You choose what you want to help with!
