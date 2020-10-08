@@ -54,6 +54,16 @@ At first I started working on this project as a solution for following Twitter a
 
 I hope that this project can prosperate, gain contributors, new instances and create a good community around it.
 
+### Why do I have to register to use Yotter?
+
+Registering has two main reasons:
+
+1. Yotter is in a **beta** state. This means that we will be incrementally increasing the capacity of the servers so we can empirically know how many users a Yotter server can handle. Also, there is no **big server** with capacity for handling any arbitrary ammount of users and serving video/data to those at the moment. For this, we decided to have a registration form so we could limit the users.
+
+2. Yotter allows users to follow accounts and have a custom feed. This needs an account to save your followed users and generate a feed.
+
+Admins are allowed to remove restrictions on any page they want. [Check this section](https://github.com/ytorg/Yotter/blob/dev-indep/SELF-HOSTING.md#removing-log-in-restrictions) to learn how.
+
 # Privacy
 #### Connections
 Yotter cares about your privacy, and for this it will never make any connection to Twitter or Youtube on the client. Every request is proxied through the Yotter server; video streaming, photos, data gathering, scrapping, etc.
