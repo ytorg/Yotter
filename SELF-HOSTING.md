@@ -66,7 +66,7 @@ docker-compose up -d
 5. You are now ready to use Yotter on your domain!
    - **Note that you will need to set up your domain DNS to resolve to your server IP.**
 
-### Extra step:
+##### 6. Extra step:
 - [Configure the server](#configure-the-server)
 
 #### Update Docker
