@@ -11,7 +11,6 @@ When you self-host you make internet stronger and more censorship resistant. If 
 * [Installation](#installation)
     * [Docker Installation](#docker)
     * [Manual Installation](#manual-installation)
-* [Nginx and HTTPS](#nginx-set-up-and-HTTPS)
 * [Configure the server](#configure-the-server)
 * [Update](#updating-the-server)
 * [Others](#other-configurations)
@@ -19,11 +18,12 @@ When you self-host you make internet stronger and more censorship resistant. If 
 
 ## Pre-Installation
 
-You will need a server of your own, or you can rent a VPS server on any service you like. Minimum requirements for ~100 users are 2GB of RAM and a Linux Server. It is better if the server is dedicated as whole to Yotter as it will improve performance and security.
+You will need a server of your own, it is recomended to rent a VPS server on any service you like. Minimum requirements for ~100 users are 2GB of RAM and a Linux Server. It is better if the server is dedicated as whole to Yotter as it will improve performance and security.
 
-Everything that appears between `</>` needs to be changed by you. So for example if you see `<password>` you should change it for `weakDummyPassword` without keeping the `</>`.
+Everything that appears between `< >` needs to be changed by you. So for example if you see `<password>` you should change it for `yourPassword` without keeping the `< >`.
 
-First of all, you will need to set up a new user on the server. For security reasons you should never use a `root` user to set up a service. If you already have a non-root user you can use that one and skip the following steps.
+### First steps: set up a user
+First of all, you will need to set up a new user on the server. For security reasons you should **never** use a `root` user to set up a service. If you already have a non-root user you can use that one and skip the following steps.
 
 We will create a user named `ubuntu` as I will be setting this up on an ubuntu machine. So, if you choose a different username make sure you replace it on future commands. We will create and login to the user as follows:
 
@@ -41,14 +41,33 @@ Now you should be logged in. Make sure to set up a good password. It is recommen
 ## Installation
 
 ### Docker
-> This instructions are provisional, some things may be missing!
-1. Install `docker` and `docker-compose`.
-2. Run the following commands:
+
+1. Install [docker](https://www.digitalocean.com/community/tutorials/how-to-install-and-use-docker-on-ubuntu-20-04) and [docker-compose](https://docs.docker.com/compose/install/) on your server (There are plenty of guides on the internet)
+
+2. Install [nginx](https://www.digitalocean.com/community/tutorials/how-to-install-nginx-on-ubuntu-20-04) if not installed.
+
+3. Run the following commands on your server:
 ```
 git clone https://github.com/ytorg/Yotter && cd Yotter
 docker-compose up -d
 ```
-3. Configure Nginx with a reverse proxy (Instructions coming soon)
+4. Configure nginx as a reverse proxy to your docker container.
+   * Create a new nginx configuration file:
+      - `sudo nano /etc/nginx/sites-enabled/yotter`
+   * Paste the content of [this file](https://paste.ubuntu.com/p/wTHnXhqfRx/) to the config file.
+      - Change `<example.com>` by your domain.
+   * Generate a ssl certificate:
+      - Method 1: follow [Let's Encrypt](https://certbot.eff.org/lets-encrypt/ubuntufocal-nginx) guide (Recommended)
+         - Only steps `3`, `5`, `6` and `7b (second command only)` are needed.
+      - Method 2: Generate a self-signed certificate.
+   * Reload nginx:
+      - `sudo service nginx reload`
+
+5. You are now ready to use Yotter on your domain!
+   - **Note that you will need to set up your domain DNS to resolve to your server IP.**
+
+### Extra step:
+- [Configure the server](#configure-the-server)
 
 #### Update Docker
 ```
@@ -216,6 +235,19 @@ Now we will run certbot and we need to tell that we run an nginx server. Here yo
 
 [Follow this instructions to install certbot and generate an ssl certificate so your server can use HTTPS](https://certbot.eff.org/lets-encrypt/ubuntufocal-nginx)
 
+## Updating the server
+Updating the server should always be pretty easy. These steps need to be run on the Yotter folder and with the python virtual env activated.
+
+```
+(venv) $ git pull
+(venv) $ sudo supervisorctl stop yotter
+(venv) $ flask db migrate
+(venv) $ flask db upgrade
+(venv) $ pip install -r requirements.txt
+(venv) $ sudo supervisorctl start yotter
+```
+* **IMPORTANT**: Make sure you have all set up on `yotter-config.json` once you finish the update.
+
 ## Configure the server
 You will find in the root folder of the project a file named `yotter-config.json`. This is the global config file for the Yotter server.
 
@@ -232,18 +264,6 @@ Currently available config is:
 * **max_old_user_days**: Maximum days for a user to be inactive, otherwise will be deleted if admin uses the action.
 * **donation_url**: Adds a link to a donation method for the instance.
 
-## Updating the server
-Updating the server should always be pretty easy. These steps need to be run on the Yotter folder and with the python virtual env activated.
-
-```
-(venv) $ git pull
-(venv) $ sudo supervisorctl stop yotter
-(venv) $ flask db migrate
-(venv) $ flask db upgrade
-(venv) $ pip install -r requirements.txt
-(venv) $ sudo supervisorctl start yotter
-```
-* **IMPORTANT**: Make sure you have all set up on `yotter-config.json` once you finish the update.
 ## Other configurations
 
 ### Removing log-in restrictions
