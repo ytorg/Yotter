@@ -27,7 +27,7 @@ jobs:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
       - name: Get hash of latest image
-        run: docker pull python:3-alpine && docker inspect --format='{{index .RepoDigests 0}}' ytorg/yotter:latest > dockerhash.txt
+        run: docker pull python:3-alpine && docker inspect --format='{{index .RepoDigests 0}}' python:3-alpine > dockerhash.txt
       - name: cache docker cache
         uses: actions/cache@v2.1.1
         with:
