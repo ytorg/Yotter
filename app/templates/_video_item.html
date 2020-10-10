@@ -1,46 +1,35 @@
-<div class="card">
-    <div class="image">
-        {%if config.nginxVideoStream%}
-        <img alt="Thumbnail" src="{{video.videoThumb}}">
-        {%else%}
-        <img alt="Thumbnail" src="/img/{{video.videoThumb.replace('/', '~')}}">
-        {%endif%}
+<div class="ui card">
+  <a class="image" href="{{url_for('watch', v=video.id, _method='GET')}}">
+    <img src="https://yotter.xyz{{video.videoThumb}}">
+  </a>
+  <div class="content">
+    <a class="header" href="{{url_for('watch', v=video.id, _method='GET')}}">{{video.videoTitle}}</a>
+    <div class="meta">
+      <a class="break-word" href="{{url_for('channel', id=video.channelId)}}">{{video.channelName}}</a>
     </div>
-    <div class="content">
-        {% if video.views == "Livestream" %}
-        <a class="video-title break-word" href="#">{{video.videoTitle}}</a>
-        {% else %}
-        <a class="video-title break-word" href="{{url_for('watch', v=video.id, _method='GET')}}">{{video.videoTitle}}</a>
-        {% endif %}
-        <div class="meta">
-            <a class="break-word" href="{{url_for('channel', id=video.channelId)}}">{{video.channelName}}</a>
-        </div>
-        <div class="description break-word">
-            {{video.description}}
-        </div>
-    </div>
+  </div>
     <div class="extra content">
         {% if video.isLive == "Livestream" or video.isLive %}
-            <span class="right floated">
+            <span class="left floated like">
                 <i class="red circle icon"></i>
-                ‎‎{{video.views}}
+                {{video.views}}
             </span>
         {% else %}
-            <span class="right floated">
+            <span class="left floated like">
                 <i class="eye icon"></i>
-                ‎‎{{video.views}}
+                {{video.views}}
             </span>
         {% endif %}
 
         {% if video.timeStamp == "Scheduled" or video.isUpcoming %}
-            <span class="right floated">
+            <span class="right floated star">
                 <i class="blue clock icon"></i>
-                {{video.timeStamp}}‎‎‎‎            ‎‎‎
+                {{video.timeStamp}}
             </span>
         {% else %}
-            <span class="right floated">
+            <span class="right floated star">
                 <i class="clock icon"></i>
-                {{video.timeStamp}}‎‎‎‎            ‎‎‎
+                {{video.timeStamp}}
             </span>
         {% endif %}
         <span>
