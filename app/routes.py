@@ -754,7 +754,7 @@ def status():
         filen = url_for('static', filename='img/open.png')
         caniregister = True
 
-    return render_template('status.html', title='STATUS', count=count, max=config['maxInstanceUsers'], file=filen, cani=False)
+    return render_template('status.html', title='STATUS', count=count, max=config['maxInstanceUsers'], file=filen, cani=caniregister)
 
 @app.route('/error/<errno>')
 def error(errno):
