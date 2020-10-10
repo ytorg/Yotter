@@ -1,5 +1,5 @@
-from youtube_data import proto, utils
-from bs4 import BeautifulSoup as bs
+from youtube_data import proto
+from youtube import utils
 from flask import Markup
 import urllib.parse
 import requests

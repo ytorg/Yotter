@@ -4,30 +4,30 @@
 {% extends "base.html" %}
 {% block content %}
 <div class="ui text container">
-    {% if video.nginxUrl == "#" %}
+    {% if info.error != None or info.playability_error != None %}
     <div class="ui center aligned text container">
         <div class="ui segment">
                 <h4 class="ui header">ERROR WITH VIDEO</h4>
         </div>
     </div>
-    {% elif video.isUpcoming %}
+    {% elif info.playability_status != None %}
     <div class="ui center aligned text container">
         <div class="ui segment">
                 <h4 class="ui header">SCHEDULED VIDEO</h4>
                 <h5 class="ui header">{{video.premieres}}</h5>
         </div>
     </div>
-    {% elif video.isLive %}
+    {% elif info.live %}
     <div class="video-js-responsive-container vjs-hd">
-        <video-js id=live width="1080" class="video-js vjs-default-skin" controls buffered>
+        <video-js id=live width="1080" class="video-js vjs-default-skin" controls>
             <source
-            src="{{urls[0]['url']}}"
+            src="#"
             type="application/x-mpegURL">
         </video-js>
     </div>
         <div class="ui center aligned text container">
             <div class="ui segment">
-                    <h3 class="ui header">LIVESTREAM VIDEO</h3>
+                    <h3 class="ui header"><i class="red small circle icon"></i> LIVESTREAM VIDEO</h3>
                     <h4 class="ui header">FEATURE AVAILABLE SOON</h4>
                     <h5 class="ui header">Livestreams are under developent and still not supported on Yotter.</h5>
             </div>
@@ -41,11 +41,11 @@
             buffered
             preload="none">
             {% if config.nginxVideoStream %}
-                {% for url in urls %}
-                    <source src="{{url.url}}" type="video/{{url.ext}}">
+                {% for format in info.formats %}
+                    {% if format.video_valid %}
+                        <source src="{{format.url}}" type="video/{{format.ext}}">
+                    {% endif %}
                 {% endfor %}
-            {% else %}
-                <source src="{{url_for('stream', url=video.videoUrl.replace('/', 'YotterSlash'))}}" type="video/mp4">
             {% endif %}
             </video>
         </div>
@@ -53,55 +53,54 @@
 
     <div class="ui segments">
         <div class="ui segment">
-            <h2 class="ui header break-word">{{video.title}}</h2>
+            <h2 class="ui header break-word">{{info.title}}</h2>
         </div>
         <div class="ui horizontal segments">
           <div class="center aligned ui segment">
-            <a href="{{ url_for('channel', id=video.channelId)}}">
-                {%if video.author.__len__() > 8%}
-                    <i class="user icon"></i> {{video.author[0:10]+'...'}}
-                {%else%}
-                    <i class="user icon"></i> {{video.author}}
-                {%endif%}
+            <a href="{{ url_for('channel', id=info.author_id)}}">
+                <i class="user icon"></i> {{info.author}}
             </a>
           </div>
           <div class="center aligned ui segment">
-            <h4 class="ui header"><i class="grey eye icon"></i>{{video.viewCount}}</h4>
+            <h4 class="ui header"><i class="grey eye icon"></i>{{info.view_count}}</h4>
           </div>
           <div class="center aligned ui segment">
-            {% if video.averageRating | int > 49 %}
-                <h4 class="ui header"><i class="green thumbs up icon"></i> {{video.averageRating[0:4]}}%</h4>
+            {% if info.rating | int > 49 %}
+                <h4 class="ui header"><i class="green thumbs up icon"></i> {{info.rating}}%</h4>
             {% else %}
-                <h4 class="ui header"><i class="red thumbs down icon"></i> {{video.averageRating[0:4]}}%</h4>
+                <h4 class="ui header"><i class="red thumbs down icon"></i> {{info.rating}}%</h4>
             {% endif %}
           </div>
         </div>
 
         <div class="ui raised center aligned segment break-word">
-            <p><i class="grey music icon"></i><b><a href="{{video.nginxAudioUrl}}">Play Only Audio</a></b></p>
+            <p><i class="grey music icon"></i><b>Audio Only</b></p>
             <audio controls>
-                <source src="{{video.nginxAudioUrl}}">
-              Your browser does not support the audio element.
+                {% for format in info.formats %}
+                    {% if format.audio_valid %}
+                        <source src="{{format.url}}">
+                    {%endif%}
+                {%endfor%}
+              No audio available.
             </audio>
         </div>
 
         <div class="ui raised segment break-word">
-            <p>{{video.description}}</p>
+            <p>{{info.description}}</p>
         </div>
     </div>
 
-    {% if comments != False %}
     <div class="ui comments">
         <h3 class="ui dividing header">Comments</h3>
-        {% for comment in video.comments %}
+        {% for comment in videocomments %}
                 {% include '_video_comment.html' %}
         {% endfor %}
     </div>
-    {%endif%}
             
 <script src="{{ url_for('static',filename='video.min.js') }}"></script>
-<script src="{{ url_for('static',filename='videojs-http-streaming.min.js')}}"></script>
-{% if video.isLive %}
+{% if info.live %}
+    <p>Active</p>
+    <script src="{{ url_for('static',filename='videojs-http-streaming.min.js')}}"></script>
     <script>
         var player = videojs('live');
         player.play();

@@ -1,7 +1,7 @@
 <div class="comment">
     <a class="avatar" style="width: 32px; height: 32px;"><img src="{{ comment.thumbnail }}"></a>
     <div class="content">
-        {% if comment.authorIsChannelOwner %}
+        {% if comment.author == info.author %}
         
         <a class="author" style="color: red;" href="{{comment.channel}}"><i class="red user circle icon"></i>{{comment.author}}</a>
         {% else %}
@@ -22,9 +22,6 @@
                 <i class="thumbs up icon"></i>
                 {{comment.likes}}
             </div>
-            {%if comment.creatorHeart != false%}
-                <i class="small red heart icon"></i><img class="ui circular image" style="width: 15px; height: 15px;" src="{{comment.creatorHeart}}">
-            {% endif %}
         </div>
     </div>
 </div>
