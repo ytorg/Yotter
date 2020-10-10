@@ -744,20 +744,17 @@ def register():
     return render_template('register.html', title='Register', registrations=REGISTRATIONS, form=form, config=config)
 
 
-@app.route('/registrations_status/icon')
-def registrations_status_icon():
+@app.route('/status')
+def status():
     count = db.session.query(User).count()
     if count >= config['maxInstanceUsers'] or config['maxInstanceUsers'] == 0:
-        return redirect(url_for('static', filename='img/close.png'))
+        filen = url_for('static', filename='img/close.png')
+        caniregister = False
     else:
-        return redirect(url_for('static', filename='img/open.png'))
+        filen = url_for('static', filename='img/open.png')
+        caniregister = True
 
-
-@app.route('/registrations_status/text')
-def registrations_status_text():
-    count = db.session.query(User).count()
-    return "{c}/{t}".format(c=count, t=config['maxInstanceUsers'])
-
+    return render_template('status.html', title='STATUS', count=count, max=config['maxInstanceUsers'], file=filen, cani=False)
 
 @app.route('/error/<errno>')
 def error(errno):

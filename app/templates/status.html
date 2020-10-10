@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="ui text container center aligned centered">
+    <div class="ui placeholder segment">
+      <div class="ui two column stackable center aligned grid">
+        <div class="ui vertical divider">
+          {%if cani%}
+            :)
+          {%else%}
+            :(
+          {%endif%}
+        </div>
+        <div class="middle aligned row">
+          <div class="column">
+            <h3 class="ui header"> Capacity </h3>
+            <div class="ui icon header">
+              {%if cani%}
+                <i class="green users icon"></i>
+              {%else%}
+                <i class="red users icon"></i>
+              {%endif%}
+              {{count}}/{{max}}
+            </div>
+          </div>
+          <div class="column">
+            <div class="ui icon header">
+              <i class="user circle outline icon"></i>
+              Can I register?
+            </div>
+
+              {%if cani%}
+                <a href="/register"><div class="ui green button">
+                  Yes!
+                </div></a>
+              {%else%}
+                <a href="#!"><div class="ui disabled red button">
+                  It's full!
+                </div></a>
+              {%endif%}
+
+          </div>
+        </div>
+      </div>
+    </div>
+</div>
+{%endblock%}
