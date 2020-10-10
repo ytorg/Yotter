@@ -16,13 +16,13 @@ When you self-host you make internet stronger and more censorship resistant. If 
 * [Others](#other-configurations)
 
 
-## Pre-Installation
+# First Steps
 
 You will need a server of your own, it is recomended to rent a VPS server on any service you like. Minimum requirements for ~100 users are 2GB of RAM and a Linux Server. It is better if the server is dedicated as whole to Yotter as it will improve performance and security.
 
 Everything that appears between `< >` needs to be changed by you. So for example if you see `<password>` you should change it for `yourPassword` without keeping the `< >`.
 
-### First steps: set up a user
+## Set up a user
 First of all, you will need to set up a new user on the server. For security reasons you should **never** use a `root` user to set up a service. If you already have a non-root user you can use that one and skip the following steps.
 
 We will create a user named `ubuntu` as I will be setting this up on an ubuntu machine. So, if you choose a different username make sure you replace it on future commands. We will create and login to the user as follows:
@@ -38,11 +38,11 @@ If you now type `pwd` and hit enter, you shuould see that the current path is `/
 
 Now you should be logged in. Make sure to set up a good password. It is recommended to use ssh keys to log-in remotelly and disable the password login on all users.
 
-## Installation
+# Installation
 
-### Docker
+## Docker
 
-#### Pre-Configuration
+### 1. Pre-Configuration
 
 1. [Install docker](https://paste.ubuntu.com/p/KMDHqs3XvB/):
 > Instructions for Ubuntu 20.04LTS. For any other systems there are plenty of guides on the internet.
@@ -55,7 +55,7 @@ Now you should be logged in. Make sure to set up a good password. It is recommen
 4. Install nginx if not installed.
 * `sudo apt install nginx`
 
-#### Setting up Yotter
+### 2. Setting up Yotter
 
 1. Run the following commands on your server:
 ```
@@ -81,7 +81,7 @@ docker-compose up -d
 ##### Extra step:
 - [Configure the server](#configure-the-server)
 
-#### Update Docker
+### How Update with Docker
 ```
 $ docker-compose down
 $ docker pull ytorg/yotter
@@ -89,7 +89,7 @@ $ docker-compose up -d
 ```
 > `sudo` may be needed.
 
-### Manual installation
+## Manual installation
 
 #### Step 1: Base setup
 1. Connect to your server via SSH or direct access.
@@ -200,7 +200,7 @@ killasgroup=true
 After you write this configuration file, you have to reload the supervisor service for it to be imported:
 `sudo supervisorctl reload`
 
-### Nginx set up and HTTPS
+#### Step 4: Nginx set up and HTTPS
 The Yotter application server powered by gunicorn is now running privately port 8000. Now we need to expose the application to the outside world by enabling public facing web server on ports 80 and 443, the two ports too need to be opened on the firewall to handle the web traffic of the application. I want this to be a secure deployment, so I'm going to configure port 80 to forward all traffic to port 443, which is going to be encrypted. [ref](https://blog.miguelgrinberg.com/post/the-flask-mega-tutorial-part-xvii-deployment-on-linux).
 
 * `sudo rm /etc/nginx/sites-enabled/default`
