@@ -474,7 +474,7 @@ def watch():
 
     for source in vsources:
         hostName = urllib.parse.urlparse(source['src']).netloc
-        source['src'] = source['src'].replace("https://{}".format(hostName), "") + "?host=" + hostName
+        source['src'] = source['src'].replace("https://{}".format(hostName), "") + "&host=" + hostName
 
     # Parse video formats
     for v_format in info['formats']:
