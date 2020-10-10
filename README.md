@@ -90,11 +90,11 @@ I always recommend self-hosting, as you will be the only person with access to y
 > Important note: The **client** never connects to Google / Youtube however, the server does in order to gather all the necessary things!
 
 # Public Instances
-| Name |Server location|User Capacity|Register|
+| Name |Server location|Status & Register|
 | ------------ | ------------ | ------------ |------------|
-| https://yotter.xyz/  |Germany| [Check](https://yotter.xyz/registrations_status/text)|[Go](https://yotter.xyz/register)|
-| https://yotter.kavin.rocks/  |India| [Check](https://yotter.kavin.rocks/registrations_status/text) |[Go](https://yotter.kavin.rocks/register)|
-| https://yotter.jank.media/  |Germany| [Check](https://yotter.jank.media/registrations_status/text)|[Go](https://yotter.jank.media/register)|
+| https://yotter.xyz/  |Germany| [Go](https://yotter.xyz/status)|
+| https://yotter.kavin.rocks/  |India| [Go](https://yotter.kavin.rocks/register)|
+| https://yotter.jank.media/  |Germany| [Go](https://yotter.jank.media/register)|
 
 # Contributing
 Contributors are always welcome. You can help in many ways: Coding, organizing, designing, [donating](#donate), maintaining... You choose what you want to help with!
