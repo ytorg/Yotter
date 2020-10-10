@@ -89,6 +89,8 @@ $ docker-compose up -d
 ```
 > `sudo` may be needed.
 
+<hr>
+
 ## Manual installation
 
 #### Step 1: Base setup
@@ -248,7 +250,7 @@ Now we will run certbot and we need to tell that we run an nginx server. Here yo
 
 [Follow this instructions to install certbot and generate an ssl certificate so your server can use HTTPS](https://certbot.eff.org/lets-encrypt/ubuntufocal-nginx)
 
-## Updating the server
+#### Updating the server
 Updating the server should always be pretty easy. These steps need to be run on the Yotter folder and with the python virtual env activated.
 
 ```
@@ -260,6 +262,8 @@ Updating the server should always be pretty easy. These steps need to be run on 
 (venv) $ sudo supervisorctl start yotter
 ```
 * **IMPORTANT**: Make sure you have all set up on `yotter-config.json` once you finish the update.
+
+<hr>
 
 ## Configure the server
 You will find in the root folder of the project a file named `yotter-config.json`. This is the global config file for the Yotter server.
