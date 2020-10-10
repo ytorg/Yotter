@@ -464,28 +464,38 @@ def get_live_urls(urls):
 def watch():
     id = request.args.get('v', None)
     info = ytwatch.extract_info(id, False, playlist_id=None, index=None)
-    # Use nginx
-    best_formats = ["22", "18", "34", "35", "36", "37", "38", "43", "44", "45", "46"]
+
+    vsources = ytwatch.get_video_sources(info, False)
+    # Retry 3 times if no sources are available.
+    retry = 3
+    while retry != 0 and len(vsources) == 0:
+        vsources = ytwatch.get_video_sources(info, False)
+        retry -= 1
+
+    for source in vsources:
+        hostName = urllib.parse.urlparse(source['src']).netloc
+        source['src'] = source['src'].replace("https://{}".format(hostName), "") + "?host=" + hostName
+
+    # Parse video formats
     for v_format in info['formats']:
         hostName = urllib.parse.urlparse(v_format['url']).netloc
         v_format['url'] = v_format['url'].replace("https://{}".format(hostName), "") + "&host=" + hostName
-        if v_format['audio_bitrate'] is not None and v_format['vcodec'] is not None:
-            v_format['video_valid'] = True
-        elif v_format['audio_bitrate'] is not None and v_format['vcodec'] is None:
+        if v_format['audio_bitrate'] is not None and v_format['vcodec'] is None:
             v_format['audio_valid'] = True
 
+    # Markup description
     info['description'] = Markup(bleach.linkify(info['description'].replace("\n", "<br>")))
 
     # Get comments
     videocomments = comments.video_comments(id, sort=0, offset=0, lc='', secret_key='')
     videocomments = utils.post_process_comments_info(videocomments)
-
     if videocomments is not None:
         videocomments.sort(key=lambda x: x['likes'], reverse=True)
 
+    # Calculate rating %
     info['rating'] = str((info['like_count'] / (info['like_count'] + info['dislike_count'])) * 100)[0:4]
     return render_template("video.html", info=info, title='{}'.format(info['title']), config=config,
-                           videocomments=videocomments)
+                           videocomments=videocomments, vsources=vsources)
 
 
 def markupString(string):

@@ -34,20 +34,18 @@
         </div>
     {%else%}
         <div class="video-js-responsive-container vjs-hd">
-            <video class="video-js vjs-default-skin" 
+            <video-js autofocus class="video-js vjs-default-skin"
             data-setup='{ "playbackRates": [0.5, 0.75, 1, 1.25,1.5, 1.75, 2] }'
             width="1080"
             controls
             buffered
             preload="none">
             {% if config.nginxVideoStream %}
-                {% for format in info.formats %}
-                    {% if format.video_valid %}
-                        <source src="{{format.url}}" type="video/{{format.ext}}">
-                    {% endif %}
+                {% for source in vsources %}
+                        <source src="{{source.src}}" type="{{source.type}}">
                 {% endfor %}
             {% endif %}
-            </video>
+            </video-js>
         </div>
     {%endif%}
 
@@ -99,7 +97,6 @@
             
 <script src="{{ url_for('static',filename='video.min.js') }}"></script>
 {% if info.live %}
-    <p>Active</p>
     <script src="{{ url_for('static',filename='videojs-http-streaming.min.js')}}"></script>
     <script>
         var player = videojs('live');
