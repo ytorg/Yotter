@@ -91,7 +91,7 @@ I always recommend self-hosting, as you will be the only person with access to y
 
 # Public Instances
 | Name |Server location|Status & Register|
-| ------------ | ------------ | ------------ |------------|
+| ------------ | ------------ | ------------ |
 | https://yotter.xyz/  |Germany| [Go](https://yotter.xyz/status)|
 | https://yotter.kavin.rocks/  |India| [Go](https://yotter.kavin.rocks/register)|
 | https://yotter.jank.media/  |Germany| [Go](https://yotter.jank.media/register)|
