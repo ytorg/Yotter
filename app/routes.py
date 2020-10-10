@@ -28,10 +28,9 @@ from youtube_search import YoutubeSearch
 from app import app, db
 from app.forms import LoginForm, RegistrationForm, EmptyForm, SearchForm, ChannelForm
 from app.models import User, twitterPost, ytPost, Post, youtubeFollow, twitterFollow
-from youtube import comments, utils
+from youtube import comments, utils, search as yts
 from youtube import watch as ytwatch
 #########################################
-from youtube_data import search as yts
 
 #########################################
 
@@ -270,7 +269,6 @@ def u(username):
 
     return render_template('user.html', posts=posts, user=user, form=form, config=config)
 
-
 #########################
 #### Youtube Logic ######
 #########################
@@ -326,12 +324,15 @@ def ytsearch():
         else:
             prev_page = "/ytsearch?q={q}&s={s}&p={p}".format(q=query, s=sort, p=int(page) - 1)
 
+        for video in results['videos']:
+            hostname = urllib.parse.urlparse(video['videoThumb']).netloc
+            video['videoThumb'] = video['videoThumb'].replace("https://{}".format(hostname), "") + "&host=" + hostname
+
         for channel in results['channels']:
             if config['nginxVideoStream']:
                 channel['thumbnail'] = channel['thumbnail'].replace("~", "/")
                 hostName = urllib.parse.urlparse(channel['thumbnail']).netloc
-                channel['thumbnail'] = channel['thumbnail'].replace("https://{}".format(hostName),
-                                                                    "") + "?host=" + hostName
+                channel['thumbnail'] = channel['thumbnail'].replace("https://{}".format(hostName),"") + "?host=" + hostName
         return render_template('ytsearch.html', form=form, btform=button_form, results=results,
                                restricted=config['restrictPublicUsage'], config=config, npage=next_page,
                                ppage=prev_page)
