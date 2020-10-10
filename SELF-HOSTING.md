@@ -42,40 +42,69 @@ Now you should be logged in. Make sure to set up a good password. It is recommen
 
 ### Docker
 
-1. Install [docker](https://www.digitalocean.com/community/tutorials/how-to-install-and-use-docker-on-ubuntu-20-04) and [docker-compose](https://docs.docker.com/compose/install/) on your server (There are plenty of guides on the internet)
+#### Pre-Configuration
 
-2. Install [nginx](https://www.digitalocean.com/community/tutorials/how-to-install-nginx-on-ubuntu-20-04) if not installed.
+1. Install [docker](https://www.digitalocean.com/community/tutorials/how-to-install-and-use-docker-on-ubuntu-20-04):
+> Instructions for Ubuntu 20.04LTS
+```
+$ sudo apt update
+$ sudo apt install apt-transport-https ca-certificates curl software-properties-common
+$ curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
+$ sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu focal stable"
+$ sudo apt update
+$ apt-cache policy docker-ce
+$ sudo apt install docker-ce
+$ sudo systemctl status docker
+```
 
-3. Run the following commands on your server:
+2.  Install [docker-compose](https://docs.docker.com/compose/install/):
+> General instructions for all Linux systems
+```
+$ sudo curl -L "https://github.com/docker/compose/releases/download/1.27.4/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose`
+$ sudo chmod +x /usr/local/bin/docker-compose`
+$ sudo ln -s /usr/local/bin/docker-compose /usr/bin/docker-compose
+```
+> You can check it was installed with `docker-compose --version`
+
+3. Install [nginx](https://www.digitalocean.com/community/tutorials/how-to-install-nginx-on-ubuntu-20-04) if not installed.
+* `sudo apt install nginx`
+```
+
+```
+
+#### Setting up Yotter
+
+1. Run the following commands on your server:
 ```
 git clone https://github.com/ytorg/Yotter && cd Yotter
 docker-compose up -d
 ```
 > You may need to use `sudo` for turning up the docker-compose
-4. Configure nginx as a reverse proxy to your docker container.
+2. Configure nginx as a reverse proxy to your docker container:
    * Create a new nginx configuration file:
       - `sudo nano /etc/nginx/sites-enabled/yotter`
-   * Paste the content of [this file](https://paste.ubuntu.com/p/wTHnXhqfRx/) to the config file.
+   * Paste the content of [this file](https://paste.ubuntu.com/p/Bzd9SRCJSG/) to the config file.
       - Change `<example.com>` by your domain.
    * Generate a ssl certificate:
-      - Method 1: follow [Let's Encrypt](https://certbot.eff.org/lets-encrypt/ubuntufocal-nginx) guide (Recommended)
+      - Follow [Let's Encrypt](https://certbot.eff.org/lets-encrypt/ubuntufocal-nginx) guide **(Recommended)**
          - Only steps `3`, `5`, `6` and `7a (second command only)` are needed.
-      - Method 2: Generate a self-signed certificate.
+         
    * Reload nginx:
       - `sudo service nginx reload`
 
-5. You are now ready to use Yotter on your domain!
+3. You are now ready to use Yotter on your domain!
    - **Note that you will need to set up your domain DNS to resolve to your server IP.**
 
-##### 6. Extra step:
+##### Extra step:
 - [Configure the server](#configure-the-server)
 
 #### Update Docker
 ```
-docker-compose down
-docker pull ytorg/yotter
-docker-compose up -d
+$ docker-compose down
+$ docker pull ytorg/yotter
+$ docker-compose up -d
 ```
+> `sudo` may be needed.
 
 ### Manual installation
 
