@@ -1,20 +1,16 @@
 import base64
-from youtube import util, yt_data_extract, local_playlist, subscriptions
-from youtube import yt_app
-
-import urllib
 import json
-from string import Template
-import youtube.proto as proto
-import html
 import math
-import gevent
 import re
-import cachetools.func
 import traceback
+import urllib
 
+import cachetools.func
 import flask
-from flask import request
+import gevent
+
+import youtube.proto as proto
+from youtube import util, yt_data_extract
 
 headers_desktop = (
     ('Accept', '*/*'),
@@ -109,7 +105,7 @@ def channel_ctoken_v1(channel_id, page, sort, tab, view=1):
 
     return base64.urlsafe_b64encode(pointless_nest).decode('ascii')
 
-def get_channel_tab(channel_id, page="1", sort=3, tab='videos', view=1, print_status=True):
+def get_channel_tab_info(channel_id, page="1", sort=3, tab='videos', view=1, print_status=True):
     message = 'Got channel tab' if print_status else None
 
     if int(sort) == 2 and int(page) > 1:
@@ -128,7 +124,11 @@ def get_channel_tab(channel_id, page="1", sort=3, tab='videos', view=1, print_st
             headers_desktop + generic_cookie,
             debug_name='channel_tab', report_text=message)
 
-    return content
+    info = yt_data_extract.extract_channel_info(json.loads(content), tab)
+    if info['error'] is not None:
+        return False
+    post_process_channel_info(info)
+    return info
 
 # cache entries expire after 30 minutes
 @cachetools.func.ttl_cache(maxsize=128, ttl=30*60)
@@ -259,23 +259,4 @@ def get_channel_page_general_url(base_url, tab, request, channel_id=None):
         **info
     )
 
-@yt_app.route('/channel/<channel_id>/')
-@yt_app.route('/channel/<channel_id>/<tab>')
-def get_channel_page(channel_id, tab='videos'):
-    return get_channel_page_general_url('https://www.youtube.com/channel/' + channel_id, tab, request, channel_id)
-
-@yt_app.route('/user/<username>/')
-@yt_app.route('/user/<username>/<tab>')
-def get_user_page(username, tab='videos'):
-    return get_channel_page_general_url('https://www.youtube.com/user/' + username, tab, request)
-
-@yt_app.route('/c/<custom>/')
-@yt_app.route('/c/<custom>/<tab>')
-def get_custom_c_page(custom, tab='videos'):
-    return get_channel_page_general_url('https://www.youtube.com/c/' + custom, tab, request)
-
-@yt_app.route('/<custom>')
-@yt_app.route('/<custom>/<tab>')
-def get_toplevel_custom_page(custom, tab='videos'):
-    return get_channel_page_general_url('https://www.youtube.com/' + custom, tab, request)
 

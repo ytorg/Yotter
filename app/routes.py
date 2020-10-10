@@ -1,4 +1,3 @@
-
 import datetime
 import glob
 import json
@@ -28,8 +27,9 @@ from youtube_search import YoutubeSearch
 from app import app, db
 from app.forms import LoginForm, RegistrationForm, EmptyForm, SearchForm, ChannelForm
 from app.models import User, twitterPost, ytPost, Post, youtubeFollow, twitterFollow
-from youtube import comments, utils, search as yts
+from youtube import comments, utils, channel as ytch, search as yts
 from youtube import watch as ytwatch
+
 #########################################
 
 #########################################
@@ -269,6 +269,7 @@ def u(username):
 
     return render_template('user.html', posts=posts, user=user, form=form, config=config)
 
+
 #########################
 #### Youtube Logic ######
 #########################
@@ -332,7 +333,8 @@ def ytsearch():
             if config['nginxVideoStream']:
                 channel['thumbnail'] = channel['thumbnail'].replace("~", "/")
                 hostName = urllib.parse.urlparse(channel['thumbnail']).netloc
-                channel['thumbnail'] = channel['thumbnail'].replace("https://{}".format(hostName),"") + "?host=" + hostName
+                channel['thumbnail'] = channel['thumbnail'].replace("https://{}".format(hostName),
+                                                                    "") + "?host=" + hostName
         return render_template('ytsearch.html', form=form, btform=button_form, results=results,
                                restricted=config['restrictPublicUsage'], config=config, npage=next_page,
                                ppage=prev_page)
@@ -343,9 +345,7 @@ def ytsearch():
 @app.route('/ytfollow/<channelId>', methods=['POST'])
 @login_required
 def ytfollow(channelId):
-    form = EmptyForm()
-    if form.validate_on_submit():
-        r = followYoutubeChannel(channelId)
+    r = followYoutubeChannel(channelId)
     return redirect(request.referrer)
 
 
@@ -377,9 +377,7 @@ def followYoutubeChannel(channelId):
 @app.route('/ytunfollow/<channelId>', methods=['POST'])
 @login_required
 def ytunfollow(channelId):
-    form = EmptyForm()
-    if form.validate_on_submit():
-        unfollowYoutubeChannel(channelId)
+    unfollowYoutubeChannel(channelId)
     return redirect(request.referrer)
 
 
@@ -405,27 +403,38 @@ def unfollowYoutubeChannel(channelId):
 def channel(id):
     form = ChannelForm()
     button_form = EmptyForm()
-    data = requests.get('https://www.youtube.com/feeds/videos.xml?channel_id={id}'.format(id=id))
-    data = feedparser.parse(data.content)
 
-    channelData = YoutubeSearch.channelInfo(id)
+    page = request.args.get('p', None)
+    sort = request.args.get('s', None)
+    if page is None:
+        page = 1
+    if sort is None:
+        sort = 3
 
-    for video in channelData[1]:
+    data = ytch.get_channel_tab_info(id, page, sort)
+
+    for video in data['items']:
         if config['nginxVideoStream']:
-            hostName = urllib.parse.urlparse(video['videoThumb']).netloc
-            video['videoThumb'] = video['videoThumb'].replace("https://{}".format(hostName), "").replace("hqdefault",
-                                                                                                         "mqdefault") + "&host=" + hostName
+            hostName = urllib.parse.urlparse(video['thumbnail'][1:]).netloc
+            video['thumbnail'] = video['thumbnail'].replace("https://{}".format(hostName), "")[1:].replace("hqdefault",
+                                                                                                       "mqdefault") + "&host=" + hostName
         else:
-            video['videoThumb'] = video['videoThumb'].replace('/', '~')
-    if config['nginxVideoStream']:
-        hostName = urllib.parse.urlparse(channelData[0]['avatar']).netloc
-        channelData[0]['avatar'] = channelData[0]['avatar'].replace("https://{}".format(hostName),
-                                                                    "") + "?host=" + hostName
-    else:
-        channelData[0]['avatar'] = channelData[0]['avatar'].replace('/', '~')
+            video['thumbnail'] = video['thumbnail'].replace('/', '~')
 
-    return render_template('channel.html', form=form, btform=button_form, channel=channelData[0], videos=channelData[1],
-                           restricted=config['restrictPublicUsage'], config=config)
+    if config['nginxVideoStream']:
+        hostName = urllib.parse.urlparse(data['avatar'][1:]).netloc
+        data['avatar'] = data['avatar'].replace("https://{}".format(hostName), "")[1:] + "?host=" + hostName
+    else:
+        data['avatar'] = data['avatar'].replace('/', '~')
+
+    next_page = "/channel/{q}?s={s}&p={p}".format(q=id, s=sort, p=int(page) + 1)
+    if int(page) == 1:
+        prev_page = "/channel/{q}?s={s}&p={p}".format(q=id, s=sort, p=1)
+    else:
+        prev_page = "/channel/{q}?s={s}&p={p}".format(q=id, s=sort, p=int(page) - 1)
+
+    return render_template('channel.html', form=form, btform=button_form, data=data,
+                           restricted=config['restrictPublicUsage'], config=config, next_page=next_page, prev_page=prev_page)
 
 
 def get_best_urls(urls):
@@ -474,8 +483,9 @@ def watch():
     if videocomments is not None:
         videocomments.sort(key=lambda x: x['likes'], reverse=True)
 
-    info['rating'] = str((info['like_count']/(info['like_count']+info['dislike_count']))*100)[0:4]
-    return render_template("video.html", info=info, title='{}'.format(info['title']), config=config, videocomments=videocomments)
+    info['rating'] = str((info['like_count'] / (info['like_count'] + info['dislike_count'])) * 100)[0:4]
+    return render_template("video.html", info=info, title='{}'.format(info['title']), config=config,
+                           videocomments=videocomments)
 
 
 def markupString(string):

@@ -1,4 +1,4 @@
-from youtube_data import proto
+from youtube import proto
 from flask import Markup as mk
 import requests
 import base64
