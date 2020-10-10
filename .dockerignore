@@ -1,3 +1,4 @@
+.circleci
 .git
 .github
 .gitignore
@@ -6,3 +7,4 @@ Dockerfile
 docker-compose.yml
 LICENSE
 *.md
+dockerhash.txt
