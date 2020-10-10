@@ -259,8 +259,14 @@ def get_video_info(id):
     jsonIni = response[start:end1]
     dataInitial = json.loads(jsonIni)
 
-    jsonDet = response[start2:end2]
-    dataDetails = json.loads(jsonDet)
+    try:
+        jsonDet = response[start2:end2]
+        dataDetails = json.loads(jsonDet)
+    except:
+        response = requests.get(url, headers=headers).json()
+        jsonDet = response[start2:end2]
+        dataDetails = json.loads(jsonDet)
+
 
     #title, views, date
     videoInfo = get_video_primary_info(dataDetails, dataInitial)

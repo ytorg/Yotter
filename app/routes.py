@@ -77,8 +77,10 @@ def twitter(page=0):
     posts = []
 
     cache_file = glob.glob("app/cache/{}_*".format(current_user.username))
-
-    time_diff = round(time.time()-os.path.getmtime(cache_file[0]))
+    if(len(cache_file) > 0):
+        time_diff = round(time.time()-os.path.getmtime(cache_file[0]))
+    else:
+        time_diff = 999
     # If cache file is more than 1 minute old
     if page == 0 and time_diff > 60:
         if cache_file:
@@ -663,6 +665,7 @@ def importYoutubeSubscriptions(file):
 def importYotterSubscriptions(file):
     filename = secure_filename(file.filename)
     data = json.load(file)
+    print(data)
     for acc in data['twitter']:
         r = followTwitterAccount(acc['username'])
 
