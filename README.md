@@ -90,11 +90,11 @@ I always recommend self-hosting, as you will be the only person with access to y
 > Important note: The **client** never connects to Google / Youtube however, the server does in order to gather all the necessary things!
 
 # Public Instances
-| name |server location|Capacity|registrations|
+| Name |Server location|User Capacity|Register|
 | ------------ | ------------ | ------------ |------------|
-| https://yotter.xyz/  |Germany| [Check](https://yotter.xyz/registrations_status/text)|<img src="https://yotter.xyz/registrations_status/icon?4" width="17">|
-| https://yotter.kavin.rocks/  |India| [Check](https://yotter.kavin.rocks/registrations_status/text) |<img src="https://yotter.kavin.rocks/registrations_status/icon?4" width="15">|
-| https://yotter.jank.media/  |Germany| [Check](https://yotter.jank.media/registrations_status/text)|<img src="https://yotter.jank.media/registrations_status/icon?4" width="15">|
+| https://yotter.xyz/  |Germany| [Check](https://yotter.xyz/registrations_status/text)|[Go](https://yotter.xyz/register)|
+| https://yotter.kavin.rocks/  |India| [Check](https://yotter.kavin.rocks/registrations_status/text) |[Go](https://yotter.kavin.rocks/register)|
+| https://yotter.jank.media/  |Germany| [Check](https://yotter.jank.media/registrations_status/text)|[Go](https://yotter.jank.media/register)|
 
 # Contributing
 Contributors are always welcome. You can help in many ways: Coding, organizing, designing, [donating](#donate), maintaining... You choose what you want to help with!
@@ -107,9 +107,10 @@ We have a [Matrix](https://matrix.org/) room where we discuss anything related w
  <a href="https://reddit.com/r/Yotter"><img alt="Join Matrix" src="https://img.shields.io/badge/Reddit-r/Yotter-orange.svg">
 
 # Powered by:
-These are projects that either make Yotter possible as an essential part of it or that served as inspiration for some parts of the code.
+These are projects that either make Yotter possible as an **essential part** of it or that served as **inspiration for some parts** of the code.
 
 * [Nitter](https://nitter.net/)
+* [Youtube-local](https://github.com/user234683/youtube-local)
 * [youtube-dl](https://github.com/ytdl-org/youtube-dl)
 * [Flask](https://flask.palletsprojects.com/)
 * [SQLAlchemy](https://docs.sqlalchemy.org/en/13/)
@@ -118,7 +119,6 @@ These are projects that either make Yotter possible as an essential part of it o
 * [microblog](https://github.com/miguelgrinberg/microblog)
 * [Video.js](https://videojs.com/)
 * [My fork of youtube_search](https://github.com/pluja/youtube_search-fork)
-* [Youtube-local](https://github.com/user234683/youtube-local)
 * [Invidious](https://github.com/iv-org/invidious)
 
 # Donate
