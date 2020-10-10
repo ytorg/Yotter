@@ -107,9 +107,10 @@ We have a [Matrix](https://matrix.org/) room where we discuss anything related w
  <a href="https://reddit.com/r/Yotter"><img alt="Join Matrix" src="https://img.shields.io/badge/Reddit-r/Yotter-orange.svg">
 
 # Powered by:
-These are projects that either make Yotter possible as an essential part of it or that served as inspiration for some parts of the code.
+These are projects that either make Yotter possible as an **essential part** of it or that served as **inspiration for some parts** of the code.
 
 * [Nitter](https://nitter.net/)
+* [Youtube-local](https://github.com/user234683/youtube-local)
 * [youtube-dl](https://github.com/ytdl-org/youtube-dl)
 * [Flask](https://flask.palletsprojects.com/)
 * [SQLAlchemy](https://docs.sqlalchemy.org/en/13/)
@@ -118,7 +119,6 @@ These are projects that either make Yotter possible as an essential part of it o
 * [microblog](https://github.com/miguelgrinberg/microblog)
 * [Video.js](https://videojs.com/)
 * [My fork of youtube_search](https://github.com/pluja/youtube_search-fork)
-* [Youtube-local](https://github.com/user234683/youtube-local)
 * [Invidious](https://github.com/iv-org/invidious)
 
 # Donate
