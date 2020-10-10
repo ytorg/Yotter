@@ -44,33 +44,16 @@ Now you should be logged in. Make sure to set up a good password. It is recommen
 
 #### Pre-Configuration
 
-1. Install [docker](https://www.digitalocean.com/community/tutorials/how-to-install-and-use-docker-on-ubuntu-20-04):
-> Instructions for Ubuntu 20.04LTS
-```
-$ sudo apt update
-$ sudo apt install apt-transport-https ca-certificates curl software-properties-common
-$ curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
-$ sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu focal stable"
-$ sudo apt update
-$ apt-cache policy docker-ce
-$ sudo apt install docker-ce
-$ sudo systemctl status docker
-```
+1. [Install docker](https://paste.ubuntu.com/p/KMDHqs3XvB/):
+> Instructions for Ubuntu 20.04LTS. For any other systems there are plenty of guides on the internet.
 
-2.  Install [docker-compose](https://docs.docker.com/compose/install/):
+2.  [Install docker-compose](https://paste.ubuntu.com/p/pgqkPzCpJk/):
 > General instructions for all Linux systems
-```
-$ sudo curl -L "https://github.com/docker/compose/releases/download/1.27.4/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose`
-$ sudo chmod +x /usr/local/bin/docker-compose`
-$ sudo ln -s /usr/local/bin/docker-compose /usr/bin/docker-compose
-```
-> You can check it was installed with `docker-compose --version`
 
-3. Install [nginx](https://www.digitalocean.com/community/tutorials/how-to-install-nginx-on-ubuntu-20-04) if not installed.
+3. You can check it was installed with `docker-compose --version`
+
+4. Install nginx if not installed.
 * `sudo apt install nginx`
-```
-
-```
 
 #### Setting up Yotter
 
@@ -87,7 +70,7 @@ docker-compose up -d
       - Change `<example.com>` by your domain.
    * Generate a ssl certificate:
       - Follow [Let's Encrypt](https://certbot.eff.org/lets-encrypt/ubuntufocal-nginx) guide **(Recommended)**
-         - Only steps `3`, `5`, `6` and `7a (second command only)` are needed.
+         - Only steps `3`, `5`, `6` and `7a (first command only)` are needed.
          
    * Reload nginx:
       - `sudo service nginx reload`
