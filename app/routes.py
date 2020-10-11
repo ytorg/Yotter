@@ -486,9 +486,8 @@ def watch():
     # Markup description
     try:
         info['description'] = Markup(bleach.linkify(info['description'].replace("\n", "<br>")))
-    except AttributeError:
+    except AttributeError or TypeError:
         print(info['description'])
-        info['description'] = Markup(bleach.linkify(info['description']))
 
 
     # Get comments
