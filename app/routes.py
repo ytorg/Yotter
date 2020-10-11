@@ -484,7 +484,12 @@ def watch():
             v_format['audio_valid'] = True
 
     # Markup description
-    info['description'] = Markup(bleach.linkify(info['description'].replace("\n", "<br>")))
+    try:
+        info['description'] = Markup(bleach.linkify(info['description'].replace("\n", "<br>")))
+    except AttributeError:
+        print(info['description'])
+        info['description'] = Markup(bleach.linkify(info['description']))
+
 
     # Get comments
     videocomments = comments.video_comments(id, sort=0, offset=0, lc='', secret_key='')
