@@ -147,7 +147,7 @@ def bypass_captcha(session, response, url, cookies):
 
 
         inputs['g-recaptcha-response'] = response['solution']['gRecaptchaResponse']
-        print(response['solution'])
+        print(response)
         # Print POST request headers
         print(requests.post("https://youtube.com/das_captcha", data=inputs,
                             headers={"Content-Type": "application/x-www-form-urlencoded",
@@ -204,7 +204,7 @@ def fetch_url_response(url, headers=(), timeout=15, data=None,
 
         session = requests.Session()
         print("Starting python GET request to "+url+"...")
-        response = session.get(url, headers={'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; rv:78.0) Gecko/20100101 Firefox/78.0'})
+        response = session.get(url, headers={'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; rv:78.0) Gecko/20100101 Firefox/78.0', "Accept-Language": "en-US,en;q=0.5"})
 
         # Strings that appear when there's a Captcha.
         string_de = "Fülle das folgende Feld aus, um YouTube weiter zu nutzen."
