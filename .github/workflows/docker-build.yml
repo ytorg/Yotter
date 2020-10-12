@@ -29,7 +29,7 @@ jobs:
       - name: Get hash of latest image
         run: docker pull python:3-alpine && docker inspect --format='{{index .RepoDigests 0}}' python:3-alpine > dockerhash.txt
       - name: cache docker cache
-        uses: actions/cache@v2.1.1
+        uses: actions/cache@v2.1.2
         with:
           path: ${{ github.workspace }}/cache
           key: ${{ runner.os }}-docker-${{ hashFiles('**/requirements.txt') }}-${{ hashFiles('**/dockerhash.txt') }}
