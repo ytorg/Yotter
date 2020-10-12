@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="ui text container center aligned centered">
+    <div class="ui icon negative message">
+      <i class="meh outline icon"></i>
+      <div class="content">
+        <div class="header">
+          Ahh... Here we go again!
+        </div>
+        <p>Google is asking to solve a Captcha. As we don't want you to do it, we'll do it for you.</p>
+        <p>Try again in a few seconds.</p>
+        <a href="{{origin}}"> Click here to reload </a>
+      </div>
+    </div>
+</div>
+
+{%endblock%}

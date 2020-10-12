@@ -171,6 +171,11 @@ def extract_info(video_id, use_invidious, playlist_id=None, index=None):
     if index:
         url += '&index=' + index
     polymer_json = util.fetch_url(url, headers=headers, debug_name='watch')
+
+    # If there's a captcha... Return word Captcha
+    if polymer_json == 'Captcha':
+        return 'Captcha'
+
     polymer_json = polymer_json.decode('utf-8')
     # TODO: Decide whether this should be done in yt_data_extract.extract_watch_info
     try:

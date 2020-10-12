@@ -200,6 +200,7 @@ def fetch_url_response(url, headers=(), timeout=15, data=None,
         # If there's a captcha, bypass it.
         if string_de in response.text or string_en in response.text:
             bypass_captcha(session, response, url)
+            return "Captcha", "Captcha"
 
         if max_redirects:
             retries = urllib3.Retry(3 + max_redirects, redirect=max_redirects)
@@ -226,8 +227,10 @@ def fetch_url(url, headers=(), timeout=15, report_text=None, data=None,
         cookiejar_send=cookiejar_send, cookiejar_receive=cookiejar_receive,
         use_tor=use_tor)
     print(response)
-    response_time = time.time()
 
+    if response == "Captcha":
+        return "Captcha"
+    response_time = time.time()
     content = response.read()
     read_finish = time.time()
     cleanup_func(response)  # release_connection for urllib3

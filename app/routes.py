@@ -464,7 +464,8 @@ def get_live_urls(urls):
 def watch():
     id = request.args.get('v', None)
     info = ytwatch.extract_info(id, False, playlist_id=None, index=None)
-
+    if info == 'Captcha':
+        return render_template('captcha.html', origin=request.referrer)
     retry = 3
     while retry != 0 and info['playability_error'] == 'Could not find player':
         info=ytwatch.extract_info(id, False, playlist_id=None, index=None)
