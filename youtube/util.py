@@ -99,12 +99,7 @@ def decode_content(content, encoding_header):
     return content
 
 
-def bypass_captcha():
-    session = requests.Session()
-    url = "https://youtube.com/watch?v=CvFH_6DNRCY&gl=US&hl=en&has_verified=1&bpctr=9999999999"
-    print("Starting python GET request...")
-    response = session.get(url)
-    print("GET successful!")
+def bypass_captcha(session, response):
     print("vvv COOKIES DICT vvv")
     cookies = session.cookies.get_dict()
     print(cookies)
@@ -195,15 +190,16 @@ def fetch_url_response(url, headers=(), timeout=15, data=None,
         # (in connectionpool.py in urllib3)
         # According to the documentation for urlopen, a redirect counts as a
         # retry. So there are 3 redirects max by default.
-        print("Testing for CAPTCHA python GET request...")
-        r = requests.get(url)
-        print("GET successful!")
 
-        html = BeautifulSoup(str(r.text), "lxml")
-        # If there's a captcha and we need to solve it...
-        if html.body.find('div', attrs={'class': 'g-recaptcha'}):
-            print("ReCaptcha detected! Trying to bypass it.")
-            bypass_captcha()
+        session = requests.Session()
+        print("Starting python GET request...")
+        response = session.get(url)
+        # Strings that appear when there's a Captcha.
+        string_de = "Fülle das folgende Feld aus, um YouTube weiter zu nutzen."
+        string_en = "To continue with your YouTube experience, please fill out the form below."
+        # If there's a captcha, bypass it.
+        if string_de in response.text or string_en in response.text:
+            bypass_captcha(session, response)
 
         if max_redirects:
             retries = urllib3.Retry(3 + max_redirects, redirect=max_redirects)
@@ -464,3 +460,4 @@ def check_gevent_exceptions(*tasks):
     for task in tasks:
         if task.exception:
             raise task.exception
+

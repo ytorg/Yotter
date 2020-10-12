@@ -1,4 +1,3 @@
-
 import datetime
 import glob
 import json
@@ -30,8 +29,8 @@ from app.forms import LoginForm, RegistrationForm, EmptyForm, SearchForm, Channe
 from app.models import User, twitterPost, ytPost, Post, youtubeFollow, twitterFollow
 from youtube import comments, utils, channel as ytch, search as yts
 from youtube import watch as ytwatch
+
 #########################################
-from youtube_data import search as yts
 
 #########################################
 
@@ -326,6 +325,10 @@ def ytsearch():
         else:
             prev_page = "/ytsearch?q={q}&s={s}&p={p}".format(q=query, s=sort, p=int(page) - 1)
 
+        for video in results['videos']:
+            hostname = urllib.parse.urlparse(video['videoThumb']).netloc
+            video['videoThumb'] = video['videoThumb'].replace("https://{}".format(hostname), "") + "&host=" + hostname
+
         for channel in results['channels']:
             if config['nginxVideoStream']:
                 channel['thumbnail'] = channel['thumbnail'].replace("~", "/")
@@ -342,9 +345,7 @@ def ytsearch():
 @app.route('/ytfollow/<channelId>', methods=['POST'])
 @login_required
 def ytfollow(channelId):
-    form = EmptyForm()
-    if form.validate_on_submit():
-        r = followYoutubeChannel(channelId)
+    r = followYoutubeChannel(channelId)
     return redirect(request.referrer)
 
 
@@ -376,9 +377,7 @@ def followYoutubeChannel(channelId):
 @app.route('/ytunfollow/<channelId>', methods=['POST'])
 @login_required
 def ytunfollow(channelId):
-    form = EmptyForm()
-    if form.validate_on_submit():
-        unfollowYoutubeChannel(channelId)
+    unfollowYoutubeChannel(channelId)
     return redirect(request.referrer)
 
 
@@ -404,27 +403,38 @@ def unfollowYoutubeChannel(channelId):
 def channel(id):
     form = ChannelForm()
     button_form = EmptyForm()
-    data = requests.get('https://www.youtube.com/feeds/videos.xml?channel_id={id}'.format(id=id))
-    data = feedparser.parse(data.content)
 
-    channelData = YoutubeSearch.channelInfo(id)
+    page = request.args.get('p', None)
+    sort = request.args.get('s', None)
+    if page is None:
+        page = 1
+    if sort is None:
+        sort = 3
 
-    for video in channelData[1]:
+    data = ytch.get_channel_tab_info(id, page, sort)
+
+    for video in data['items']:
         if config['nginxVideoStream']:
-            hostName = urllib.parse.urlparse(video['videoThumb']).netloc
-            video['videoThumb'] = video['videoThumb'].replace("https://{}".format(hostName), "").replace("hqdefault",
-                                                                                                         "mqdefault") + "&host=" + hostName
+            hostName = urllib.parse.urlparse(video['thumbnail'][1:]).netloc
+            video['thumbnail'] = video['thumbnail'].replace("https://{}".format(hostName), "")[1:].replace("hqdefault",
+                                                                                                       "mqdefault") + "&host=" + hostName
         else:
-            video['videoThumb'] = video['videoThumb'].replace('/', '~')
-    if config['nginxVideoStream']:
-        hostName = urllib.parse.urlparse(channelData[0]['avatar']).netloc
-        channelData[0]['avatar'] = channelData[0]['avatar'].replace("https://{}".format(hostName),
-                                                                    "") + "?host=" + hostName
-    else:
-        channelData[0]['avatar'] = channelData[0]['avatar'].replace('/', '~')
+            video['thumbnail'] = video['thumbnail'].replace('/', '~')
 
-    return render_template('channel.html', form=form, btform=button_form, channel=channelData[0], videos=channelData[1],
-                           restricted=config['restrictPublicUsage'], config=config)
+    if config['nginxVideoStream']:
+        hostName = urllib.parse.urlparse(data['avatar'][1:]).netloc
+        data['avatar'] = data['avatar'].replace("https://{}".format(hostName), "")[1:] + "?host=" + hostName
+    else:
+        data['avatar'] = data['avatar'].replace('/', '~')
+
+    next_page = "/channel/{q}?s={s}&p={p}".format(q=id, s=sort, p=int(page) + 1)
+    if int(page) == 1:
+        prev_page = "/channel/{q}?s={s}&p={p}".format(q=id, s=sort, p=1)
+    else:
+        prev_page = "/channel/{q}?s={s}&p={p}".format(q=id, s=sort, p=int(page) - 1)
+
+    return render_template('channel.html', form=form, btform=button_form, data=data,
+                           restricted=config['restrictPublicUsage'], config=config, next_page=next_page, prev_page=prev_page)
 
 
 def get_best_urls(urls):
@@ -454,18 +464,13 @@ def get_live_urls(urls):
 def watch():
     id = request.args.get('v', None)
     info = ytwatch.extract_info(id, False, playlist_id=None, index=None)
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-    # Use nginx
-    best_formats = ["22", "18", "34", "35", "36", "37", "38", "43", "44", "45", "46"]
-=======
-=======
->>>>>>> Stashed changes
-=======
->>>>>>> Stashed changes
-    vsources = ytwatch.get_video_sources(info, False)
 
+    retry = 3
+    while retry != 0 and info['playability_error'] == 'Could not find player':
+        info=ytwatch.extract_info(id, False, playlist_id=None, index=None)
+        retry -= 1
+
+    vsources = ytwatch.get_video_sources(info, False)
     # Retry 3 times if no sources are available.
     retry = 3
     while retry != 0 and len(vsources) == 0:
@@ -477,26 +482,29 @@ def watch():
         source['src'] = source['src'].replace("https://{}".format(hostName), "") + "&host=" + hostName
 
     # Parse video formats
->>>>>>> Stashed changes
     for v_format in info['formats']:
         hostName = urllib.parse.urlparse(v_format['url']).netloc
         v_format['url'] = v_format['url'].replace("https://{}".format(hostName), "") + "&host=" + hostName
-        if v_format['audio_bitrate'] is not None and v_format['vcodec'] is not None:
-            v_format['video_valid'] = True
-        elif v_format['audio_bitrate'] is not None and v_format['vcodec'] is None:
+        if v_format['audio_bitrate'] is not None and v_format['vcodec'] is None:
             v_format['audio_valid'] = True
 
-    info['description'] = Markup(bleach.linkify(info['description'].replace("\n", "<br>")))
+    # Markup description
+    try:
+        info['description'] = Markup(bleach.linkify(info['description'].replace("\n", "<br>")))
+    except AttributeError or TypeError:
+        print(info['description'])
+
 
     # Get comments
     videocomments = comments.video_comments(id, sort=0, offset=0, lc='', secret_key='')
     videocomments = utils.post_process_comments_info(videocomments)
-
     if videocomments is not None:
         videocomments.sort(key=lambda x: x['likes'], reverse=True)
 
-    info['rating'] = str((info['like_count']/(info['like_count']+info['dislike_count']))*100)[0:4]
-    return render_template("video.html", info=info, title='{}'.format(info['title']), config=config, videocomments=videocomments)
+    # Calculate rating %
+    info['rating'] = str((info['like_count'] / (info['like_count'] + info['dislike_count'])) * 100)[0:4]
+    return render_template("video.html", info=info, title='{}'.format(info['title']), config=config,
+                           videocomments=videocomments, vsources=vsources)
 
 
 def markupString(string):
@@ -745,15 +753,17 @@ def register():
     return render_template('register.html', title='Register', registrations=REGISTRATIONS, form=form, config=config)
 
 
-@app.route('/registrations_status/icon')
-def registrations_status_icon():
+@app.route('/status')
+def status():
     count = db.session.query(User).count()
     if count >= config['maxInstanceUsers'] or config['maxInstanceUsers'] == 0:
-        return redirect(url_for('static', filename='img/close.png'))
+        filen = url_for('static', filename='img/close.png')
+        caniregister = False
     else:
         filen = url_for('static', filename='img/open.png')
         caniregister = True
 
+    return render_template('status.html', title='STATUS', count=count, max=config['maxInstanceUsers'], file=filen, cani=caniregister)
 
 @app.route('/error/<errno>')
 def error(errno):

@@ -8,11 +8,11 @@ from youtube import util, yt_data_extract
 
 def get_video_sources(info, tor_bypass=False):
     video_sources = []
-    max_resolution = "720"
+    max_resolution = 1080
     for fmt in info['formats']:
         if not all(fmt[attr] for attr in ('quality', 'width', 'ext', 'url')):
             continue
-        if fmt['acodec'] and fmt['vcodec'] and fmt['height'] <= max_resolution:
+        if fmt['acodec'] and fmt['vcodec'] and (fmt['height'] <= max_resolution):
             video_sources.append({
                 'src': fmt['url'],
                 'type': 'video/' + fmt['ext'],
@@ -123,6 +123,24 @@ def get_subtitle_sources(info):
 
     return sources
 
+def decrypt_signatures(info):
+    '''return error string, or False if no errors'''
+    if not yt_data_extract.requires_decryption(info):
+        return False
+    if not info['player_name']:
+        return 'Could not find player name'
+    if not info['base_js']:
+        return 'Failed to find base.js'
+
+    player_name = info['player_name']
+    base_js = util.fetch_url(info['base_js'], debug_name='base.js', report_text='Fetched player ' + player_name)
+    base_js = base_js.decode('utf-8')
+    err = yt_data_extract.extract_decryption_function(info, base_js)
+    if err:
+        return err
+    err = yt_data_extract.decrypt_signatures(info)
+    return err
+
 
 def get_ordered_music_list_attributes(music_list):
     # get the set of attributes which are used by atleast 1 track
@@ -146,9 +164,8 @@ headers = (
     ('X-YouTube-Client-Version', '2.20180830'),
 ) + util.mobile_ua
 def extract_info(video_id, use_invidious, playlist_id=None, index=None):
-    # bpctr=9999999999 will bypass are-you-sure dialogs for controversial
-    # videos
-    url = 'https://m.youtube.com/watch?v=' + video_id + '&gl=US&hl=en&has_verified=1&pbj=1&bpctr=9999999999'
+    # bpctr=9999999999 will bypass are-you-sure dialogs for controversial videos
+    url = 'https://m.youtube.com/watch?v=' + video_id + '&pbj=1&bpctr=9999999999'
     if playlist_id:
         url += '&list=' + playlist_id
     if index:
@@ -173,6 +190,12 @@ def extract_info(video_id, use_invidious, playlist_id=None, index=None):
         url = 'https://www.youtube.com/get_video_info?' + urllib.parse.urlencode(data)
         video_info_page = util.fetch_url(url, debug_name='get_video_info', report_text='Fetched age restriction bypass page').decode('utf-8')
         yt_data_extract.update_with_age_restricted_info(info, video_info_page)
+
+    # signature decryption
+    decryption_error = decrypt_signatures(info)
+    if decryption_error:
+        decryption_error = 'Error decrypting url signatures: ' + decryption_error
+        info['playability_error'] = decryption_error
     # check if urls ready (non-live format) in former livestream
     # urls not ready if all of them have no filesize
     if info['was_live']:
