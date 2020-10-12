@@ -102,7 +102,7 @@ def decode_content(content, encoding_header):
 def bypass_captcha(session, response, url, cookies):
     print("vvv COOKIES DICT vvv")
 
-    cookies = [{c.name: c.value} for c in cookies]
+    cookies = [{c['name']: c['value']} for c in cookies]
     inputs = {}
     html = BeautifulSoup(str(response.text), "lxml")
 
