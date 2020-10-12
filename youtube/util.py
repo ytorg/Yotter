@@ -99,11 +99,10 @@ def decode_content(content, encoding_header):
     return content
 
 
-def bypass_captcha(session, response, url):
+def bypass_captcha(session, response, url, cookies):
     print("vvv COOKIES DICT vvv")
-    cookies = session.cookies.get_dict()
-    print(cookies)
 
+    cookies = [{c.name: c.value} for c in cookies]
     inputs = {}
     html = BeautifulSoup(str(response.text), "lxml")
 
@@ -141,7 +140,7 @@ def bypass_captcha(session, response, url):
                             headers={"Content-Type": "application/x-www-form-urlencoded",
                                      "Accept-Language": "en-US,en;q=0.5",
                                      "Referer": "https://www.youtube.com/das_captcha",
-                                     "Origin": "https://www.youtube.com"}).headers)
+                                     "Origin": "https://www.youtube.com"}, cookies=cookies).headers)
 
 
 def fetch_url_response(url, headers=(), timeout=15, data=None,
@@ -192,14 +191,18 @@ def fetch_url_response(url, headers=(), timeout=15, data=None,
         # retry. So there are 3 redirects max by default.
 
         session = requests.Session()
-        print("Starting python GET request...")
-        response = session.get(url)
+        print("Starting python GET request to "+url+"...")
+        response = session.get(url, headers={'User-Agent': 'Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:81.0) Gecko/20100101 Firefox/81.0'})
+
         # Strings that appear when there's a Captcha.
         string_de = "Fülle das folgende Feld aus, um YouTube weiter zu nutzen."
         string_en = "To continue with your YouTube experience, please fill out the form below."
         # If there's a captcha, bypass it.
         if string_de in response.text or string_en in response.text:
-            bypass_captcha(session, response, url)
+            # Parse response cookies.
+            cookies = [{'name': c.name, 'value': c.value, 'domain': c.domain, 'path': c.path} for c in session.cookies]
+            print(cookies)
+            bypass_captcha(session, response, url, cookies)
             return "Captcha", "Captcha"
 
         if max_redirects:
@@ -463,4 +466,3 @@ def check_gevent_exceptions(*tasks):
     for task in tasks:
         if task.exception:
             raise task.exception
-
