@@ -454,8 +454,27 @@ def get_live_urls(urls):
 def watch():
     id = request.args.get('v', None)
     info = ytwatch.extract_info(id, False, playlist_id=None, index=None)
+<<<<<<< Updated upstream
+<<<<<<< Updated upstream
     # Use nginx
     best_formats = ["22", "18", "34", "35", "36", "37", "38", "43", "44", "45", "46"]
+=======
+=======
+>>>>>>> Stashed changes
+    vsources = ytwatch.get_video_sources(info, False)
+
+    # Retry 3 times if no sources are available.
+    retry = 3
+    while retry != 0 and len(vsources) == 0:
+        vsources = ytwatch.get_video_sources(info, False)
+        retry -= 1
+
+    for source in vsources:
+        hostName = urllib.parse.urlparse(source['src']).netloc
+        source['src'] = source['src'].replace("https://{}".format(hostName), "") + "&host=" + hostName
+
+    # Parse video formats
+>>>>>>> Stashed changes
     for v_format in info['formats']:
         hostName = urllib.parse.urlparse(v_format['url']).netloc
         v_format['url'] = v_format['url'].replace("https://{}".format(hostName), "") + "&host=" + hostName

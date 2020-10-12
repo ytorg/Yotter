@@ -38,6 +38,14 @@ packaging==20.4
 pylint==2.6.0
 PyMySQL==0.10.1
 pyparsing==2.4.7
+<<<<<<< Updated upstream
+=======
+PySocks==1.7.1
+python-anticaptcha==0.7.1
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
+>>>>>>> Stashed changes
 python-dateutil==2.8.1
 python-dotenv==0.14.0
 python-editor==1.0.4

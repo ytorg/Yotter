@@ -11,5 +11,6 @@
 	"admin_message":"Message from the admin text",
 	"admin_user":"admin_username",
 	"max_old_user_days": 60,
-	"donate_url": ""
+	"donate_url": "",
+	"anticaptcha": "cf4bb53a6b87f973be8c0c976c390342"
 }
