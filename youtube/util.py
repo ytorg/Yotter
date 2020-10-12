@@ -99,7 +99,7 @@ def decode_content(content, encoding_header):
     return content
 
 
-def bypass_captcha(session, response):
+def bypass_captcha(session, response, url):
     print("vvv COOKIES DICT vvv")
     cookies = session.cookies.get_dict()
     print(cookies)
@@ -199,7 +199,7 @@ def fetch_url_response(url, headers=(), timeout=15, data=None,
         string_en = "To continue with your YouTube experience, please fill out the form below."
         # If there's a captcha, bypass it.
         if string_de in response.text or string_en in response.text:
-            bypass_captcha(session, response)
+            bypass_captcha(session, response, url)
 
         if max_redirects:
             retries = urllib3.Retry(3 + max_redirects, redirect=max_redirects)
