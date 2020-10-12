@@ -28,7 +28,7 @@ from youtube_search import YoutubeSearch
 from app import app, db
 from app.forms import LoginForm, RegistrationForm, EmptyForm, SearchForm, ChannelForm
 from app.models import User, twitterPost, ytPost, Post, youtubeFollow, twitterFollow
-from youtube import comments, utils
+from youtube import comments, utils, channel as ytch, search as yts
 from youtube import watch as ytwatch
 #########################################
 from youtube_data import search as yts
@@ -456,9 +456,12 @@ def watch():
     info = ytwatch.extract_info(id, False, playlist_id=None, index=None)
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
     # Use nginx
     best_formats = ["22", "18", "34", "35", "36", "37", "38", "43", "44", "45", "46"]
 =======
+=======
+>>>>>>> Stashed changes
 =======
 >>>>>>> Stashed changes
     vsources = ytwatch.get_video_sources(info, False)
@@ -748,13 +751,8 @@ def registrations_status_icon():
     if count >= config['maxInstanceUsers'] or config['maxInstanceUsers'] == 0:
         return redirect(url_for('static', filename='img/close.png'))
     else:
-        return redirect(url_for('static', filename='img/open.png'))
-
-
-@app.route('/registrations_status/text')
-def registrations_status_text():
-    count = db.session.query(User).count()
-    return "{c}/{t}".format(c=count, t=config['maxInstanceUsers'])
+        filen = url_for('static', filename='img/open.png')
+        caniregister = True
 
 
 @app.route('/error/<errno>')
