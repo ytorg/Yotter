@@ -101,8 +101,6 @@ def decode_content(content, encoding_header):
 
 def bypass_captcha(session, response, url, cookies):
     print("vvv COOKIES DICT vvv")
-
-    cookies = [{c['name']: c['value']} for c in cookies]
     inputs = {}
     html = BeautifulSoup(str(response.text), "lxml")
 
@@ -125,22 +123,38 @@ def bypass_captcha(session, response, url, cookies):
         site_key = html.body.find('div', attrs={'class': 'g-recaptcha'})['data-sitekey']
         s_value = html.body.find('input', attrs={'name': 'session_token'})['value']
 
-        # Get anti-captcha API key
+        # Get anti-captcha API key from config
         config = json.load(open('yotter-config.json'))
-        client = AnticaptchaClient(config['anticaptcha'])
-        # Create anti-captcha Task
-        task = NoCaptchaTaskProxylessTask(url, site_key)
-        job = client.createTask(task)
-        job.join()
+        # Generate anti-captcha request payload
+        body = {'clientKey': config['anticaptcha']}
+        task = {'type': "NoCaptchaTaskProxyless", 'websiteURL': url,
+                'websiteKey': site_key, "recaptchaDataSValue": s_value}
+        body['task'] = task
 
-        inputs['g-recaptcha-response'] = job.get_solution_response()
+        # Create the task.
+        response = requests.post("https://api.anti-captcha.com/createTask", json=body).json()
+        task_id = response["taskId"]
+        print("Task was created: {}. Waiting...".format(task_id))
 
+        # Wait until task is completed
+        body = {"clientKey": config['anticaptcha'], "taskId": task_id}
+        response = requests.post("https://api.anti-captcha.com/getTaskResult", json=body).json()
+        ready = response["status"] == "ready"
+        while not ready:
+            print(response['status'])
+            response = requests.post("https://api.anti-captcha.com/getTaskResult", json=body).json()
+            ready = response["status"] == "ready"
+
+
+        inputs['g-recaptcha-response'] = response['solution']['gRecaptchaResponse']
+        print(response['solution'])
         # Print POST request headers
         print(requests.post("https://youtube.com/das_captcha", data=inputs,
                             headers={"Content-Type": "application/x-www-form-urlencoded",
                                      "Accept-Language": "en-US,en;q=0.5",
+                                     "User-Agent":'Mozilla/5.0 (Windows NT 10.0; rv:78.0) Gecko/20100101 Firefox/78.0',
                                      "Referer": "https://www.youtube.com/das_captcha",
-                                     "Origin": "https://www.youtube.com"}, cookies=cookies).headers)
+                                     "Origin": "https://www.youtube.com"}, cookies=session.cookies).headers)
 
 
 def fetch_url_response(url, headers=(), timeout=15, data=None,
@@ -176,11 +190,9 @@ def fetch_url_response(url, headers=(), timeout=15, data=None,
 
     if cookiejar_send is not None or cookiejar_receive is not None:  # Use urllib
         req = urllib.request.Request(url, data=data, headers=headers)
-
         cookie_processor = HTTPAsymmetricCookieProcessor(cookiejar_send=cookiejar_send,
                                                          cookiejar_receive=cookiejar_receive)
         opener = urllib.request.build_opener(cookie_processor)
-
         response = opener.open(req, timeout=timeout)
         cleanup_func = (lambda r: None)
 
@@ -192,17 +204,14 @@ def fetch_url_response(url, headers=(), timeout=15, data=None,
 
         session = requests.Session()
         print("Starting python GET request to "+url+"...")
-        response = session.get(url, headers={'User-Agent': 'Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:81.0) Gecko/20100101 Firefox/81.0'})
+        response = session.get(url, headers={'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; rv:78.0) Gecko/20100101 Firefox/78.0'})
 
         # Strings that appear when there's a Captcha.
         string_de = "Fülle das folgende Feld aus, um YouTube weiter zu nutzen."
         string_en = "To continue with your YouTube experience, please fill out the form below."
         # If there's a captcha, bypass it.
         if string_de in response.text or string_en in response.text:
-            # Parse response cookies.
-            cookies = [{'name': c.name, 'value': c.value, 'domain': c.domain, 'path': c.path} for c in session.cookies]
-            print(cookies)
-            bypass_captcha(session, response, url, cookies)
+            bypass_captcha(session, response, url, session.cookies)
             return "Captcha", "Captcha"
 
         if max_redirects:
