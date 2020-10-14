@@ -24,7 +24,7 @@ future==0.18.2
 gevent==20.9.0
 greenlet==0.4.17
 idna==2.10
-isort==5.5.3
+isort==5.6.4
 itsdangerous==1.1.0
 Jinja2==2.11.2
 lazy-object-proxy==1.5.1
