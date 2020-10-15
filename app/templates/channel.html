@@ -54,7 +54,7 @@
         {% for video in data['items'] %}
             <div class="ui card">
               <a class="image" href="{{url_for('watch', v=video.id, _method='GET')}}">
-                <img src="https://yotter.xyz{{video.thumbnail}}">
+                <img src="{{video.thumbnail}}">
               </a>
               <div class="content">
                 <a class="header" href="{{url_for('watch', v=video.id, _method='GET')}}">{{video.title}}</a>

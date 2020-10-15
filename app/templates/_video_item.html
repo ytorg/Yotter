@@ -1,6 +1,6 @@
 <div class="ui card">
   <a class="image" href="{{url_for('watch', v=video.id, _method='GET')}}">
-    <img src="https://yotter.xyz{{video.videoThumb}}">
+    <img src="{{video.videoThumb}}">
   </a>
   <div class="content">
     <a class="header" href="{{url_for('watch', v=video.id, _method='GET')}}">{{video.videoTitle}}</a>
