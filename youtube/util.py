@@ -127,8 +127,10 @@ def bypass_captcha(session, response, url, cookies):
         config = json.load(open('yotter-config.json'))
         # Generate anti-captcha request payload
         body = {'clientKey': config['anticaptcha']}
-        task = {'type': "NoCaptchaTaskProxyless", 'websiteURL': url,
-                'websiteKey': site_key, "recaptchaDataSValue": s_value}
+        task = {'type': "NoCaptchaTaskProxyless",
+                'websiteURL': url,
+                'websiteKey': site_key,
+                'recaptchaDataSValue': s_value}
         body['task'] = task
 
         # Create the task.
