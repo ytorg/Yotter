@@ -56,17 +56,38 @@
         <div class="ui horizontal segments">
           <div class="center aligned ui segment">
             <a href="{{ url_for('channel', id=info.author_id)}}">
-                <i class="user icon"></i> {{info.author}}
+                <i class="user icon"></i> <b>{{info.author}}</b>
             </a>
           </div>
           <div class="center aligned ui segment">
-            <h4 class="ui header"><i class="grey eye icon"></i>{{info.view_count}}</h4>
+            <div class="ui mini statistic">
+                <div class="value">
+                    <i class="grey eye icon"></i> <b>{{info.view_count}}</b>
+                </div>
+                <div class="label">
+                    views
+                </div>
+            </div>
           </div>
           <div class="center aligned ui segment">
             {% if info.rating | int > 49 %}
-                <h4 class="ui header"><i class="green thumbs up icon"></i> {{info.rating}}%</h4>
+                <div class="ui mini statistic">
+                    <div class="value">
+                        <i class="green thumbs up icon"></i> <b>{{info.rating}}%</b>
+                    </div>
+                    <div class="label">
+                        Total: {{info.like_count+info.dislike_count}} votes
+                    </div>
+                </div>
             {% else %}
-                <h4 class="ui header"><i class="red thumbs down icon"></i> {{info.rating}}%</h4>
+            <div class="ui mini statistic">
+                <div class="value">
+                    <i class="red thumbs down icon"></i> <b>{{info.rating}}%</b>
+                </div>
+                <div class="label">
+                    Total: {{info.like_count+info.dislike_count}} votes
+                </div>
+                </div>
             {% endif %}
           </div>
         </div>

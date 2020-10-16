@@ -80,6 +80,15 @@ def twitter(page=0):
     avatarPath = "img/avatars/1.png"
     posts = []
 
+    nitter_feed_link = config['nitterInstance']
+    c = len(followingList)
+    for user in followingList:
+        if c != 0:
+            nitter_feed_link = nitter_feed_link+"{},".format(user.username)
+            c = c-1
+        else:
+            nitter_feed_link = nitter_feed_link+user.username
+
     cache_file = glob.glob("app/cache/{}_*".format(current_user.username))
     if (len(cache_file) > 0):
         time_diff = round(time.time() - os.path.getmtime(cache_file[0]))
@@ -133,7 +142,7 @@ def twitter(page=0):
         profilePic = posts[0]['profilePic']
     return render_template('twitter.html', title='Yotter | Twitter', posts=posts, avatar=avatarPath,
                            profilePic=profilePic, followedCount=followCount, form=form, config=config,
-                           pages=total_pages, init_page=init_page, actual_page=page)
+                           pages=total_pages, init_page=init_page, actual_page=page, nitter_link=nitter_feed_link)
 
 
 @app.route('/savePost/<url>', methods=['POST'])
@@ -489,7 +498,6 @@ def watch():
     except AttributeError or TypeError:
         print(info['description'])
 
-
     # Get comments
     videocomments = comments.video_comments(id, sort=0, offset=0, lc='', secret_key='')
     videocomments = utils.post_process_comments_info(videocomments)
@@ -497,7 +505,10 @@ def watch():
         videocomments.sort(key=lambda x: x['likes'], reverse=True)
 
     # Calculate rating %
-    info['rating'] = str((info['like_count'] / (info['like_count'] + info['dislike_count'])) * 100)[0:4]
+    if info['like_count']+info['dislike_count']>0:
+        info['rating'] = str((info['like_count'] / (info['like_count'] + info['dislike_count'])) * 100)[0:4]
+    else:
+        info['rating'] = 50.0
     return render_template("video.html", info=info, title='{}'.format(info['title']), config=config,
                            videocomments=videocomments, vsources=vsources)
 
