@@ -57,7 +57,7 @@ location ~ (/videoplayback|/vi/|/a/) {
     ```
     
    > Your `/etc/nginx/sites-enabled/yotter` file should look something [like this](https://bin.nixnet.services/?d319d06feb1f5756#HgsMgpN9kob7vB5GpUtdTtqZeCdb5SEggLzwr4YAaYo).
-7. Edit your `yotter-config.json` file and enable the `nginxVideoStream` option.
+7. Edit your `yotter-config.json` file and set the `isInstance` option to True.
 8. `sudo service nginx reload`
 9. `sudo supervisorctl start yotter`
 

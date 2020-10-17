@@ -233,11 +233,11 @@ server {
      }
 }
 ```
-Make sure to replace `<yourdomain>` by the domain you are willing to use for your instance (i.e example.com). You can now edit `yotter-config.json` and set `nginxVideoStream` to `true`.
+Make sure to replace `<yourdomain>` by the domain you are willing to use for your instance (i.e example.com). You can now edit `yotter-config.json` and set `isInstance` to `true`.
 
 You will also need to change the `</path/to>` after `alias` to fit your system. You have to point to the Yotter folder, in this set up it would be `/home/ubuntu` as it is the location where we cloned the Yotter app. This alias is created to handle static files directly, without forwarding to the application.
 
-Once done, you can run `sudo service nginx reload`. If everything so far went OK, you can now set the `nginxVideoStream` to `true` on the `yotter-config.json` file.
+Once done, you can run `sudo service nginx reload`. If everything so far went OK, you can now set the `isInstance` to `true` on the `yotter-config.json` file.
 
 Now you need to install an SSL certificate on your server so you can use HTTPS. If you are running Ubuntu 20LTS or already have `snap` installed, you can proceed as follows:
 
@@ -274,7 +274,7 @@ Currently available config is:
 * **maxInstanceUsers**: Max users on the instance. When set to `0` it closes registrations.
 * **serverLocation**: Location of the server.
 * **restrictPublicUsage**: When set to `false` the instance allows non-registered users to use some routes (i.e /watch?v=..., /ytsearch, /channel...). See [this section](https://github.com/pluja/Yotter/blob/dev-indep/SELF-HOSTING.md#removing-log-in-restrictions)
-* **nginxVideoStream**: Wether or not to use Nginx as streaming engine. It is recommended for public instances. [See this link]()
+* **isInstance**: If your installation is on a server using Nginx, it must be True. Only false if running on a local machine. [See this link]()
 * **maintenance_mode**: Activates a message on the server warning users of maintenance mode.
 * **show_admin_message**: Shows a message from the admin with title as `admin_message_title` and body as `admin_message`
 * **admin_user**: Username of the admin user.

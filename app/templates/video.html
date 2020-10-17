@@ -40,7 +40,7 @@
             controls
             buffered
             preload="none">
-            {% if config.nginxVideoStream %}
+            {% if config.isInstance %}
                 {% for source in vsources %}
                         <source src="{{source.src}}" type="{{source.type}}">
                 {% endfor %}

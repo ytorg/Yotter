@@ -339,7 +339,7 @@ def ytsearch():
             video['videoThumb'] = video['videoThumb'].replace("https://{}".format(hostname), "") + "&host=" + hostname
 
         for channel in results['channels']:
-            if config['nginxVideoStream']:
+            if config['isInstance']:
                 channel['thumbnail'] = channel['thumbnail'].replace("~", "/")
                 hostName = urllib.parse.urlparse(channel['thumbnail']).netloc
                 channel['thumbnail'] = channel['thumbnail'].replace("https://{}".format(hostName),
@@ -423,14 +423,14 @@ def channel(id):
     data = ytch.get_channel_tab_info(id, page, sort)
 
     for video in data['items']:
-        if config['nginxVideoStream']:
+        if config['isInstance']:
             hostName = urllib.parse.urlparse(video['thumbnail'][1:]).netloc
             video['thumbnail'] = video['thumbnail'].replace("https://{}".format(hostName), "")[1:].replace("hqdefault",
                                                                                                        "mqdefault") + "&host=" + hostName
         else:
             video['thumbnail'] = video['thumbnail'].replace('/', '~')
 
-    if config['nginxVideoStream']:
+    if config['isInstance']:
         hostName = urllib.parse.urlparse(data['avatar'][1:]).netloc
         data['avatar'] = data['avatar'].replace("https://{}".format(hostName), "")[1:] + "?host=" + hostName
     else:
@@ -1027,7 +1027,7 @@ def getYoutubePosts(ids):
                 video.channelUrl = vid.author_detail.href
                 video.id = vid.yt_videoid
                 video.videoTitle = vid.title
-                if config['nginxVideoStream']:
+                if config['isInstance']:
                     hostName = urllib.parse.urlparse(vid.media_thumbnail[0]['url']).netloc
                     video.videoThumb = vid.media_thumbnail[0]['url'].replace("https://{}".format(hostName), "").replace(
                         "hqdefault", "mqdefault") + "?host=" + hostName

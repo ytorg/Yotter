@@ -23,7 +23,7 @@
             {% for res in results.channels %}
                     <div class="item">
                         <div class="image">
-                            {% if config.nginxVideoStream %}
+                            {% if config.isInstance %}
                                 <img src="{{res.thumbnail}}" alt="Avatar">
                             {% else %}    
                                 <img alt="Avatar" src="{{ url_for('img', url=res.thumbnail) }}">
