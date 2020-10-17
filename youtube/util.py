@@ -151,12 +151,13 @@ def bypass_captcha(session, response, url, cookies):
         inputs['g-recaptcha-response'] = response['solution']['gRecaptchaResponse']
         print(response)
         # Print POST request headers
-        print(requests.post("https://youtube.com/das_captcha", data=inputs,
-                            headers={"Content-Type": "application/x-www-form-urlencoded",
-                                     "Accept-Language": "en-US,en;q=0.5",
-                                     "User-Agent":'Mozilla/5.0 (Windows NT 10.0; rv:78.0) Gecko/20100101 Firefox/78.0',
-                                     "Referer": "https://www.youtube.com/das_captcha",
-                                     "Origin": "https://www.youtube.com"}, cookies=session.cookies).headers)
+        yt_rq = requests.post("https://youtube.com/das_captcha", data=inputs,
+                                headers={"Content-Type": "application/x-www-form-urlencoded",
+                                        "Accept-Language": "en-US,en;q=0.5",
+                                        "User-Agent":'Mozilla/5.0 (Windows NT 10.0; rv:78.0) Gecko/20100101 Firefox/78.0',
+                                        "Referer": "https://www.youtube.com/das_captcha",
+                                        "Origin": "https://www.youtube.com"}, cookies=session.cookies).headers
+        print(yt_rq['Cookie'])
 
 
 def fetch_url_response(url, headers=(), timeout=15, data=None,
