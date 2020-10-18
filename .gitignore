@@ -145,6 +145,7 @@ dmypy.json
 .pytype/
 
 # Added
+yotter-config.yaml
 data_export.json
 .env
 .envo
