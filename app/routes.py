@@ -1,5 +1,6 @@
 import datetime
 import glob
+import yaml
 import json
 import math
 import os
@@ -39,7 +40,7 @@ cache.init_app(app)
 ##########################
 #### Config variables ####
 ##########################
-config = json.load(open('yotter-config.json'))
+config = yaml.safe_load(open('yotter-config.yaml'))
 ##########################
 #### Config variables ####
 ##########################
