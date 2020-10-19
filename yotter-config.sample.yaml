@@ -18,10 +18,13 @@ proxy_videos: true
 # If this is unset and `proxy_*` is set to true, requests will be proxied internally.
 # It's recommended to use an external proxy such as nginx for better performance.
 #
-# Vars in {} for the original url as per `urllib.parse.urlparse`:
-# scheme, netloc (host:port), path (with a leading `/`), query (without leading `?`), fragment (without leading `#`)
+# It's possible to use variables in `{}` that refer to the original request url:
+# `scheme`, `netloc` (host:port), `path` (with a leading `/`), `query` (without leading `?`), `fragment` (without leading `#`): as per `urllib.parse.urlparse`
+# `scheme_encoded`, `netloc_encoded` etc.: same as above but urlencoded
+# `url`, `url_encoded`: the original request url, and urlencoded variant
 #
 # The example below works for the nginx configuration in `SELF-HOSTING.md`
+#
 #external_proxy: "https://my.nginx.instance{path}?{query}&host={netloc}"
 
 maintenance_mode: false

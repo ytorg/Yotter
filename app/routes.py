@@ -583,7 +583,12 @@ def ytimg(url):
 
 def proxy_url(url, endpoint, config_entry):
     ext_proxy = config.get('external_proxy', None)
-    if ext_proxy: return ext_proxy.format(**urllib.parse.urlparse(url)._asdict())
+    if ext_proxy:
+        parsed = urllib.parse.urlparse(url)._asdict()
+        parsed['url'] = url
+        encoded = {key+'_encoded': urllib.parse.quote_plus(value) for (key,value) in parsed.items()}
+        joined = dict(parsed, **encoded)
+        return ext_proxy.format(**joined)
     return url_for(endpoint,url=url) if config.get(config_entry, None) else url
 
 def proxy_video_source_url(url):
