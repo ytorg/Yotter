@@ -595,7 +595,7 @@ def proxy_video_source_url(url):
     return proxy_url(url, 'stream', 'proxy_videos')
 
 def proxy_image_url(url):
-    return proxy_url(url, 'ytimg', 'proxy_images')
+    return proxy_url(url, 'ytimg', 'proxy_images').replace('hqdefault','mqdefault')
 
 @app.route('/logout')
 def logout():
