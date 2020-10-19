@@ -40,11 +40,9 @@
             controls
             buffered
             preload="none">
-            {% if config.nginxVideoStream %}
-                {% for source in vsources %}
-                        <source src="{{source.src}}" type="{{source.type}}">
-                {% endfor %}
-            {% endif %}
+            {% for source in vsources %}
+                    <source src="{{source.src}}" type="{{source.type}}">
+            {% endfor %}
             </video-js>
         </div>
     {%endif%}
@@ -115,7 +113,7 @@
                 {% include '_video_comment.html' %}
         {% endfor %}
     </div>
-            
+
 <script src="{{ url_for('static',filename='video.min.js') }}"></script>
 {% if info.live %}
     <script src="{{ url_for('static',filename='videojs-http-streaming.min.js')}}"></script>

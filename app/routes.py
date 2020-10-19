@@ -336,15 +336,11 @@ def ytsearch():
             prev_page = "/ytsearch?q={q}&s={s}&p={p}".format(q=query, s=sort, p=int(page) - 1)
 
         for video in results['videos']:
-            hostname = urllib.parse.urlparse(video['videoThumb']).netloc
-            video['videoThumb'] = video['videoThumb'].replace("https://{}".format(hostname), "") + "&host=" + hostname
+            video['videoThumb'] = proxy_image_url(video['videoThumb'])
 
         for channel in results['channels']:
-            if config['nginxVideoStream']:
-                channel['thumbnail'] = channel['thumbnail'].replace("~", "/")
-                hostName = urllib.parse.urlparse(channel['thumbnail']).netloc
-                channel['thumbnail'] = channel['thumbnail'].replace("https://{}".format(hostName),
-                                                                    "") + "?host=" + hostName
+            channel['thumbnail'] = proxy_image_url(channel['thumbnail'])
+
         return render_template('ytsearch.html', form=form, btform=button_form, results=results,
                                restricted=config['restrictPublicUsage'], config=config, npage=next_page,
                                ppage=prev_page)
@@ -424,18 +420,9 @@ def channel(id):
     data = ytch.get_channel_tab_info(id, page, sort)
 
     for video in data['items']:
-        if config['nginxVideoStream']:
-            hostName = urllib.parse.urlparse(video['thumbnail'][1:]).netloc
-            video['thumbnail'] = video['thumbnail'].replace("https://{}".format(hostName), "")[1:].replace("hqdefault",
-                                                                                                       "mqdefault") + "&host=" + hostName
-        else:
-            video['thumbnail'] = video['thumbnail'].replace('/', '~')
+        video['thumbnail'] = proxy_image_url(video['thumbnail'])
 
-    if config['nginxVideoStream']:
-        hostName = urllib.parse.urlparse(data['avatar'][1:]).netloc
-        data['avatar'] = data['avatar'].replace("https://{}".format(hostName), "")[1:] + "?host=" + hostName
-    else:
-        data['avatar'] = data['avatar'].replace('/', '~')
+    data['avatar'] = proxy_image_url(data['avatar'])
 
     next_page = "/channel/{q}?s={s}&p={p}".format(q=id, s=sort, p=int(page) + 1)
     if int(page) == 1:
@@ -483,13 +470,11 @@ def watch():
         retry -= 1
 
     for source in vsources:
-        hostName = urllib.parse.urlparse(source['src']).netloc
-        source['src'] = source['src'].replace("https://{}".format(hostName), "") + "&host=" + hostName
+        source['src'] = proxy_video_source_url(source['src'])
 
     # Parse video formats
     for v_format in info['formats']:
-        hostName = urllib.parse.urlparse(v_format['url']).netloc
-        v_format['url'] = v_format['url'].replace("https://{}".format(hostName), "") + "&host=" + hostName
+        v_format['url'] = proxy_video_source_url(v_format['url'])
         if v_format['audio_bitrate'] is not None and v_format['vcodec'] is None:
             v_format['audio_valid'] = True
 
@@ -524,11 +509,10 @@ def markupString(string):
 
 
 ## PROXY videos through Yotter server to the client.
-@app.route('/stream/<url>', methods=['GET', 'POST'])
+@app.route('/stream/<path:url>', methods=['GET', 'POST'])
 @login_required
 def stream(url):
     # This function proxies the video stream from GoogleVideo to the client.
-    url = url.replace('YotterSlash', '/')
     headers = Headers()
     if (url):
         s = requests.Session()
@@ -586,6 +570,27 @@ def img(url):
     pic = requests.get(url.replace("~", "/"))
     return Response(pic, mimetype="image/png")
 
+# Proxy yt images through server
+@app.route('/ytimg/<path:url>')
+@login_required
+def ytimg(url):
+    pic = requests.get(url, stream=True)
+    response = Response(pic, mimetype=pic.headers['Content-Type'], direct_passthrough=True)
+    # extend browser file caching with etags (ytimg uses 7200)
+    response.cache_control.public = True
+    response.cache_control.max_age = int(60000)
+    return response
+
+def proxy_url(url, endpoint, config_entry):
+    ext_proxy = config.get('external_proxy', None)
+    if ext_proxy: return ext_proxy.format(**urllib.parse.urlparse(url)._asdict())
+    return url_for(endpoint,url=url) if config.get(config_entry, None) else url
+
+def proxy_video_source_url(url):
+    return proxy_url(url, 'stream', 'proxy_videos')
+
+def proxy_image_url(url):
+    return proxy_url(url, 'ytimg', 'proxy_images')
 
 @app.route('/logout')
 def logout():
@@ -1028,12 +1033,8 @@ def getYoutubePosts(ids):
                 video.channelUrl = vid.author_detail.href
                 video.id = vid.yt_videoid
                 video.videoTitle = vid.title
-                if config['nginxVideoStream']:
-                    hostName = urllib.parse.urlparse(vid.media_thumbnail[0]['url']).netloc
-                    video.videoThumb = vid.media_thumbnail[0]['url'].replace("https://{}".format(hostName), "").replace(
-                        "hqdefault", "mqdefault") + "?host=" + hostName
-                else:
-                    video.videoThumb = vid.media_thumbnail[0]['url'].replace('/', '~')
+                video.videoThumb = proxy_image_url(vid.media_thumbnail[0]['url'])
+
                 video.views = vid.media_statistics['views']
                 video.description = vid.summary_detail.value
                 video.description = re.sub(r'^https?:\/\/.*[\r\n]*', '', video.description[0:120] + "...",

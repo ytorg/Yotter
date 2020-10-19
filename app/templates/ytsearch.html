@@ -19,15 +19,11 @@
     {% if results.channels %}
         <h3 class="ui dividing header">Users</h3>
     {% endif %}
-    <div class="ui relaxed divided list">        
+    <div class="ui relaxed divided list">
             {% for res in results.channels %}
                     <div class="item">
                         <div class="image">
-                            {% if config.nginxVideoStream %}
-                                <img src="{{res.thumbnail}}" alt="Avatar">
-                            {% else %}    
-                                <img alt="Avatar" src="{{ url_for('img', url=res.thumbnail) }}">
-                            {% endif %}
+                            <img src="{{res.thumbnail}}" alt="Avatar">
                         </div>
                         <div class="content">
                           <a class = "header" href="{{ url_for('channel', id=res.channelId)}}">{{res.username}}</a>
@@ -45,7 +41,7 @@
                             <div class="ui label">
                                 <i class="video icon"></i> {{res.videos}}
                             </div>
-                            
+
                             {% if restricted or current_user.is_authenticated %}
                                 <div class="right floated content">
                                 {% if not current_user.is_following_yt(res.channelId) %}
@@ -59,7 +55,7 @@
                                         {{ btform.submit(value='Unfollow') }}
                                     </form>
                                 {% endif %}
-                                </div>  
+                                </div>
                             {% endif %}
                           </div>
                         </div>

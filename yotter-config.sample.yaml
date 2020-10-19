@@ -4,7 +4,26 @@ nitterInstance: "https://nitter.net/"
 maxInstanceUsers: 100
 serverLocation: "Germany"
 restrictPublicUsage: true
-nginxVideoStream: true
+
+# Deprecated
+#nginxVideoStream: true
+
+# Whether to proxy images (thumbnails etc.) through the server
+proxy_images: true
+
+# Whether to proxy video (or audio) streams through the server
+proxy_videos: true
+
+# Url for external proxy server
+# If this is unset and `proxy_*` is set to true, requests will be proxied internally.
+# It's recommended to use an external proxy such as nginx for better performance.
+#
+# Vars in {} for the original url as per `urllib.parse.urlparse`:
+# scheme, netloc (host:port), path (with a leading `/`), query (without leading `?`), fragment (without leading `#`)
+#
+# The example below works for the nginx configuration in `SELF-HOSTING.md`
+#external_proxy: "https://my.nginx.instance{path}?{query}&host={netloc}"
+
 maintenance_mode: false
 show_admin_message: false
 admin_message_title: "Message from the admin"
