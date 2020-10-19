@@ -489,6 +489,8 @@ def watch():
     videocomments = utils.post_process_comments_info(videocomments)
     if videocomments is not None:
         videocomments.sort(key=lambda x: x['likes'], reverse=True)
+        for cmnt in videocomments:
+            cmnt['thumbnail'] = proxy_image_url(cmnt['thumbnail'])
 
     # Calculate rating %
     if info['like_count']+info['dislike_count']>0:

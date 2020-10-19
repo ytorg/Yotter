@@ -27,11 +27,9 @@ def concat_texts(strings):
 
 def parse_comment(raw_comment):
     cmnt = {}
-    imgHostName = urllib.parse.urlparse(raw_comment['author_avatar'][1:]).netloc
     cmnt['author'] = raw_comment['author']
-    cmnt['thumbnail'] = raw_comment['author_avatar'].replace("https://{}".format(imgHostName),"")[1:] + "?host=" + imgHostName
+    cmnt['thumbnail'] = raw_comment['author_avatar']
 
-    print(cmnt['thumbnail'])
     cmnt['channel'] = raw_comment['author_url']
     cmnt['text'] = Markup(bleach.linkify(concat_texts(raw_comment['text']).replace("\n", "<br>")))
     cmnt['date'] = raw_comment['time_published']
