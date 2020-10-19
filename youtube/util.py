@@ -49,7 +49,7 @@ import gevent.lock
 import urllib3
 import urllib3.contrib.socks
 
-URL_ORIGIN = "/https://www.youtube.com"
+URL_ORIGIN = "https://www.youtube.com"
 
 connection_pool = urllib3.PoolManager(cert_reqs = 'CERT_REQUIRED')
 
@@ -304,7 +304,7 @@ def video_id(url):
 # default, sddefault, mqdefault, hqdefault, hq720
 def get_thumbnail_url(video_id):
     return "/i.ytimg.com/vi/" + video_id + "/mqdefault.jpg"
-    
+
 def seconds_to_timestamp(seconds):
     seconds = int(seconds)
     hours, seconds = divmod(seconds,3600)
@@ -332,12 +332,6 @@ def uppercase_escape(s):
          r'\\U([0-9a-fA-F]{8})',
          lambda m: chr(int(m.group(1), base=16)), s)
 
-def prefix_url(url):
-    if url is None:
-        return None
-    url = url.lstrip('/')     # some urls have // before them, which has a special meaning
-    return '/' + url
-
 def left_remove(string, substring):
     '''removes substring from the start of string, if present'''
     if string.startswith(substring):
@@ -354,21 +348,9 @@ def concat_or_none(*strings):
     return result
 
 
-def prefix_urls(item):
-    try:
-        item['thumbnail'] = prefix_url(item['thumbnail'])
-    except KeyError:
-        pass
-
-    try:
-        item['author_url'] = prefix_url(item['author_url'])
-    except KeyError:
-        pass
-
 def add_extra_html_info(item):
     if item['type'] == 'video':
         item['url'] = (URL_ORIGIN + '/watch?v=' + item['id']) if item.get('id') else None
-
         video_info = {}
         for key in ('id', 'title', 'author', 'duration'):
             try:
@@ -385,9 +367,7 @@ def add_extra_html_info(item):
 
 def parse_info_prepare_for_html(renderer, additional_info={}):
     item = yt_data_extract.extract_item_info(renderer, additional_info)
-    prefix_urls(item)
     add_extra_html_info(item)
-
     return item
 
 def check_gevent_exceptions(*tasks):
