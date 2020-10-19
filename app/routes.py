@@ -538,6 +538,16 @@ def download_file(streamable):
         for chunk in stream.iter_content(chunk_size=8192):
             yield chunk
 
+# Proxy yt images through server
+@app.route('/ytimg/<path:url>')
+@login_required
+def ytimg(url):
+    pic = requests.get(url, stream=True)
+    response = Response(pic, mimetype=pic.headers['Content-Type'], direct_passthrough=True)
+    # extend browser file caching with etags (ytimg uses 7200)
+    response.cache_control.public = True
+    response.cache_control.max_age = int(60000)
+    return response
 
 #########################
 #### General Logic ######
@@ -569,17 +579,6 @@ def login():
 def img(url):
     pic = requests.get(url.replace("~", "/"))
     return Response(pic, mimetype="image/png")
-
-# Proxy yt images through server
-@app.route('/ytimg/<path:url>')
-@login_required
-def ytimg(url):
-    pic = requests.get(url, stream=True)
-    response = Response(pic, mimetype=pic.headers['Content-Type'], direct_passthrough=True)
-    # extend browser file caching with etags (ytimg uses 7200)
-    response.cache_control.public = True
-    response.cache_control.max_age = int(60000)
-    return response
 
 def proxy_url(url, endpoint, config_entry):
     ext_proxy = config.get('external_proxy', None)
