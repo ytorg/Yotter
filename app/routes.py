@@ -583,6 +583,7 @@ def img(url):
     return Response(pic, mimetype="image/png")
 
 def proxy_url(url, endpoint, config_entry):
+    if not config.get(config_entry, None): return url
     ext_proxy = config.get('external_proxy', None)
     if ext_proxy:
         parsed = urllib.parse.urlparse(url)._asdict()
@@ -590,7 +591,7 @@ def proxy_url(url, endpoint, config_entry):
         encoded = {key+'_encoded': urllib.parse.quote_plus(value) for (key,value) in parsed.items()}
         joined = dict(parsed, **encoded)
         return ext_proxy.format(**joined)
-    return url_for(endpoint,url=url) if config.get(config_entry, None) else url
+    return url_for(endpoint,url=url)
 
 def proxy_video_source_url(url):
     return proxy_url(url, 'stream', 'proxy_videos')
