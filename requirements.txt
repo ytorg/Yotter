@@ -61,4 +61,4 @@ yarl==1.6.0
 youtube-dl==2020.9.20
 youtube-search-fork==1.2.5
 zope.event==4.5.0
-zope.interface==5.1.0
+zope.interface==5.1.2
