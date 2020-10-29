@@ -14,15 +14,15 @@ import flask
 
 
 
-def playlist_ctoken(playlist_id, offset):  
-    
+def playlist_ctoken(playlist_id, offset):
+
     offset = proto.uint(1, offset)
     # this is just obfuscation as far as I can tell. It doesn't even follow protobuf
     offset = b'PT:' + proto.unpadded_b64encode(offset)
     offset = proto.string(15, offset)
 
     continuation_info = proto.string( 3, proto.percent_b64encode(offset) )
-    
+
     playlist_id = proto.string(2, 'VL' + playlist_id )
     pointless_nest = proto.string(80226972, playlist_id + continuation_info)
 
@@ -51,7 +51,7 @@ def playlist_first_page(playlist_id, report_text = "Retrieved playlist"):
     content = json.loads(util.uppercase_escape(content.decode('utf-8')))
 
     return content
-    
+
 
 #https://m.youtube.com/playlist?itct=CBMQybcCIhMIptj9xJaJ2wIV2JKcCh3Idwu-&ctoken=4qmFsgI2EiRWTFBMT3kwajlBdmxWWlB0bzZJa2pLZnB1MFNjeC0tN1BHVEMaDmVnWlFWRHBEUWxFJTNE&pbj=1
 def get_videos(playlist_id, page):
@@ -84,7 +84,7 @@ def get_playlist_page():
         this_page_json = first_page_json
     else:
         tasks = (
-            gevent.spawn(playlist_first_page, playlist_id, report_text="Retrieved playlist info" ), 
+            gevent.spawn(playlist_first_page, playlist_id, report_text="Retrieved playlist info" ),
             gevent.spawn(get_videos, playlist_id, page)
         )
         gevent.joinall(tasks)
@@ -98,12 +98,10 @@ def get_playlist_page():
     if page != '1':
         info['metadata'] = yt_data_extract.extract_playlist_metadata(first_page_json)
 
-    util.prefix_urls(info['metadata'])
     for item in info.get('items', ()):
-        util.prefix_urls(item)
         util.add_extra_html_info(item)
         if 'id' in item:
-            item['thumbnail'] = '/https://i.ytimg.com/vi/' + item['id'] + '/default.jpg'
+            item['thumbnail'] = 'https://i.ytimg.com/vi/' + item['id'] + '/default.jpg'
 
         item['url'] += '&list=' + playlist_id
         if item['index']:

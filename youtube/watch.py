@@ -34,7 +34,7 @@ def make_caption_src(info, lang, auto=False, trans_lang=None):
     if trans_lang:
         label += ' -> ' + trans_lang
     return {
-        'url': '/' + yt_data_extract.get_caption_url(info, lang, 'vtt', auto, trans_lang),
+        'src': yt_data_extract.get_caption_url(info, lang, 'vtt', auto, trans_lang),
         'label': label,
         'srclang': trans_lang[0:2] if trans_lang else lang[0:2],
         'on': False,

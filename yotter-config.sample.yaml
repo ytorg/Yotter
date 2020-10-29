@@ -1,0 +1,37 @@
+
+serverName: "yotter.xyz"
+nitterInstance: "https://nitter.net/"
+maxInstanceUsers: 100
+serverLocation: "Germany"
+restrictPublicUsage: true
+
+# Deprecated
+#nginxVideoStream: true
+
+# Whether to proxy images (thumbnails etc.) through the server
+proxy_images: true
+
+# Whether to proxy video (or audio) streams through the server
+proxy_videos: true
+
+# Url for external proxy server
+# If this is unset and `proxy_*` is set to true, requests will be proxied internally.
+# It's recommended to use an external proxy such as nginx for better performance.
+#
+# It's possible to use variables in `{}` that refer to the original request url:
+# `scheme`, `netloc` (host:port), `path` (with a leading `/`), `query` (without leading `?`), `fragment` (without leading `#`): as per `urllib.parse.urlparse`
+# `scheme_encoded`, `netloc_encoded` etc.: same as above but urlencoded
+# `url`, `url_encoded`: the original request url, and urlencoded variant
+#
+# The example below works for the nginx configuration in `SELF-HOSTING.md`
+#
+#external_proxy: "https://my.nginx.instance{path}?{query}&host={netloc}"
+
+maintenance_mode: false
+show_admin_message: false
+admin_message_title: "Message from the admin"
+admin_message: "Message from the admin text"
+admin_user: "admin_username"
+max_old_user_days: 60
+donate_url: ""
+

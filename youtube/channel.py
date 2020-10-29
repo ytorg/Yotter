@@ -180,20 +180,11 @@ def get_channel_search_json(channel_id, query, page):
     ctoken = base64.urlsafe_b64encode(proto.nested(80226972, ctoken)).decode('ascii')
 
     polymer_json = util.fetch_url("https://www.youtube.com/browse_ajax?ctoken=" + ctoken, headers_desktop, debug_name='channel_search')
-
     return polymer_json
 
-
 def post_process_channel_info(info):
-    info['avatar'] = util.prefix_url(info['avatar'])
-    info['channel_url'] = util.prefix_url(info['channel_url'])
     for item in info['items']:
-        util.prefix_urls(item)
         util.add_extra_html_info(item)
-
-
-
-
 
 playlist_sort_codes = {'2': "da", '3': "dd", '4': "lad"}
 
@@ -202,7 +193,6 @@ playlist_sort_codes = {'2': "da", '3': "dd", '4': "lad"}
 # youtube.com/c/[custom]/[tab]
 # youtube.com/[custom]/[tab]
 def get_channel_page_general_url(base_url, tab, request, channel_id=None):
-
     page_number = int(request.args.get('page', 1))
     sort = request.args.get('sort', '3')
     view = request.args.get('view', '1')

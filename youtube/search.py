@@ -61,28 +61,22 @@ def get_channel_renderer_item_info(item):
         suscribers = item['subscriberCountText']['simpleText'].split(" ")[0]
     except:
         suscribers = "?"
-    
+
     try:
         description = utils.get_description_snippet_text(item['descriptionSnippet']['runs'])
     except KeyError:
         description = ""
+    channel = {
+        "channelId": item['channelId'],
+        "username": item['title']['simpleText'],
+        "description": Markup(str(description)),
+        "suscribers": suscribers,
+        "thumbnail": "https:{}".format(item['thumbnail']['thumbnails'][0]['url']),
+    }
 
-    try:
-        channel = {
-            "channelId": item['channelId'],
-            "username": item['title']['simpleText'],
-            "thumbnail": "https:{}".format(item['thumbnail']['thumbnails'][0]['url'].replace("/", "~")),
-            "description": Markup(str(description)),
-            "suscribers": suscribers,
-            "videos": item['videoCountText']['runs'][0]['text']
-        }
-    except KeyError:
-        channel = {
-            "channelId": item['channelId'],
-            "username": item['title']['simpleText'],
-            "avatar": item['thumbnail']['thumbnails'][0]['url'],
-            "suscribers": suscribers
-        }
+    try: channel["videos"] = item['videoCountText']['runs'][0]['text']
+    except KeyError: pass
+
     return channel
 
 def get_videos_from_search(search):
@@ -105,7 +99,7 @@ def get_videos_from_search(search):
         except KeyError:
             continue
 
-    # Sometimes Youtube will return an empty query. Try again.        
+    # Sometimes Youtube will return an empty query. Try again.
     return results
 
 def get_video_renderer_item_info(item):

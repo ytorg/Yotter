@@ -172,7 +172,7 @@ def get_author_info_from_channel(content):
     channel = {
         "channelId": cmd['channelId'],
         "username": cmd['title'],
-        "thumbnail": "https:{}".format(cmd['avatar']['thumbnails'][0]['url'].replace("/", "~")),
+        "thumbnail": "https:{}".format(cmd['avatar']['thumbnails'][0]['url']),
         "description":description,
         "suscribers": cmd['subscriberCountText']['runs'][0]['text'].split(" ")[0],
         "banner": cmd['banner']['thumbnails'][0]['url']
