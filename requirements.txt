@@ -35,7 +35,7 @@ MarkupSafe==1.1.1
 mccabe==0.6.1
 multidict==5.0.0
 numerize==0.12
-numpy==1.19.2
+numpy==1.19.3
 packaging==20.4
 pylint==2.6.0
 PyMySQL==0.10.1
