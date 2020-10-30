@@ -36,15 +36,15 @@ def get_info(url):
         if(info['like_count'] == None):
             video['like_count'] = 0
         else:
-            video['like_count'] = info['like_count']
+            video['like_count'] = int(info['like_count'])
 
         if(info['dislike_count'] == None):
             video['dislike_count'] = 0
         else:
-            video['dislike_count'] = info['dislike_count']
+            video['dislike_count'] = int(info['dislike_count'])
 
         try:
-            video['total_likes'] = int(info['dislike_count']) + int(info['like_count'])
+            video['total_likes'] = info['dislike_count'] + info['like_count']
         except:
             video['total_likes'] = ""
         video['average_rating'] = str(info['average_rating'])[0:4]
