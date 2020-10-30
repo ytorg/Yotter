@@ -33,20 +33,18 @@ def get_info(url):
         video['duration'] = info['duration']
         video['view_count'] = info['view_count']
         
-        if(info['like_count'] == None):
+        if(info['like_count'] is None):
             video['like_count'] = 0
         else:
             video['like_count'] = int(info['like_count'])
 
-        if(info['dislike_count'] == None):
+        if(info['dislike_count'] is None):
             video['dislike_count'] = 0
         else:
             video['dislike_count'] = int(info['dislike_count'])
 
-        try:
-            video['total_likes'] = info['dislike_count'] + info['like_count']
-        except:
-            video['total_likes'] = ""
+        video['total_likes'] = info['dislike_count'] + info['like_count']
+
         video['average_rating'] = str(info['average_rating'])[0:4]
         video['formats'] = get_video_formats(info['formats'])
         video['audio_formats'] = get_video_formats(info['formats'], audio=True)
