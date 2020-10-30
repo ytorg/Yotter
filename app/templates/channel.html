@@ -9,11 +9,13 @@
           {{data.channel_name}}
         </h2>
     </div>
+    {% if data.short_description %}
     <div class="ui vertical segment">
         <p>{{data.short_description}}</p>
     </div>
+    {%endif%}
     <div class="ui vertical segment">
-          <div class="ui tiny statistic">
+          <!--<div class="ui tiny statistic">
             <div class="value">
                 {%if data.approx_suscriber_count == None%}
                     <i class="user icon"></i> ?
@@ -24,7 +26,7 @@
             <div class="label">
                Followers
             </div>
-          </div>
+          </div>-->
 {% if restricted or current_user.is_authenticated %}
     {% if not current_user.is_following_yt(data.channel_id) %}
         <form action="{{ url_for('ytfollow', channelId=data.channel_id) }}" method="post">
