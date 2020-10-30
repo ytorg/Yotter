@@ -93,8 +93,8 @@ I always recommend self-hosting, as you will be the only person with access to y
 | Name |Server location|Status & Register|
 | ------------ | ------------ | ------------ |
 | https://yotter.xyz/  |Germany| [Go](https://yotter.xyz/status)|
-| https://yotter.kavin.rocks/  |India| [Go](https://yotter.kavin.rocks/register)|
-| https://yotter.jank.media/  |Germany| [Go](https://yotter.jank.media/register)|
+| https://yotter.kavin.rocks/  |India| [Go](https://yotter.kavin.rocks/status)|
+| https://yotter.jank.media/  |Germany| [Go](https://yotter.jank.media/status)|
 
 # Contributing
 Contributors are always welcome. You can help in many ways: Coding, organizing, designing, [donating](#donate), maintaining... You choose what you want to help with!
