@@ -4,124 +4,124 @@
 {% extends "base.html" %}
 {% block content %}
 <div style="width: 80%;" class="ui container">
-    {% if info.error != None or info.playability_error != None %}
-    <div class="ui center aligned text container">
-        <div class="ui segment">
-                <h4 class="ui header">ERROR WITH VIDEO</h4>
-        </div>
-    </div>
-    {% elif info.playability_status != None %}
-    <div class="ui center aligned text container">
-        <div class="ui segment">
-                <h4 class="ui header">SCHEDULED VIDEO</h4>
-                <h5 class="ui header">{{video.premieres}}</h5>
-        </div>
-    </div>
-    {% elif info.live %}
-    <div class="video-js-responsive-container vjs-hd">
-        <video-js id=live width="1080" class="video-js vjs-default-skin" controls>
-            <source
-            src="#"
-            type="application/x-mpegURL">
-        </video-js>
-    </div>
-        <div class="ui center aligned text container">
-            <div class="ui segment">
-                    <h3 class="ui header"><i class="red small circle icon"></i> LIVESTREAM VIDEO</h3>
-                    <h4 class="ui header">FEATURE AVAILABLE SOON</h4>
-                    <h5 class="ui header">Livestreams are under developent and still not supported on Yotter.</h5>
-            </div>
-        </div>
-    {%else%}
-        <div class="video-js-responsive-container vjs-hd">
-            <video-js autofocus class="video-js vjs-default-skin"
-            data-setup='{ "playbackRates": [0.5, 0.75, 1, 1.25,1.5, 1.75, 2] }'
-            width="1080"
-            controls
-            buffered
-            preload="none">
-            {% if config.isInstance %}
-                {% for source in vsources %}
-                        <source src="{{source.src}}" type="{{source.type}}">
-                {% endfor %}
-            {% endif %}
-            </video-js>
-        </div>
-    {%endif%}
 
-    <div class="ui segments">
+    {% if info.error == True %}
+    <div class="ui center aligned text container">
         <div class="ui segment">
-            <h2 class="ui header break-word">{{info.title}}</h2>
+                <h4 class="ui header"><i class="calendar icon"></i> SCHEDULED VIDEO</h4>
+                <h5 class="ui header">This video is scheduled and is not supported by Yotter.</h5>
         </div>
-        <div class="ui horizontal segments">
-          <div class="center aligned ui segment">
-            <a href="{{ url_for('channel', id=info.author_id)}}">
-                <i class="user icon"></i> <b>{{info.author}}</b>
-            </a>
-          </div>
-          <div class="center aligned ui segment">
-            <div class="ui mini statistic">
-                <div class="value">
-                    <i class="grey eye icon"></i> <b>{{info.view_count}}</b>
-                </div>
-                <div class="label">
-                    views
+    </div>
+    {% else %}
+        {% if info.start_time != None %}
+        {% elif info.is_live != None %}
+        <!--<div class="video-js-responsive-container vjs-hd">
+            <video-js id=live width="1080" class="video-js vjs-default-skin" controls>
+                <source
+                src="#"
+                type="application/x-mpegURL">
+            </video-js>
+        </div>-->
+            <div class="ui center aligned text container">
+                <div class="ui segment">
+                        <h3 class="ui header"><i class="red small circle icon"></i> LIVESTREAM VIDEO</h3>
+                        <h4 class="ui header">FEATURE AVAILABLE SOON</h4>
+                        <h5 class="ui header">Livestreams are under developent and still not supported on Yotter.</h5>
                 </div>
             </div>
-          </div>
-          <div class="center aligned ui segment">
-            {% if info.rating | int > 49 %}
+        {%else%}
+            <div class="video-js-responsive-container vjs-hd">
+                <video-js autofocus class="video-js vjs-default-skin"
+                data-setup='{ "playbackRates": [0.5, 0.75, 1, 1.25,1.5, 1.75, 2] }'
+                width="1080"
+                controls
+                buffered
+                preload="none">
+                {% if config.isInstance %}
+                    {% for source in info.formats %}
+                            <source src="{{source.url}}" type="video/{{source.ext}}">
+                    {% endfor %}
+                {% endif %}
+                </video-js>
+            </div>
+        {%endif%}
+
+        <div class="ui segments">
+            <div class="ui segment">
+                <h2 class="ui header break-word">{{info.title}}</h2>
+            </div>
+            <div class="ui horizontal segments">
+            <div class="center aligned ui segment">
+                <a href="{{ url_for('channel', id=info.uploader_id)}}">
+                    <i class="user icon"></i> <b>{{info.uploader}}</b>
+                </a>
+                    <div class="label">
+                        <i class="user icon"></i>{{info.subscriber_count}}
+                    </div>
+            </div>
+            <div class="center aligned ui segment">
                 <div class="ui mini statistic">
                     <div class="value">
-                        <i class="green thumbs up icon"></i> <b>{{info.rating}}%</b>
+                        <i class="grey eye icon"></i> <b>{{info.view_count}}</b>
                     </div>
                     <div class="label">
-                        Total: {{info.like_count+info.dislike_count}} votes
+                        views
                     </div>
                 </div>
-            {% else %}
-            <div class="ui mini statistic">
-                <div class="value">
-                    <i class="red thumbs down icon"></i> <b>{{info.rating}}%</b>
-                </div>
-                <div class="label">
-                    Total: {{info.like_count+info.dislike_count}} votes
-                </div>
-                </div>
-            {% endif %}
-          </div>
-        </div>
+            </div>
+            <div class="center aligned ui segment">
+                {% if info.average_rating | int > 2.5 %}
+                    <div class="ui mini statistic">
+                        <div class="value">
+                            <i class="green thumbs up icon"></i> <b>{{info.average_rating}}/5</b>
+                        </div>
+                        <div class="label">
+                            Total: {{info.total_likes}} votes
+                        </div>
+                    </div>
+                {% else %}
+                <div class="ui mini statistic">
+                    <div class="value">
+                        <i class="red thumbs down icon"></i> <b>{{info.average_rating}}/5</b>
+                    </div>
+                    <div class="label">
+                        Total: {{info.total_likes}} votes
+                    </div>
+                    </div>
+                {% endif %}
+            </div>
+            </div>
 
-        <div class="ui raised center aligned segment break-word">
-            <p><i class="grey music icon"></i><b>Audio Only</b></p>
-            <audio controls>
-                {% for format in info.formats %}
-                    {% if format.audio_valid %}
+            <div class="ui raised center aligned segment break-word">
+                <p><i class="grey music icon"></i><b>Audio Only</b></p>
+                <audio controls>
+                    {% for format in info.audio_formats %}
                         <source src="{{format.url}}">
-                    {%endif%}
-                {%endfor%}
-              No audio available.
-            </audio>
+                    {%endfor%}
+                No audio available.
+                </audio>
+            </div>
+
+            <div class="ui raised segment break-word">
+                <p>{{info.description}}</p>
+            </div>
         </div>
 
-        <div class="ui raised segment break-word">
-            <p>{{info.description}}</p>
+        {%if videocomments%}
+        <div class="ui comments">
+            <h3 class="ui dividing header">Comments</h3>
+            {% for comment in videocomments %}
+                    {% include '_video_comment.html' %}
+            {% endfor %}
         </div>
-    </div>
-
-    <div class="ui comments">
-        <h3 class="ui dividing header">Comments</h3>
-        {% for comment in videocomments %}
-                {% include '_video_comment.html' %}
-        {% endfor %}
-    </div>
-            
-<script src="{{ url_for('static',filename='video.min.js') }}"></script>
-{% if info.live %}
-    <script src="{{ url_for('static',filename='videojs-http-streaming.min.js')}}"></script>
-    <script>
-        var player = videojs('live');
-        player.play();
-    </script>
-{% endif %}
+        {%endif%}
+    <script src="{{ url_for('static',filename='video.min.js') }}"></script>
+    {% if info.live %}
+        <script src="{{ url_for('static',filename='videojs-http-streaming.min.js')}}"></script>
+        <script>
+            var player = videojs('live');
+            player.play();
+        </script>
+    {% endif %}
+    {%endif%}
 {% endblock %}

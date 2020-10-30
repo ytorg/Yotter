@@ -29,7 +29,7 @@ from app.forms import LoginForm, RegistrationForm, EmptyForm, SearchForm, Channe
 from app.models import User, twitterPost, ytPost, Post, youtubeFollow, twitterFollow
 from youtube import comments, utils, channel as ytch, search as yts
 from youtube import watch as ytwatch
-
+from youtube import video as ytvid
 #########################################
 
 #########################################
@@ -467,50 +467,40 @@ def get_live_urls(urls):
                 best_urls.append(url)
     return best_urls
 
-
 @app.route('/watch', methods=['GET'])
 @login_required
 def watch():
     id = request.args.get('v', None)
-    info = ytwatch.extract_info(id, False, playlist_id=None, index=None)
+    info = ytvid.get_info(id)
+    
+    if info['error'] == False:
+        for format in info['formats']:
+            hostName = urllib.parse.urlparse(format['url']).netloc
+            format['url'] = format['url'].replace("https://{}".format(hostName), "") + "&host=" + hostName
+        
+        for format in info['audio_formats']:
+            hostName = urllib.parse.urlparse(format['url']).netloc
+            format['url'] = format['url'].replace("https://{}".format(hostName), "") + "&host=" + hostName
 
-    vsources = ytwatch.get_video_sources(info, False)
-    # Retry 3 times if no sources are available.
-    retry = 3
-    while retry != 0 and len(vsources) == 0:
-        vsources = ytwatch.get_video_sources(info, False)
-        retry -= 1
+        # Markup description
+        try:
+            info['description'] = Markup(bleach.linkify(info['description'].replace("\n", "<br>"))).replace('www.youtube.com', config['serverName']).replace('youtube.com', config['serverName']).replace("/join","")
+        except AttributeError or TypeError:
+            print(info['description'])
 
-    for source in vsources:
-        hostName = urllib.parse.urlparse(source['src']).netloc
-        source['src'] = source['src'].replace("https://{}".format(hostName), "") + "&host=" + hostName
-
-    # Parse video formats
-    for v_format in info['formats']:
-        hostName = urllib.parse.urlparse(v_format['url']).netloc
-        v_format['url'] = v_format['url'].replace("https://{}".format(hostName), "") + "&host=" + hostName
-        if v_format['audio_bitrate'] is not None and v_format['vcodec'] is None:
-            v_format['audio_valid'] = True
-
-    # Markup description
-    try:
-        info['description'] = Markup(bleach.linkify(info['description'].replace("\n", "<br>")))
-    except AttributeError or TypeError:
-        print(info['description'])
-
-    # Get comments
-    videocomments = comments.video_comments(id, sort=0, offset=0, lc='', secret_key='')
-    videocomments = utils.post_process_comments_info(videocomments)
-    if videocomments is not None:
-        videocomments.sort(key=lambda x: x['likes'], reverse=True)
-
-    # Calculate rating %
-    if info['like_count']+info['dislike_count']>0:
-        info['rating'] = str((info['like_count'] / (info['like_count'] + info['dislike_count'])) * 100)[0:4]
-    else:
-        info['rating'] = 50.0
-    return render_template("video.html", info=info, title='{}'.format(info['title']), config=config,
-                           videocomments=videocomments, vsources=vsources)
+        # Get comments
+        if not info['is_live']:
+            videocomments = comments.video_comments(id, sort=0, offset=0, lc='', secret_key='')
+            videocomments = utils.post_process_comments_info(videocomments)
+            if videocomments is not None:
+                videocomments.sort(key=lambda x: x['likes'], reverse=True)
+        else:
+            videocomments=False
+        
+        return render_template("video.html", info=info, title=info['title'], config=config,
+                           videocomments=videocomments)
+        
+    return render_template("video.html", info=info, title='Scheduled Video', config=config)
 
 
 def markupString(string):
@@ -881,7 +871,7 @@ def getFeed(urls):
                     newPost["twitterName"] = post.find('a', attrs={'class': 'fullname'}).text
                     newPost["timeStamp"] = date_time_str
                     newPost["date"] = post.find('span', attrs={'class': 'tweet-date'}).find('a').text
-                    newPost["content"] = Markup(post.find('div', attrs={'class': 'tweet-content'}))
+                    newPost["content"] = Markup(post.find('div', attrs={'class': 'tweet-content'})).replace("\n", "<br>")
 
                     if post.find('div', attrs={'class': 'retweet-header'}):
                         newPost["username"] = post.find('div', attrs={'class': 'retweet-header'}).find('div', attrs={
