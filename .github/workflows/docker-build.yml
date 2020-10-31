@@ -32,9 +32,9 @@ jobs:
         uses: actions/cache@v2.1.2
         with:
           path: ${{ github.workspace }}/cache
-          key: ${{ runner.os }}-docker-${{ hashFiles('**/requirements.txt') }}-${{ hashFiles('**/dockerhash.txt') }}
+          key: ${{ runner.os }}-docker-cpython-${{ hashFiles('**/requirements.txt') }}-${{ hashFiles('**/dockerhash.txt') }}
           restore-keys: |
-            ${{ runner.os }}-docker-
+            ${{ runner.os }}-docker-cpython-
       - name: Build and push
         uses: docker/build-push-action@v2
         with:
@@ -69,9 +69,9 @@ jobs:
         uses: actions/cache@v2.1.2
         with:
           path: ${{ github.workspace }}/cache
-          key: ${{ runner.os }}-docker-${{ hashFiles('**/requirements.txt') }}-${{ hashFiles('**/dockerhash.txt') }}
+          key: ${{ runner.os }}-docker-pypy-${{ hashFiles('**/requirements.txt') }}-${{ hashFiles('**/dockerhash.txt') }}
           restore-keys: |
-            ${{ runner.os }}-docker-
+            ${{ runner.os }}-docker-pypy-
       - name: Build and push
         uses: docker/build-push-action@v2
         with:
