@@ -1,4 +1,4 @@
-version: '3.8'
+version: "3.8"
 services:
   mariadb:
     image: mariadb:10.5
@@ -9,9 +9,15 @@ services:
       MYSQL_PASSWORD: changeme
     restart: unless-stopped
     volumes:
-     - mysql:/var/lib/mysql
+      - mysql:/var/lib/mysql
     healthcheck:
-     test: ["CMD", "mysqladmin", "ping", "--silent"]
+      test: ["CMD", "mysqladmin", "ping", "--silent"]
+  ytproxy:
+    image: 1337kavin/ytproxy:latest
+    restart: unless-stopped
+    volumes:
+      - "/var/run/ytproxy:/app/socket/"
+    network_mode: host
   yotter:
     image: ytorg/yotter:latest
     restart: unless-stopped
@@ -21,9 +27,10 @@ services:
       DATABASE_URL: mysql+pymysql://yotter:changeme@mariadb:3306/yotter
     depends_on:
       - mariadb
+      - ytproxy
     volumes:
-     - migrations:/usr/src/app/migrations
-     - ./yotter-config.json:/usr/src/app/yotter-config.json
+      - migrations:/usr/src/app/migrations
+      - ./yotter-config.json:/usr/src/app/yotter-config.json
 volumes:
   mysql:
   migrations:
