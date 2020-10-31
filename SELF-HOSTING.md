@@ -61,12 +61,13 @@ Now you should be logged in. Make sure to set up a good password. It is recommen
 ```
 git clone https://github.com/ytorg/Yotter && cd Yotter
 docker-compose up -d
+chown -R www-data:www-data /var/run/ytproxy
 ```
 > You may need to use `sudo` for turning up the docker-compose
 2. Configure nginx as a reverse proxy to your docker container:
    * Create a new nginx configuration file:
       - `sudo nano /etc/nginx/sites-enabled/yotter`
-   * Paste the content of [this file](https://paste.ubuntu.com/p/Bzd9SRCJSG/) to the config file.
+   * Paste the content of [this file](https://paste.ubuntu.com/p/248hh6crWH/) to the config file.
       - Change `<example.com>` by your domain.
    * Generate a ssl certificate:
       - Follow [Let's Encrypt](https://certbot.eff.org/lets-encrypt/ubuntufocal-nginx) guide **(Recommended)**
