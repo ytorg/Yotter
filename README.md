@@ -111,14 +111,13 @@ These are projects that either make Yotter possible as an **essential part** of 
 
 * [Nitter](https://nitter.net/)
 * [Youtube-local](https://github.com/user234683/youtube-local)
-* [youtube-dl](https://github.com/ytdl-org/youtube-dl)
+* [youtube-dlc](https://github.com/blackjack4494/yt-dlc)
 * [Flask](https://flask.palletsprojects.com/)
 * [SQLAlchemy](https://docs.sqlalchemy.org/en/13/)
 * [Semantic-UI](https://semantic-ui.com)
 * [requests-futures](https://github.com/ross/requests-futures)
 * [microblog](https://github.com/miguelgrinberg/microblog)
 * [Video.js](https://videojs.com/)
-* [My fork of youtube_search](https://github.com/pluja/youtube_search-fork)
 * [Invidious](https://github.com/iv-org/invidious)
 
 # Donate
