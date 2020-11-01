@@ -126,9 +126,16 @@ This project is completely free and Open Source and will always be.
 
 All donations are used to mantain the [yotter.xyz](https://yotter.xyz/) public instance. [This is the server](https://www.netcup.eu/bestellen/produkt.php?produkt=2598) that I have rented for now.
 
-#### Crypto (preferred):
+#### Crypto:
+##### Preferred
 - **Bitcoin**: `bc1q5y3g907ju0pt40me7dr9fy5uhfhfgfv9k3kh3z`
 - **Monero**: `48nQGAXaC6eFK2Wo7SVVyF9xL333gDHjzdmRL3XETEqbU3w4CcKjjHVUZPU4W3dg1oJL8be3iGtUAQsgV88dzbS7QNpZjC2`
+
+##### Others:
+- **Ethereum**: `0x6cf0B1C3354c255F1a876f4833A1BBE82D887Ad6`
+- **Litecoin**: `MHjnpYHwu4y4AeQvVBDv52T8V6BzVxmiNZ`
+- **ZCash**: `t1a6smU9a6dxGfZWcX9bCRzE31qsaF27FsD`
+
 #### Fiat:
 - <a href="https://liberapay.com/pluja/donate"><img alt="Donate using Liberapay" src="https://liberapay.com/assets/widgets/donate.svg"></a>
 
