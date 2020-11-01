@@ -871,7 +871,8 @@ def getFeed(urls):
                     newPost["twitterName"] = post.find('a', attrs={'class': 'fullname'}).text
                     newPost["timeStamp"] = date_time_str
                     newPost["date"] = post.find('span', attrs={'class': 'tweet-date'}).find('a').text
-                    newPost["content"] = Markup(post.find('div', attrs={'class': 'tweet-content'}).replace("\n", "<br>"))
+                    content=post.find('div', attrs={'class': 'tweet-content'})
+                    newPost["content"] = Markup(str(content).replace("\n", "<br>"))
 
                     if post.find('div', attrs={'class': 'retweet-header'}):
                         newPost["username"] = post.find('div', attrs={'class': 'retweet-header'}).find('div', attrs={
