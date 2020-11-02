@@ -38,7 +38,7 @@ urllib3==1.25.11
 webencodings==0.5.1
 Werkzeug==1.0.1
 WTForms==2.3.3
-youtube-dlc==2020.10.26
+youtube-dlc==2020.10.31
 youtube-search-fork==1.2.5
 zope.event==4.5.0
 zope.interface==5.1.2
