@@ -1,8 +1,9 @@
 {% extends "base.html" %}
 
 {% block content %}
-    {% if registrations %}
+{% if registrations %}
         <h2 class="ui centered header">Register</h2>   
+        <h5 class="ui centered header"><a href="https://github.com/ytorg/Yotter#why-do-i-have-to-register-to-use-yotter">Why do I have to register?</a></h5>
         <div class="ui text container" id="container">
             <form class="ui form" action="" method="post">
                 {{ form.hidden_tag() }}
