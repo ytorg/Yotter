@@ -16,7 +16,6 @@ Yotter is possible thanks to several open-source projects that are listed on the
 * [Privacy and Security](#privacy)
 * [Public instances](#public-instances)
 * [Self hosting](https://github.com/ytorg/Yotter/blob/dev-indep/SELF-HOSTING.md)
-    * [Update the server](https://github.com/ytorg/Yotter/blob/dev-indep/SELF-HOSTING.md#updating-the-server)
 * [Contributing and contact](#contributing)
 * [Powered by](#powered-by)
 * [Donate](#donate)
