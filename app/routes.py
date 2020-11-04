@@ -7,6 +7,7 @@ import random
 import re
 import time
 import urllib
+import subprocess
 from multiprocessing import Process
 from concurrent.futures import as_completed
 
@@ -774,8 +775,9 @@ def status():
         filen = url_for('static', filename='img/open.png')
         caniregister = True
 
+    version = subprocess.check_output(["git", "rev-parse", "--short", "HEAD"]).strip()
     return render_template('status.html', title='STATUS', count=count, max=config['maxInstanceUsers'], file=filen,
-                           cani=caniregister, version=config['version'])
+                           cani=caniregister, version=str(version)[2:-1])
 
 
 @app.route('/error/<errno>')
