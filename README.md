@@ -45,7 +45,6 @@ So we need platforms and spaces where we can freely watch and listen content wit
 - [x] Terminal-browser friendly.
 
 *Video player is VideoJS, which uses JavaScript. But if JavaScript is disabled Yotter still works perfectly and uses the default HTML video player.
-> And many more to come!
 
 # FAQ
 ### What's the difference between this and Invidious?
