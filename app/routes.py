@@ -775,7 +775,7 @@ def status():
         caniregister = True
 
     return render_template('status.html', title='STATUS', count=count, max=config['maxInstanceUsers'], file=filen,
-                           cani=caniregister)
+                           cani=caniregister, version=config['version'])
 
 
 @app.route('/error/<errno>')
