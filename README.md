@@ -125,7 +125,7 @@ These are projects that either make Yotter possible as an **essential part** of 
 # Donate
 This project is completely free and Open Source and will always be.
 
-All donations are used to mantain the [yotter.xyz](https://yotter.xyz/) public instance. [This is the server](https://www.netcup.eu/bestellen/produkt.php?produkt=2598) that I have rented for now.
+Donations are used to mantain the [yotter.xyz](https://yotter.xyz/) public instance. [This is the server](https://www.netcup.eu/bestellen/produkt.php?produkt=2598) that I have rented for now.
 
 #### Crypto:
 ##### Preferred
