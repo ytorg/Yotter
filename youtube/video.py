@@ -43,7 +43,7 @@ def get_info(url):
         else:
             video['dislike_count'] = int(info['dislike_count'])
 
-        video['total_likes'] = info['dislike_count'] + info['like_count']
+        video['total_likes'] = video['dislike_count'] + video['like_count']
 
         video['average_rating'] = str(info['average_rating'])[0:4]
         video['formats'] = get_video_formats(info['formats'])
