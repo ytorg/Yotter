@@ -64,6 +64,8 @@ Registering has two main reasons:
 
 Admins are allowed to remove restrictions on any page they want. [Check this section](https://github.com/ytorg/Yotter/blob/dev-indep/SELF-HOSTING.md#removing-log-in-restrictions) to learn how.
 
+If you want to use Yotter, it is recommended to self-host your own instance. You can use it for personal use or open it to the world. Self-hosting makes Yotter stronger and gives you full power. See [self hosting guide](https://github.com/ytorg/Yotter/blob/dev-indep/SELF-HOSTING.md).
+
 # Privacy
 #### Connections
 Yotter cares about your privacy, and for this it will never make any connection to Twitter or Youtube on the client. Every request is proxied through the Yotter server; video streaming, photos, data gathering, scrapping, etc.

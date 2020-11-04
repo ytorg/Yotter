@@ -7,6 +7,7 @@ import random
 import re
 import time
 import urllib
+from multiprocessing import Process
 from concurrent.futures import as_completed
 
 import bleach
@@ -30,6 +31,7 @@ from app.models import User, twitterPost, ytPost, Post, youtubeFollow, twitterFo
 from youtube import comments, utils, channel as ytch, search as yts
 from youtube import watch as ytwatch
 from youtube import video as ytvid
+
 #########################################
 
 #########################################
@@ -84,10 +86,10 @@ def twitter(page=0):
     c = len(followingList)
     for user in followingList:
         if c != 0:
-            nitter_feed_link = nitter_feed_link+"{},".format(user.username)
-            c = c-1
+            nitter_feed_link = nitter_feed_link + "{},".format(user.username)
+            c = c - 1
         else:
-            nitter_feed_link = nitter_feed_link+user.username
+            nitter_feed_link = nitter_feed_link + user.username
 
     cache_file = glob.glob("app/cache/{}_*".format(current_user.username))
     if (len(cache_file) > 0):
@@ -426,7 +428,7 @@ def channel(id):
         if config['isInstance']:
             hostName = urllib.parse.urlparse(video['thumbnail'][1:]).netloc
             video['thumbnail'] = video['thumbnail'].replace("https://{}".format(hostName), "")[1:].replace("hqdefault",
-                                                                                                       "mqdefault") + "&host=" + hostName
+                                                                                                           "mqdefault") + "&host=" + hostName
         else:
             video['thumbnail'] = video['thumbnail'].replace('/', '~')
 
@@ -443,7 +445,8 @@ def channel(id):
         prev_page = "/channel/{q}?s={s}&p={p}".format(q=id, s=sort, p=int(page) - 1)
 
     return render_template('channel.html', form=form, btform=button_form, data=data,
-                           restricted=config['restrictPublicUsage'], config=config, next_page=next_page, prev_page=prev_page)
+                           restricted=config['restrictPublicUsage'], config=config, next_page=next_page,
+                           prev_page=prev_page)
 
 
 def get_best_urls(urls):
@@ -467,24 +470,27 @@ def get_live_urls(urls):
                 best_urls.append(url)
     return best_urls
 
+
 @app.route('/watch', methods=['GET'])
 @login_required
 def watch():
     id = request.args.get('v', None)
     info = ytvid.get_info(id)
-    
+
     if info['error'] == False:
         for format in info['formats']:
             hostName = urllib.parse.urlparse(format['url']).netloc
             format['url'] = format['url'].replace("https://{}".format(hostName), "") + "&host=" + hostName
-        
+
         for format in info['audio_formats']:
             hostName = urllib.parse.urlparse(format['url']).netloc
             format['url'] = format['url'].replace("https://{}".format(hostName), "") + "&host=" + hostName
 
         # Markup description
         try:
-            info['description'] = Markup(bleach.linkify(info['description'].replace("\n", "<br>"))).replace('www.youtube.com', config['serverName']).replace('youtube.com', config['serverName']).replace("/join","")
+            info['description'] = Markup(bleach.linkify(info['description'].replace("\n", "<br>"))).replace(
+                'www.youtube.com', config['serverName']).replace('youtube.com', config['serverName']).replace("/join",
+                                                                                                              "")
         except AttributeError or TypeError:
             print(info['description'])
 
@@ -495,11 +501,11 @@ def watch():
             if videocomments is not None:
                 videocomments.sort(key=lambda x: x['likes'], reverse=True)
         else:
-            videocomments=False
-        
+            videocomments = False
+
         return render_template("video.html", info=info, title=info['title'], config=config,
-                           videocomments=videocomments)
-        
+                               videocomments=videocomments)
+
     return render_template("video.html", info=info, title='Scheduled Video', config=config)
 
 
@@ -679,14 +685,23 @@ def importdata():
             flash('No selected file')
             return redirect(request.referrer)
         else:
-            option = request.form['import_format']
-            if option == 'yotter':
-                importYotterSubscriptions(file)
-            elif option == 'youtube':
-                importYoutubeSubscriptions(file)
+            importdataasync(file)
             return redirect(request.referrer)
 
     return redirect(request.referrer)
+
+
+def importdataasync(file):
+    p = Process(target=importdataforprocess, args=(file,))
+    p.start()
+
+
+def importdataforprocess(file):
+    option = request.form['import_format']
+    if option == 'yotter':
+        importYotterSubscriptions(file)
+    elif option == 'youtube':
+        importYoutubeSubscriptions(file)
 
 
 @app.route('/deleteme', methods=['GET', 'POST'])
@@ -759,7 +774,9 @@ def status():
         filen = url_for('static', filename='img/open.png')
         caniregister = True
 
-    return render_template('status.html', title='STATUS', count=count, max=config['maxInstanceUsers'], file=filen, cani=caniregister)
+    return render_template('status.html', title='STATUS', count=count, max=config['maxInstanceUsers'], file=filen,
+                           cani=caniregister)
+
 
 @app.route('/error/<errno>')
 def error(errno):
@@ -871,7 +888,7 @@ def getFeed(urls):
                     newPost["twitterName"] = post.find('a', attrs={'class': 'fullname'}).text
                     newPost["timeStamp"] = date_time_str
                     newPost["date"] = post.find('span', attrs={'class': 'tweet-date'}).find('a').text
-                    content=post.find('div', attrs={'class': 'tweet-content'})
+                    content = post.find('div', attrs={'class': 'tweet-content'})
                     newPost["content"] = Markup(str(content).replace("\n", "<br>"))
 
                     if post.find('div', attrs={'class': 'retweet-header'}):
