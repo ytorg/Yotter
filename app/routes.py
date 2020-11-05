@@ -775,9 +775,22 @@ def status():
         filen = url_for('static', filename='img/open.png')
         caniregister = True
 
-    version = config['version']
+    try:
+        with open ("version.txt", "r") as versionFile:
+            hsh=versionFile.readlines()[0]
+            update=versionFile.readlines()[1]
+            #tag=versionFile.readlines()[2]
+    except:
+        try:
+            tag = str(subprocess.check_output(["git", "describe", "--tags"]).strip())[2:-1]
+            hsh = str(subprocess.check_output(["git", "rev-parse", "--short", "HEAD"]).strip())[2:-1]
+            update = str(subprocess.check_output(["git", "log", "-1", "--format=%cd"]).strip())[2:-1]
+        except:
+            hsh="Unknown"
+            update="Unknown"
+            tag="Unknown"
     return render_template('status.html', title='STATUS', count=count, max=config['maxInstanceUsers'], file=filen,
-                           cani=caniregister, version=config['version'])
+                           cani=caniregister, hash=hsh, update=update, tag=tag)
 
 
 @app.route('/error/<errno>')
