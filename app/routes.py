@@ -784,7 +784,7 @@ def status():
         try:
             tag = str(subprocess.check_output(["git", "describe", "--tags"]).strip())[2:-1]
             hsh = str(subprocess.check_output(["git", "rev-parse", "--short", "HEAD"]).strip())[2:-1]
-            update = str(subprocess.check_output(["git", "log", "-1", "--format=%cd"]).strip())[2:-1]
+            update = str(subprocess.check_output(["git", "log", "-1", "--format=%cd"]).strip())[2:-7]
         except:
             hsh="Unknown"
             update="Unknown"
