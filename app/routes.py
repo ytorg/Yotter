@@ -777,9 +777,10 @@ def status():
 
     try:
         with open ("version.txt", "r") as versionFile:
-            hsh=versionFile.readlines()[0]
-            update=versionFile.readlines()[1]
-            #tag=versionFile.readlines()[2]
+            ver=versionFile.readlines()
+            hsh = ver[0]
+            update= ver[1]
+            tag=ver[2]
     except:
         try:
             tag = str(subprocess.check_output(["git", "describe", "--tags"]).strip())[2:-1]
