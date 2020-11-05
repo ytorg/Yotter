@@ -20,6 +20,7 @@ Yotter is possible thanks to several open-source projects that are listed on the
 * [Powered by](#powered-by)
 * [Donate](#donate)
 * [Screenshots](#screenshots)
+* [Redirect Extensions](#redirect)
 
 # Why
 Youtube and Twitter are well-known by their invasive and data-stealing *'privacy policies'*. You give them a **lot** of data; from ideology to music taste, your likes and dislikes, your free-time schedule, and much more than you think. This much data gives such companies a control over you that you would never thought.
@@ -145,3 +146,12 @@ Donations are used to mantain the [yotter.xyz](https://yotter.xyz/) public insta
 <p align="center"> <img width="720" src="https://i.imgur.com/a7rM4sv.png"> </img></p> 
 <p align="center"> <img width="720" src="https://i.imgur.com/skXFMqE.png"> </img></p> 
 <p align="center"> <img width="720" src="https://i.imgur.com/AurVw5M.png"> </img></p> 
+
+## Redirect
+If you want to worry less and enjoy Yotter more, you can use any of the following extensions to redirect Youtube to Yotter automatically:
+
+* [Youtter](https://addons.mozilla.org/en-US/firefox/addon/youtter/?utm_source=addons.mozilla.org&utm_medium=referral&utm_content=search) - Firefox
+* [Privacy Redirect](https://addons.mozilla.org/en-US/firefox/addon/youtter/?utm_source=addons.mozilla.org&utm_medium=referral&utm_content=search) - Chromium
+   * Set Yotter as a Invidious instance on extension options.
+* [HTTPSEverywhere](https://www.eff.org/https-everywhere) - Both
+   * You can set up redirects. Use a "http://youtube.com/ -> https://yotterinstance.xyz/" redirect.
