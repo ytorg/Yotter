@@ -157,3 +157,5 @@ app/cache/*
 app/cache
 ./app/cache/*
 ./app/cache
+.github/ISSUE_TEMPLATE/
+.github/ISSUE_TEMPLATE/*
