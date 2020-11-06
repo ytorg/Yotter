@@ -363,22 +363,23 @@ def ytfollow(channelId):
 
 def followYoutubeChannel(channelId):
     try:
-        channelData = YoutubeSearch.channelInfo(channelId, False)
         try:
             if not current_user.is_following_yt(channelId):
+                channelData = ytch.get_channel_tab_info(channelId, tab='about')
+                if channelData == False:
+                    return False
                 follow = youtubeFollow()
                 follow.channelId = channelId
-                follow.channelName = channelData[0]['name']
+                follow.channelName = channelData['channel_name']
                 follow.followers.append(current_user)
                 db.session.add(follow)
                 db.session.commit()
-                flash("{} followed!".format(channelData[0]['name']))
+                flash("{} followed!".format(channelData['channel_name']))
                 return True
             else:
                 return False
         except Exception as e:
             print(e)
-            flash("Youtube: Couldn't follow {}. Already followed?".format(channelData[0]['name']))
             return False
     except KeyError as ke:
         print("KeyError: {}:'{}' could not be found".format(ke, channelId))
@@ -686,6 +687,7 @@ def importdata():
             flash('No selected file')
             return redirect(request.referrer)
         else:
+            flash("Data is being imported. You can keep using Yotter.")
             importdataasync(file)
             return redirect(request.referrer)
 
@@ -885,7 +887,7 @@ def getFeed(urls):
     with FuturesSession() as session:
         futures = [session.get('{instance}{user}'.format(instance=NITTERINSTANCE, user=u.username)) for u in urls]
         for future in as_completed(futures):
-            res = future.result().content.decode('utf-8')
+            res= future.result().content
             html = BeautifulSoup(res, "html.parser")
             userFeed = html.find_all('div', attrs={'class': 'timeline-item'})
             if userFeed != []:
