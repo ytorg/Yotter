@@ -28,6 +28,8 @@ jobs:
           password: ${{ secrets.DOCKER_PASSWORD }}
       - name: Get hash of latest image
         run: docker pull python:3-alpine && docker inspect --format='{{index .RepoDigests 0}}' python:3-alpine > dockerhash.txt
+      - name: Write the current version to a file
+        run: "{ git describe --tags --abbrev=0 & date +\"%d-%m-%y\" & git rev-list HEAD --max-count=1 --abbrev-commit;} > version.txt"
       - name: cache docker cache
         uses: actions/cache@v2.1.2
         with:
@@ -65,6 +67,8 @@ jobs:
           password: ${{ secrets.DOCKER_PASSWORD }}
       - name: Get hash of latest image
         run: docker pull pypy:3-slim-buster && docker inspect --format='{{index .RepoDigests 0}}' pypy:3-slim-buster > dockerhash.txt
+      - name: Write the current version to a file
+        run: "{ git describe --tags --abbrev=0 & date +\"%d-%m-%y\" & git rev-list HEAD --max-count=1 --abbrev-commit;} > version.txt"
       - name: cache docker cache
         uses: actions/cache@v2.1.2
         with:
