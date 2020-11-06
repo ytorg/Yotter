@@ -128,7 +128,7 @@ def get_feed_tweets(html):
                         tweet['attachedImages'].append(url)
                 else:
                     tweet['attachedImages'] = False
-                    
+                # Videos    
                 if post.find('div', attrs={'gallery-video'}):
                     tweet['attachedVideo'] = True
                 else:
