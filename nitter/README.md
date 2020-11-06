@@ -5,7 +5,7 @@
 ## user.py
 
 ### get_user_info(username)
-Returns the info of a particular Twitter user without tweets.
+Returns the info of a particular Twitter user without tweets. If the user does not exist, it returns `False`.
 
 ##### Return example:
 
