@@ -8,8 +8,24 @@
     {% if info.error == True %}
     <div class="ui center aligned text container">
         <div class="ui segment">
-                <h4 class="ui header"><i class="calendar icon"></i> SCHEDULED VIDEO</h4>
-                <h5 class="ui header">This video is scheduled and is not supported by Yotter.</h5>
+                <h3 class="ui header"><i class="times icon"></i> ERROR WITH VIDEO </h3>
+                <h5 class="ui header">Try to reload the page. Most times this solves the error.</h5>
+                <h4 class="ui header">Other reasons.</h4>
+                <div class="ui list">
+                    <div class="item">
+                      <div class="header"><i class="calendar icon"> </i>Scheduled Video</div>
+                      Scheduled videos are not supported.
+                    </div>
+                    <div class="item">
+                      <div class="header"><i class="red circle icon"> </i>Livestream video</div>
+                      Livestream videos are not yet supported.
+                    </div>
+                    <div class="item">
+                      <div class="header">Other reasons</div>
+                      If none of the above is the case, you might have found a bug. <a href="https://github.com/ytorg/Yotter/issues/new/choose">Report it!</a>
+                    </div>
+                </div>
+                <p>Sorry for the inconveninet. Yotter is in a Beta state, so expect errors!</p>
         </div>
     </div>
     {% else %}
