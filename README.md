@@ -44,6 +44,7 @@ So we need platforms and spaces where we can freely watch and listen content wit
 - [x] Save your favourite Tweets.
 - [x] Tor-friendly.
 - [x] Terminal-browser friendly.
+- [x] Fair non-adictive UX - No recommendations, no trending, no tops. Just your feed and your searches.
 
 *Video player is VideoJS, which uses JavaScript. But if JavaScript is disabled Yotter still works perfectly and uses the default HTML video player.
 
