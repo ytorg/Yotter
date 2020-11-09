@@ -19,35 +19,67 @@
                 <span class="category"><i class="retweet icon"></i> {{post.username}}</span>
             {%endif%}
         </div>
-        <div class="description break-word">
+        <div style="margin-bottom: 15px;" class="description break-word">
             <p>{{post.content | safe}}</p>
         </div>
-        <div class="extra content">
-            {% if post.attachedImg %}
-                <a target="_blank" href="{{post.attachedImg}}"><img alt="Image attachment" class="ui centered fluid rounded medium image" src="{{post.attachedImg}}">
+        <div class="content">
+            {% if post.attachedImages %}
+                {%for img in post.attachedImages %}
+                    <a target="_blank" href="{{img}}">
+                        <img alt="Image attachment" class="ui centered fluid rounded medium image" src="{{img}}">
+                    </a>
+                {%endfor%}
             {% endif %}
+            {% if post.attachedVideo %}
+                <div class="ui segment"><p><i class="file video icon"></i> <b>This tweet has an attached video.</b></p></div>
+            {%endif%}
             {% if post.isReply %}
-                <div class="ui card">
-                    <div class="content">
-                        <div class="header"><a href="/{{post.replyingUser}}">{{post.replyingUser}}</a></div>
-                        <div class="meta">{{post.replyingUser}}</div>
-                        <div class="description break-word">
-                        {{post.replyingTweetContent | safe}}
-                        {% if post.replyAttachedImg %}
-                            <a target="_blank" href="{{post.replyAttachedImg}}"><img alt="Image attachment" class="ui centered fluid rounded medium image" src="{{post.replyAttachedImg}}"></a>
-                        {% endif %}
+                {%if post.unavailableReply%}
+                    <div class="ui card">
+                        <div class="content">
+                            <p> This tweet is unavailable. </p>
                         </div>
                     </div>
-                </div>
+                {%else%}
+                    <div class="ui card">
+                        <div class="content">
+                            <div class="header"><a href="/{{post.replyingUser}}">{{post.replyingUser}}</a></div>
+                            <div class="meta">{{post.replyingUser}}</div>
+                            <div class="description break-word">
+                                {{post.replyingTweetContent | safe}}
+                                
+                                {% if post.replyAttachedImg %}
+                                    <a target="_blank" href="{{post.replyAttachedImg}}">
+                                        <img alt="Image attachment" class="ui centered fluid rounded medium image" src="{{post.replyAttachedImg}}">
+                                    </a>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                {%endif%}
             {% endif %}
-
             <p>
                 <form class="ui form" action="{{ url_for('savePost', url=post.url.replace('/', '~')) }}" method="post">
-                    <button type="submit" class="ui icon button">
+                    <button type="submit" class="mini ui icon button">
                         <i class="bookmark outline icon"></i>
-                        </button>
+                    </button>
                 </form>
             </p>
         </div>
+    </div>
+    <div class="extra content">
+        <span class="left floated">
+            <i class="red heart like icon"></i>
+            {{post.likes}}
+            <span> </span>
+            <i class="grey comment icon"></i>
+            {{post.comments}}
+        </span>
+        <span class="right floated">
+            <i class="blue retweet icon"></i>
+                {{post.retweets}}
+            <i class="grey quote left icon"></i>
+            {{post.quotes}}
+        </span>
     </div>
 </div> <!--End tweet--> 

@@ -1,60 +1,108 @@
 {% extends "base.html" %}
 
 {% block content %}
-    <div class="blue ui centered card">
-        <div class="content">
-            <div class="center aligned author">
-                <img alt="Profile picture" class="ui avatar image" src="{{user.profilePic}}">
+    <div class="ui text container center aligned">
+        <div class="ui segments">
+            <div class="ui centered vertical segment">
+                <h2 class="ui header">
+                <img src="{{user.profilePic}}" class="ui circular image">
+                {{user.profileFullName}} <span style="color:grey;font-size: small;">({{user.profileUsername}})</span>
+                </h2>
             </div>
-            <div class="center aligned header"><a href="https://nitter.net/{{ user.profileUsername.replace('@','') }}">
-                {%if user.profileFullName%}
-                    {{user.profileFullName}}
-                {%else%}
-                    {{user.profileUsername}}
-                {%endif%}
-            </a></div>
-            <div class="center aligned description">
+            <div class="ui horizontal segments">
+                <div class="ui segment">
+                    <div class="ui centered vertical segment">
+                        <p>{{user.profileBio}}</p>
+                    </div>
+                </div>
+                <div class="ui segment">
+                    {% if not current_user.is_following_tw(user.profileUsername.replace('@','')) %}
+                        <p>
+                            <form action="{{ url_for('follow', username=user.profileUsername.replace('@','')) }}" method="post">
+                                {{ form.hidden_tag() }}
+                                {{ form.submit(value='Follow') }}
+                            </form>
+                        </p>
+                    {% else %}
+                        <p>
+                            <form action="{{ url_for('unfollow', username=user.profileUsername.replace('@','')) }}" method="post">
+                                {{ form.hidden_tag() }}
+                                {{ form.submit(value='Unfollow') }}
+                            </form>
+                        </p>
+                    {% endif %} 
+                </div>
+            </div>
+            <div class="ui horizontal segments">
+                <div class="ui segment">
                     <div class="statistic">
                         <div class="value">
-                            <i class="users icon"></i>{{user.followers}}
+                          <b>{{user.followers}}</b>
                         </div>
                         <div class="label">
-                        Followers
+                            <b>FOLLOWERS</b>
                         </div>
-                    </div>   
+                    </div>
+                </div>
+                <div class="ui segment">
+                    <div class="statistic">
+                        <div class="value">
+                          <b>{{user.following}}</b>
+                        </div>
+                        <div class="label">
+                            <b>FOLLOWING</b>
+                        </div>
+                    </div>
+                </div>
+                <div class="ui segment">
+                    <div class="statistic">
+                        <div class="value">
+                          <b>{{user.tweets}}</b>
+                        </div>
+                        <div class="label">
+                            <b>TWEETS</b>
+                        </div>
+                    </div>
+                </div>
+                <div class="ui segment">
+                    <div class="statistic">
+                        <div class="value">
+                          <b>{{user.likes}}</b>
+                        </div>
+                        <div class="label">
+                            <b>LIKES</b>
+                        </div>
+                    </div>
+                </div>
             </div>
-        </div>
-        <div class="center aligned extra content">
-            {% if not current_user.is_following_tw(user.profileUsername.replace('@','')) %}
-                <p>
-                    <form action="{{ url_for('follow', username=user.profileUsername.replace('@','')) }}" method="post">
-                        {{ form.hidden_tag() }}
-                        {{ form.submit(value='Follow') }}
-                    </form>
-                </p>
-            {% else %}
-                <p>
-                    <form action="{{ url_for('unfollow', username=user.profileUsername.replace('@','')) }}" method="post">
-                        {{ form.hidden_tag() }}
-                        {{ form.submit(value='Unfollow') }}
-                    </form>
-                </p>
-            {% endif %}        
         </div>
     </div>
 
-    <div class="text container" id="card-container">
+    <div style="margin-top: 15px;" class="text container" id="card-container">
         {% if not posts %}
-            {% include '_empty_feed.html' %}
+            <div style="margin-top: 20px;" class="ui container center aligned">
+                <h2> <i class="window close outline icon"></i> This feed is empty. </h3>
+            </div>
+        {% elif posts == 'Protected' %}
+            <div style="margin-top: 20px;" class="ui container center aligned">
+                <h2> <i class="lock icon"></i> This account's tweets are protected. </h3>
+            </div>
         {% else %}
             {% for post in posts %}
                     {% include '_twitter_post.html' %}
             {% endfor %}
+            <div class="scroller">
+                <a href="#top" class="ui button">
+                    <i style="margin: 0;" class="chevron up icon"></i>
+                </a>
+            </div>
+            <br>
+            <div class="ui center aligned text container">
+                <a href="/{{user.profileUsername}}/{{prev_page}}"> <button class="ui left attached button"><i class="angle blue left icon"></i></button> </a>
+                <a href="/{{user.profileUsername}}/{{page+1}}"> <button class="right attached ui button"><i class="angle blue right icon"></i></button></a>
+            </div>
+            <br>
         {% endif %}
-        <div class="scroller">
-            <a href="#top" class="ui button">
-                <i style="margin: 0;" class="chevron up icon"></i>
-            </a>
-        </div>
     </div>
+
 {% endblock %}

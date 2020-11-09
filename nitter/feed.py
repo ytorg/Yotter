@@ -19,6 +19,7 @@ def get_feed(usernames, daysMaxOld=10, includeRT=True):
     '''
     Returns feed tweets given a set of usernames
     '''
+    print(usernames)
     feedTweets = []
     with FuturesSession() as session:
         futures = [session.get('{instance}{user}'.format(instance=config['nitterInstance'], user=u)) for u in usernames]
@@ -38,5 +39,8 @@ def get_feed(usernames, daysMaxOld=10, includeRT=True):
                     userFeed.append(tweet)
         else:
             userFeed += feed
-    userFeed.sort(key=lambda x: datetime.datetime.strptime(x['timeStamp'], '%Y-%m-%d %H:%M:%S'), reverse=True)
+    try:
+        userFeed.sort(key=lambda x: datetime.datetime.strptime(x['timeStamp'], '%Y-%m-%d %H:%M:%S'), reverse=True)
+    except:
+        return userFeed
     return userFeed

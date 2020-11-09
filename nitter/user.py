@@ -66,8 +66,19 @@ def get_tweets(user, page=1):
         feedPosts = get_feed_tweets(html)
     return feedPosts
 
+def yotterify(text):
+    URLS = ['https://youtube.com']
+    text = str(text)
+    for url in URLS:
+        text.replace(url, "")
+    return text
+
 def get_feed_tweets(html):
     feedPosts = []
+    if 'No items found' in str(html.body):
+        return 'Empty feed'
+    if "This account's tweets are protected." in str(html.body):
+        return 'Protected feed'
     userFeed = html.find_all('div', attrs={'class':'timeline-item'})
     if userFeed != []:
         for post in userFeed[:-1]:
@@ -84,7 +95,7 @@ def get_feed_tweets(html):
             tweet['twitterName'] = post.find('a', attrs={'class':'fullname'}).text
             tweet['timeStamp'] = str(datetime.datetime.strptime(date_time_str, '%d/%m/%Y %H:%M:%S'))
             tweet['date'] = post.find('span', attrs={'class':'tweet-date'}).find('a').text
-            tweet['content'] = Markup(post.find('div',  attrs={'class':'tweet-content'}).decode_contents())
+            tweet['content'] = Markup(yotterify(post.find('div',  attrs={'class':'tweet-content'}).decode_contents().replace("\n", "<br>")))
             
             if post.find('div', attrs={'class':'retweet-header'}):
                 tweet['username'] = post.find('div', attrs={'class':'retweet-header'}).find('div', attrs={'class':'icon-container'}).text
@@ -100,19 +111,28 @@ def get_feed_tweets(html):
             if post.find('div', attrs={'class':'quote'}):
                 tweet['isReply'] = True
                 quote = post.find('div', attrs={'class':'quote'})
-                if quote.find('div',  attrs={'class':'quote-text'}):
-                    tweet['replyingTweetContent'] = Markup(quote.find('div',  attrs={'class':'quote-text'}))
-                    
-                if quote.find('a', attrs={'class':'still-image'}):
-                    tweet['replyAttachedImages'] = []
-                    images = quote.find_all('a',  attrs={'class':'still-image'})
-                    for img in images:
-                        img = BeautifulSoup(str(img), "lxml")
-                        url = config['nitterInstance'] + img.find('a')['href'][1:]
-                        tweet['replyAttachedImages'].append(url)
 
-                tweet['replyingUser']=quote.find('a',  attrs={'class':'username'}).text
-                post.find('div', attrs={'class':'quote'}).decompose()
+                if 'unavailable' in str(quote):
+                    tweet['unavailableReply'] = True
+                else:
+                    tweet['unavailableReply'] = False
+
+                if not tweet['unavailableReply']:
+                    if quote.find('div',  attrs={'class':'quote-text'}):
+                        try:
+                            tweet['replyingTweetContent'] = Markup(quote.find('div',  attrs={'class':'quote-text'}).replace("\n", "<br>"))
+                        except:
+                            tweet['replyingTweetContent'] = Markup(quote.find('div',  attrs={'class':'quote-text'}))
+                        
+                    if quote.find('a', attrs={'class':'still-image'}):
+                        tweet['replyAttachedImages'] = []
+                        images = quote.find_all('a',  attrs={'class':'still-image'})
+                        for img in images:
+                            img = BeautifulSoup(str(img), "lxml")
+                            url = config['nitterInstance'] + img.find('a')['href'][1:]
+                            tweet['replyAttachedImages'].append(url)
+                    tweet['replyingUser']=quote.find('a',  attrs={'class':'username'}).text
+                    post.find('div', attrs={'class':'quote'}).decompose()
             else:
                 tweet['isReply'] = False
             
@@ -129,13 +149,25 @@ def get_feed_tweets(html):
                 else:
                     tweet['attachedImages'] = False
                 # Videos    
-                if post.find('div', attrs={'gallery-video'}):
+                if post.find('div', attrs={'attachments'}).find('div', attrs={'gallery-video'}):
                     tweet['attachedVideo'] = True
                 else:
                     tweet['attachedVideo'] = False
             else:
                 tweet['attachedVideo'] = False
                 tweet['attachedImages'] = False
+
+            if post.find('div', attrs={'class':'tweet-stats'}):
+                stats = post.find('div', attrs={'class':'tweet-stats'}).find_all('span', attrs={'class':'tweet-stat'})
+                for stat in stats:
+                    if 'comment' in str(stat):
+                        tweet['comments'] = stat.find('div',attrs={'class':'icon-container'}).text
+                    elif 'retweet' in str(stat):
+                        tweet['retweets'] = stat.find('div',attrs={'class':'icon-container'}).text
+                    elif 'heart' in str(stat):
+                        tweet['likes'] = stat.find('div',attrs={'class':'icon-container'}).text
+                    else:
+                        tweet['quotes'] =  stat.find('div',attrs={'class':'icon-container'}).text              
             feedPosts.append(tweet)
     else:
         return {"emptyFeed": True}

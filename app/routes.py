@@ -29,9 +29,13 @@ from youtube_search import YoutubeSearch
 from app import app, db
 from app.forms import LoginForm, RegistrationForm, EmptyForm, SearchForm, ChannelForm
 from app.models import User, twitterPost, ytPost, Post, youtubeFollow, twitterFollow
+
 from youtube import comments, utils, channel as ytch, search as yts
 from youtube import watch as ytwatch
 from youtube import video as ytvid
+
+from nitter import feed as nitterfeed
+from nitter import user as nitteruser
 
 #########################################
 
@@ -81,31 +85,28 @@ def twitter(page=0):
     followCount = len(followingList)
     page = int(page)
     avatarPath = "img/avatars/1.png"
-    posts = []
 
-    nitter_feed_link = config['nitterInstance']
-    c = len(followingList)
-    for user in followingList:
-        if c != 0:
-            nitter_feed_link = nitter_feed_link + "{},".format(user.username)
-            c = c - 1
-        else:
-            nitter_feed_link = nitter_feed_link + user.username
+    followList = []
+    for f in followingList:
+        followList.append(f.username)
+    posts = []
 
     cache_file = glob.glob("app/cache/{}_*".format(current_user.username))
     if (len(cache_file) > 0):
         time_diff = round(time.time() - os.path.getmtime(cache_file[0]))
     else:
         time_diff = 999
+
     # If cache file is more than 1 minute old
     if page == 0 and time_diff > 60:
         if cache_file:
             for f in cache_file:
                 os.remove(f)
-        feed = getFeed(followingList)
+        feed = nitterfeed.get_feed(followList)
         cache_file = "{u}_{d}.json".format(u=current_user.username, d=time.strftime("%Y%m%d-%H%M%S"))
         with open("app/cache/{}".format(cache_file), 'w') as fp:
             json.dump(feed, fp)
+
     # Else, refresh feed
     else:
         try:
@@ -113,14 +114,12 @@ def twitter(page=0):
             with open(cache_file, 'r') as fp:
                 feed = json.load(fp)
         except:
-            feed = getFeed(followingList)
+            feed = nitterfeed.get_feed(followList)
             cache_file = "{u}_{d}.json".format(u=current_user.username, d=time.strftime("%Y%m%d-%H%M%S"))
             with open("app/cache/{}".format(cache_file), 'w') as fp:
                 json.dump(feed, fp)
 
     posts.extend(feed)
-    posts.sort(key=lambda x: datetime.datetime.strptime(x['timeStamp'], '%d/%m/%Y %H:%M:%S'), reverse=True)
-
     # Items range per page
     page_items = page * 16
     offset = page_items + 16
@@ -138,14 +137,8 @@ def twitter(page=0):
         posts = posts[page_items:offset]
     else:
         posts = posts[page_items:]
-
-    if not posts:
-        profilePic = avatarPath
-    else:
-        profilePic = posts[0]['profilePic']
-    return render_template('twitter.html', title='Yotter | Twitter', posts=posts, avatar=avatarPath,
-                           profilePic=profilePic, followedCount=followCount, form=form, config=config,
-                           pages=total_pages, init_page=init_page, actual_page=page, nitter_link=nitter_feed_link)
+    return render_template('twitter.html', title='Yotter | Twitter', posts=posts, followedCount=followCount, form=form, config=config,
+                           pages=total_pages, init_page=init_page, actual_page=page)
 
 
 @app.route('/savePost/<url>', methods=['POST'])
@@ -260,26 +253,39 @@ def search():
     else:
         return render_template('search.html', form=form, config=config)
 
-
 @app.route('/u/<username>')
 @app.route('/<username>')
+@app.route('/<username>/<page>')
 @login_required
-def u(username):
+def u(username, page=1):
+    page=int(page)
     if username == "favicon.ico":
         return redirect(url_for('static', filename='favicons/favicon.ico'))
     form = EmptyForm()
     avatarPath = "img/avatars/{}.png".format(str(random.randint(1, 12)))
-    user = getTwitterUserInfo(username)
+    user = nitteruser.get_user_info(username)
     if not user:
         flash("This user is not on Twitter.")
         return redirect(request.referrer)
 
     posts = []
-    posts.extend(getPosts(username))
-    if not posts:
-        user['profilePic'] = avatarPath
+    tweets=nitteruser.get_tweets(username, page)
+    if tweets == 'Empty feed':
+        posts = False
+    elif tweets == 'Protected feed':
+        posts = 'Protected'
+    else:
+        posts.extend(tweets)
 
-    return render_template('user.html', posts=posts, user=user, form=form, config=config)
+    if page-1 < 0:
+        prev_page = 0
+    else:
+        prev_page = page-1
+    
+    if page > 2:
+        page =2
+
+    return render_template('user.html', posts=posts, user=user, form=form, config=config, page=page, prev_page=prev_page)
 
 
 #########################
