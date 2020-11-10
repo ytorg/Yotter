@@ -38,13 +38,12 @@ def get_feed(usernames, daysMaxOld=10, includeRT=True):
                 else:
                     userFeed.append(tweet)
         else:
-            userFeed.append(feed)
+            userFeed+=feed
     try:
         for uf in userFeed:
             if uf == 'emptyFeed':
                 userFeed.remove(uf)
         userFeed.sort(key=lambda item:item['timeStamp'], reverse=True)
-        #userFeed.sort(key=lambda x: datetime.datetime.strptime(x['timeStamp'], '%Y-%m-%d %H:%M:%S'), reverse=True)
     except:
         return userFeed
     return userFeed
