@@ -9,7 +9,7 @@
                 <i class="share square outline icon"></i>
             </span></a>
         </div>
-        <div class="header" id="author"><a href="{{url_for('/', username=post.op.replace('@',''))}}">{{ post.op }}</a></div>
+        <div class="header" id="author"><a href="{{url_for('u', username=post.op.replace('@',''))}}">{{ post.op }}</a></div>
         <div class="meta">
             <span class="category" id="time"><i class="clock icon"></i> {{post.date}} </span>
             {% if post.isPinned %}
