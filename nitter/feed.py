@@ -4,7 +4,7 @@ from werkzeug.datastructures import Headers
 from concurrent.futures import as_completed
 from numerize import numerize
 from bs4 import BeautifulSoup
-from operator import itemgetter
+from operator import itemgetter, attrgetter
 from re import findall
 from nitter import user
 import time, datetime
@@ -20,7 +20,6 @@ def get_feed(usernames, daysMaxOld=10, includeRT=True):
     '''
     Returns feed tweets given a set of usernames
     '''
-    print(usernames)
     feedTweets = []
     with FuturesSession() as session:
         futures = [session.get('{instance}{user}'.format(instance=config['nitterInstance'], user=u)) for u in usernames]
@@ -39,9 +38,12 @@ def get_feed(usernames, daysMaxOld=10, includeRT=True):
                 else:
                     userFeed.append(tweet)
         else:
-            userFeed+=feed
+            userFeed.append(feed)
     try:
-        userFeed = sorted(userFeed, key=itemgetter('timeStamp'), reverse=True)
+        for uf in userFeed:
+            if uf == 'emptyFeed':
+                userFeed.remove(uf)
+        userFeed.sort(key=lambda item:item['timeStamp'], reverse=True)
         #userFeed.sort(key=lambda x: datetime.datetime.strptime(x['timeStamp'], '%Y-%m-%d %H:%M:%S'), reverse=True)
     except:
         return userFeed
