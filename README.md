@@ -151,15 +151,20 @@ Donations are used to mantain the [yotter.xyz](https://yotter.xyz/) public insta
 #### Twitter / Tweets / Profiles
 <p align="center"> <img width="720" src="https://i.imgur.com/tA15ciH.png"> </img></p> 
 <p align="center"> <img width="720" src="https://i.imgur.com/BYswFy6.png"> </img></p> 
+
 #### Twitter search
 <p align="center"> <img width="720" src="https://i.imgur.com/KalBDa5.png"> </img></p> 
+
 #### Youtube feed
 <p align="center"> <img width="720" src="https://i.imgur.com/rHsKl0e.png"> </img></p> 
+
 #### Youtube video page / Comments
 <p align="center"> <img width="720" src="https://i.imgur.com/pQhLcvI.png"> </img></p> 
 <p align="center"> <img width="720" src="https://i.imgur.com/kZPGUdq.png"> </img></p> 
+
 #### Youtube channel page
 <p align="center"> <img width="720" src="https://i.imgur.com/zybRB7X.png"> </img></p> 
+
 #### Youtube search
 <p align="center"> <img width="720" src="https://i.imgur.com/XHCSNTP.png"> </img></p> 
 
