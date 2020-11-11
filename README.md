@@ -148,12 +148,14 @@ Donations are used to mantain the [yotter.xyz](https://yotter.xyz/) public insta
 - <a href="https://liberapay.com/pluja/donate"><img alt="Donate using Liberapay" src="https://liberapay.com/assets/widgets/donate.svg"></a>
 
 ## Screenshots
-<p align="center"> <img width="720" src="https://i.imgur.com/6AfXO57.png"> </img></p> 
-<p align="center"> <img width="720" src="https://i.imgur.com/jipjySH.png"> </img></p> 
-<p align="center"> <img width="720" src="https://i.imgur.com/JMUW6VH.png"> </img></p> 
-<p align="center"> <img width="720" src="https://i.imgur.com/a7rM4sv.png"> </img></p> 
-<p align="center"> <img width="720" src="https://i.imgur.com/skXFMqE.png"> </img></p> 
-<p align="center"> <img width="720" src="https://i.imgur.com/AurVw5M.png"> </img></p> 
+<p align="center"> <img width="720" src="https://i.imgur.com/tA15ciH.png"> </img></p> 
+<p align="center"> <img width="720" src="https://i.imgur.com/BYswFy6.png"> </img></p> 
+<p align="center"> <img width="720" src="https://i.imgur.com/KalBDa5.png"> </img></p> 
+<p align="center"> <img width="720" src="https://i.imgur.com/rHsKl0e.png"> </img></p> 
+<p align="center"> <img width="720" src="https://i.imgur.com/pQhLcvI.png"> </img></p> 
+<p align="center"> <img width="720" src="https://i.imgur.com/kZPGUdq.png"> </img></p> 
+<p align="center"> <img width="720" src="https://i.imgur.com/zybRB7X.png"> </img></p> 
+<p align="center"> <img width="720" src="https://i.imgur.com/XHCSNTP.png"> </img></p> 
 
 ## Redirect
 If you want to worry less and enjoy Yotter more, you can use any of the following extensions to redirect Youtube to Yotter automatically:
