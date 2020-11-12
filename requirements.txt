@@ -27,7 +27,7 @@ PySocks==1.7.1
 python-dateutil==2.8.1
 python-dotenv==0.15.0
 python-editor==1.0.4
-requests==2.24.0
+requests==2.25.0
 requests-futures==1.0.0
 sgmllib3k==1.0.0
 six==1.15.0
