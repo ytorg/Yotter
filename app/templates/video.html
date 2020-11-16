@@ -1,5 +1,6 @@
 <head>
     <link rel="stylesheet" type= "text/css" href="{{ url_for('static',filename='video-js.min.css') }}">
+    <script src="{{ url_for('static',filename='video.min.js') }}"></script>
 </head>
 {% extends "base.html" %}
 {% block content %}
@@ -47,17 +48,20 @@
             </div>
         {%else%}
             <div class="video-js-responsive-container vjs-hd">
-                <video-js autofocus class="video-js vjs-default-skin"
-                data-setup='{ "playbackRates": [0.5, 0.75, 1, 1.25,1.5, 1.75, 2] }'
+                <video-js id="video-1" class="video-js vjs-default-skin vjs-big-play-centered" 
+                controls 
+                data-setup='{ "playbackRates": [0.5, 1, 1.25, 1.5, 1.75, 2] }' 
+                autofocus
                 width="1080"
-                controls
                 buffered
                 preload="none">
                 {% if config.isInstance %}
                     {% for source in info.formats %}
-                            <source src="{{source.url}}" type="video/{{source.ext}}">
+                            <source src="https://yotter.xyz{{source.url}}" type="video/{{source.ext}}">
                     {% endfor %}
                 {% endif %}
+                    <p class="vjs-no-js">To view this video please enable JavaScript, and consider upgrading to a web browser that
+                    <a href="http://videojs.com/html5-video-support/" target="_blank">supports HTML5 video</a></p>
                 </video-js>
             </div>
         {%endif%}
@@ -131,13 +135,129 @@
             {% endfor %}
         </div>
         {%endif%}
-    <script src="{{ url_for('static',filename='video.min.js') }}"></script>
+    
     {% if info.live %}
-        <script src="{{ url_for('static',filename='videojs-http-streaming.min.js')}}"></script>
-        <script>
-            var player = videojs('live');
-            player.play();
+    <script src="{{ url_for('static',filename='videojs-http-streaming.min.js')}}"></script>
+    <script>
+        var player = videojs('live');
+        player.play();
         </script>
     {% endif %}
     {%endif%}
+    <script src="{{ url_for('static',filename='videojs.hotkeys.min.js') }}"></script>
+    <script>
+      // initialize the plugin
+      videojs('video-1', {
+        playbackRates: [0.5, 1, 1.25, 1.5, 1.75, 2]
+      });
+      
+      videojs('video-1').ready(function() {
+        this.hotkeys({
+          volumeStep: 0.1,
+          seekStep: 5,
+          enableMute: true,
+          enableFullscreen: true,
+          enableNumbers: false,
+          enableVolumeScroll: true,
+          enableHoverScroll: true,
+
+          // Mimic VLC seek behavior, and default to 5.
+          seekStep: function(e) {
+            if (e.ctrlKey && e.altKey) {
+              return 5*60;
+            } else if (e.ctrlKey) {
+              return 60;
+            } else if (e.altKey) {
+              return 10;
+            } else {
+              return 5;
+            }
+          },
+
+          // Enhance existing simple hotkey with a complex hotkey
+          fullscreenKey: function(e) {
+            // fullscreen with the F key or Ctrl+Enter
+            return ((e.which === 70) || (e.ctrlKey && e.which === 13));
+          },
+
+          // Custom Keys
+          customKeys: {
+
+            // Add new simple hotkey
+            simpleKey: {
+              key: function(e) {
+                // Toggle something with S Key
+                return (e.which === 83);
+              },
+              handler: function(player, options, e) {
+                // Example
+                if (player.paused()) {
+                  player.play();
+                } else {
+                  player.pause();
+                }
+              }
+            },
+
+            // Add new complex hotkey
+            complexKey: {
+              key: function(e) {
+                // Toggle something with CTRL + D Key
+                return (e.ctrlKey && e.which === 68);
+              },
+              handler: function(player, options, event) {
+                // Example
+                if (options.enableMute) {
+                  player.muted(!player.muted());
+                }
+              }
+            },
+
+            // Override number keys example from https://github.com/ctd1500/videojs-hotkeys/pull/36
+            numbersKey: {
+              key: function(event) {
+                // Override number keys
+                return ((event.which > 47 && event.which < 59) || (event.which > 95 && event.which < 106));
+              },
+              handler: function(player, options, event) {
+                // Do not handle if enableModifiersForNumbers set to false and keys are Ctrl, Cmd or Alt
+                if (options.enableModifiersForNumbers || !(event.metaKey || event.ctrlKey || event.altKey)) {
+                  var sub = 48;
+                  if (event.which > 95) {
+                    sub = 96;
+                  }
+                  var number = event.which - sub;
+                  player.currentTime(player.duration() * number * 0.1);
+                }
+              }
+            },
+
+            emptyHotkey: {
+              // Empty
+            },
+
+            withoutKey: {
+              handler: function(player, options, event) {
+                  console.log('withoutKey handler');
+              }
+            },
+
+            withoutHandler: {
+              key: function(e) {
+                  return true;
+              }
+            },
+
+            malformedKey: {
+              key: function() {
+                console.log('I have a malformed customKey. The Key function must return a boolean.');
+              },
+              handler: function(player, options, event) {
+                //Empty
+              }
+            }
+          }
+        });
+      });
+    </script>
 {% endblock %}
