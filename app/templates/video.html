@@ -57,7 +57,7 @@
                 preload="none">
                 {% if config.isInstance %}
                     {% for source in info.formats %}
-                            <source src="https://yotter.xyz{{source.url}}" type="video/{{source.ext}}">
+                            <source src="{{source.url}}" type="video/{{source.ext}}">
                     {% endfor %}
                 {% endif %}
                     <p class="vjs-no-js">To view this video please enable JavaScript, and consider upgrading to a web browser that
