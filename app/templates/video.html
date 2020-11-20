@@ -1,6 +1,9 @@
 <head>
-    <link rel="stylesheet" type= "text/css" href="{{ url_for('static',filename='video-js.min.css') }}">
-    <script src="{{ url_for('static',filename='video.min.js') }}"></script>
+  <link rel="stylesheet" type= "text/css" href="{{ url_for('static',filename='quality-selector.css') }}">
+  <script src="{{ url_for('static',filename='videojs-quality-selector.min.js') }}"></script>
+  
+  <link rel="stylesheet" type= "text/css" href="{{ url_for('static',filename='video-js.min.css') }}">
+  <script src="{{ url_for('static',filename='video.min.js') }}"></script>
 </head>
 {% extends "base.html" %}
 {% block content %}
@@ -49,15 +52,16 @@
         {%else%}
             <div class="video-js-responsive-container vjs-hd">
                 <video-js id="video-1" class="video-js vjs-default-skin vjs-big-play-centered" 
+                qualitySelector
                 controls 
-                data-setup='{ "playbackRates": [0.5, 1, 1.25, 1.5, 1.75, 2] }' 
                 autofocus
+                data-setup='{ "playbackRates": [0.5, 1, 1.25, 1.5, 1.75, 2] }' 
                 width="1080"
                 buffered
                 preload="none">
                 {% if config.isInstance %}
                     {% for source in info.formats %}
-                            <source src="https://yotter.xyz{{source.url}}" type="video/{{source.ext}}">
+                            <source src="{{source.url}}" type="video/{{source.ext}}" label="{{source.format_note}}">
                     {% endfor %}
                 {% endif %}
                     <p class="vjs-no-js">To view this video please enable JavaScript, and consider upgrading to a web browser that
@@ -144,12 +148,20 @@
         </script>
     {% endif %}
     {%endif%}
+
+    <!-- SETUP QUALITY SELECTOR -->
+    <script>
+      videojs("video-1", {}, function() {
+         var player = this;
+
+         player.controlBar.addChild('QualitySelector');
+      });
+   </script>
+
+   <!-- SETUP CONTROL HOTKEYS -->
     <script src="{{ url_for('static',filename='videojs.hotkeys.min.js') }}"></script>
     <script>
       // initialize the plugin
-      videojs('video-1', {
-        playbackRates: [0.5, 1, 1.25, 1.5, 1.75, 2]
-      });
       
       videojs('video-1').ready(function() {
         this.hotkeys({
