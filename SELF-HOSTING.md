@@ -317,6 +317,8 @@ Now we will run certbot and we need to tell that we run an nginx server. Here yo
 
 [Follow this instructions to install certbot and generate an ssl certificate so your server can use HTTPS](https://certbot.eff.org/lets-encrypt/ubuntufocal-nginx)
 
+Finally, once this is done, you should edit the `yotter` nginx config and change the `listen 443 ssl;` line to `listen 443 ssl http2;`
+
 #### Updating the server
 Updating the server should always be pretty easy. These steps need to be run on the Yotter folder and with the python virtual env activated.
 
