@@ -19,7 +19,7 @@ config = json.load(open('yotter-config.json'))
 config['nitterInstance']
 
 def get_user_info(username):
-    response = urllib.request.urlopen('{instance}{user}'.format(instance=config['nitterInstance'], user=username)).read()
+    response = urllib.request.urlopen(f'{config["nitterInstance"]}{username}').read()
     #rssFeed = feedparser.parse(response.content)
 
     html = BeautifulSoup(str(response), "lxml")
@@ -32,7 +32,7 @@ def get_user_info(username):
             fullName = html.find('a', attrs={'class':'profile-card-fullname'}).getText().encode('latin1').decode('unicode_escape').encode('latin1').decode('utf8')
         else:
             fullName = None
-        
+
         if html.find('div', attrs={'class':'profile-bio'}):
             profileBio = html.find('div', attrs={'class':'profile-bio'}).getText().encode('latin1').decode('unicode_escape').encode('latin1').decode('utf8')
         else:
@@ -46,12 +46,12 @@ def get_user_info(username):
             "following":html.find_all('span', attrs={'class':'profile-stat-num'})[1].string,
             "followers":numerize.numerize(int(html.find_all('span', attrs={'class':'profile-stat-num'})[2].string.replace(",",""))),
             "likes":html.find_all('span', attrs={'class':'profile-stat-num'})[3].string,
-            "profilePic":"{instance}{pic}".format(instance=config['nitterInstance'], pic=html.find('a', attrs={'class':'profile-card-avatar'})['href'][1:])
+            "profilePic":config['nitterInstance'] + html.find('a', attrs={'class':'profile-card-avatar'})['href'][1:],
         }
         return user
 
-def get_tweets(user, page=1):        
-    feed = urllib.request.urlopen('{instance}{user}'.format(instance=config['nitterInstance'], user=user)).read()
+def get_tweets(user, page=1):
+    feed = urllib.request.urlopen(f'{config["nitterInstance"]}{user}').read()
     #Gather feedPosts
     res = feed.decode('utf-8')
     html = BeautifulSoup(res, "html.parser")
@@ -59,8 +59,9 @@ def get_tweets(user, page=1):
 
     if page == 2:
         nextPage = html.find('div', attrs={'class':'show-more'}).find('a')['href']
-        print('{instance}{user}{page}'.format(instance=config['nitterInstance'], user=user, page=nextPage))
-        feed = urllib.request.urlopen('{instance}{user}{page}'.format(instance=config['nitterInstance'], user=user, page=nextPage)).read()
+        url = f'{config["nitterInstance"]}{user}{nextPage}'
+        print(url)
+        feed = urllib.request.urlopen(url).read()
         res = feed.decode('utf-8')
         html = BeautifulSoup(res, "html.parser")
         feedPosts = get_feed_tweets(html)
@@ -96,17 +97,17 @@ def get_feed_tweets(html):
             tweet['timeStamp'] = str(datetime.datetime.strptime(date_time_str, '%d/%m/%Y %H:%M:%S'))
             tweet['date'] = post.find('span', attrs={'class':'tweet-date'}).find('a').text
             tweet['content'] = Markup(yotterify(post.find('div',  attrs={'class':'tweet-content'}).decode_contents().replace("\n", "<br>")))
-            
+
             if post.find('div', attrs={'class':'retweet-header'}):
                 tweet['username'] = post.find('div', attrs={'class':'retweet-header'}).find('div', attrs={'class':'icon-container'}).text
                 tweet['isRT'] = True
             else:
                 tweet['username'] = tweet['op']
                 tweet['isRT'] = False
-            
+
             tweet['profilePic'] = config['nitterInstance']+post.find('a', attrs={'class':'tweet-avatar'}).find('img')['src'][1:]
             tweet['url'] = config['nitterInstance'] + post.find('a', attrs={'class':'tweet-link'})['href'][1:]
-            
+
             # Is quoting another tweet
             if post.find('div', attrs={'class':'quote'}):
                 tweet['isReply'] = True
@@ -123,7 +124,7 @@ def get_feed_tweets(html):
                             tweet['replyingTweetContent'] = Markup(quote.find('div',  attrs={'class':'quote-text'}).replace("\n", "<br>"))
                         except:
                             tweet['replyingTweetContent'] = Markup(quote.find('div',  attrs={'class':'quote-text'}))
-                        
+
                     if quote.find('a', attrs={'class':'still-image'}):
                         tweet['replyAttachedImages'] = []
                         images = quote.find_all('a',  attrs={'class':'still-image'})
@@ -135,7 +136,7 @@ def get_feed_tweets(html):
                     post.find('div', attrs={'class':'quote'}).decompose()
             else:
                 tweet['isReply'] = False
-            
+
             # Has attatchments
             if post.find('div',  attrs={'class':'attachments'}):
                 # Images
@@ -167,7 +168,7 @@ def get_feed_tweets(html):
                     elif 'heart' in str(stat):
                         tweet['likes'] = stat.find('div',attrs={'class':'icon-container'}).text
                     else:
-                        tweet['quotes'] =  stat.find('div',attrs={'class':'icon-container'}).text              
+                        tweet['quotes'] =  stat.find('div',attrs={'class':'icon-container'}).text
             feedPosts.append(tweet)
     else:
         return {"emptyFeed": True}

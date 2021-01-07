@@ -91,7 +91,7 @@ def twitter(page=0):
         followList.append(f.username)
     posts = []
 
-    cache_file = glob.glob("app/cache/{}_*".format(current_user.username))
+    cache_file = glob.glob(f"app/cache/{current_user.username}_*")
     if (len(cache_file) > 0):
         time_diff = round(time.time() - os.path.getmtime(cache_file[0]))
     else:
@@ -103,20 +103,20 @@ def twitter(page=0):
             for f in cache_file:
                 os.remove(f)
         feed = nitterfeed.get_feed(followList)
-        cache_file = "{u}_{d}.json".format(u=current_user.username, d=time.strftime("%Y%m%d-%H%M%S"))
-        with open("app/cache/{}".format(cache_file), 'w') as fp:
+        cache_file = f"{current_user.username}_{time.strftime('%Y%m%d-%H%M%S')}.json"
+        with open(f"app/cache/{cache_file}", 'w') as fp:
             json.dump(feed, fp)
 
     # Else, refresh feed
     else:
         try:
-            cache_file = glob.glob("app/cache/{}*".format(current_user.username))[0]
+            cache_file = glob.glob(f"app/cache/{current_user.username}*")[0]
             with open(cache_file, 'r') as fp:
                 feed = json.load(fp)
         except:
             feed = nitterfeed.get_feed(followList)
-            cache_file = "{u}_{d}.json".format(u=current_user.username, d=time.strftime("%Y%m%d-%H%M%S"))
-            with open("app/cache/{}".format(cache_file), 'w') as fp:
+            cache_file = f"{current_user.username}_{time.strftime('%Y%m%d-%H%M%S')}.json"
+            with open(f"app/cache/{cache_file}", 'w') as fp:
                 json.dump(feed, fp)
 
     posts.extend(feed)
@@ -187,7 +187,7 @@ def follow(username):
     form = EmptyForm()
     if form.validate_on_submit():
         if followTwitterAccount(username):
-            flash("{} followed!".format(username))
+            flash(f"{username} followed!")
     return redirect(request.referrer)
 
 
@@ -202,7 +202,7 @@ def followTwitterAccount(username):
                 db.session.commit()
                 return True
             except:
-                flash("Twitter: Couldn't follow {}. Already followed?".format(username))
+                flash(f"Twitter: Couldn't follow {username}. Already followed?")
                 return False
     else:
         flash("Something went wrong... try again")
@@ -215,7 +215,7 @@ def unfollow(username):
     form = EmptyForm()
     if form.validate_on_submit():
         if twUnfollow(username):
-            flash("{} unfollowed!".format(username))
+            flash(f"{username} unfollowed!")
     return redirect(request.referrer)
 
 
@@ -248,7 +248,7 @@ def search():
         if results:
             return render_template('search.html', form=form, results=results, config=config)
         else:
-            flash("User {} not found...".format(user))
+            flash(f"User {user} not found...")
             return redirect(request.referrer)
     else:
         return render_template('search.html', form=form, config=config)
@@ -262,7 +262,7 @@ def u(username, page=1):
     if username == "favicon.ico":
         return redirect(url_for('static', filename='favicons/favicon.ico'))
     form = EmptyForm()
-    avatarPath = "img/avatars/{}.png".format(str(random.randint(1, 12)))
+    avatarPath = f"img/avatars/{str(random.randint(1, 12))}.png"
     user = nitteruser.get_user_info(username)
     if not user:
         flash("This user is not on Twitter.")
@@ -281,7 +281,7 @@ def u(username, page=1):
         prev_page = 0
     else:
         prev_page = page-1
-    
+
     if page > 2:
         page =2
 
@@ -300,7 +300,7 @@ def youtube():
     videos = getYoutubePosts(ids)
     if videos:
         videos.sort(key=lambda x: x.date, reverse=True)
-    print("--- {} seconds fetching youtube feed---".format(time.time() - start_time))
+    print(f"--- {time.time() - start_time} seconds fetching youtube feed---")
     return render_template('youtube.html', title="Yotter | Youtube", videos=videos, followCount=followCount,
                            config=config)
 
@@ -337,22 +337,21 @@ def ytsearch():
         filters = {"time": 0, "type": 0, "duration": 0}
         results = yts.search_by_terms(query, page, autocorrect, sort, filters)
 
-        next_page = "/ytsearch?q={q}&s={s}&p={p}".format(q=query, s=sort, p=int(page) + 1)
+        next_page = f"/ytsearch?q={query}&s={sort}&p={int(page)+1}"
         if int(page) == 1:
-            prev_page = "/ytsearch?q={q}&s={s}&p={p}".format(q=query, s=sort, p=1)
+            prev_page = f"/ytsearch?q={query}&s={sort}&p={1}"
         else:
-            prev_page = "/ytsearch?q={q}&s={s}&p={p}".format(q=query, s=sort, p=int(page) - 1)
+            prev_page = f"/ytsearch?q={query}&s={sort}&p={int(page)-1}"
 
         for video in results['videos']:
             hostname = urllib.parse.urlparse(video['videoThumb']).netloc
-            video['videoThumb'] = video['videoThumb'].replace("https://{}".format(hostname), "") + "&host=" + hostname
+            video['videoThumb'] = video['videoThumb'].replace(f"https://{hostname}", "") + "&host=" + hostname
 
         for channel in results['channels']:
             if config['isInstance']:
                 channel['thumbnail'] = channel['thumbnail'].replace("~", "/")
                 hostName = urllib.parse.urlparse(channel['thumbnail']).netloc
-                channel['thumbnail'] = channel['thumbnail'].replace("https://{}".format(hostName),
-                                                                    "") + "?host=" + hostName
+                channel['thumbnail'] = channel['thumbnail'].replace(f"https://{hostName}", "") + "?host=" + hostName
         return render_template('ytsearch.html', form=form, btform=button_form, results=results,
                                restricted=config['restrictPublicUsage'], config=config, npage=next_page,
                                ppage=prev_page)
@@ -380,7 +379,7 @@ def followYoutubeChannel(channelId):
                 follow.followers.append(current_user)
                 db.session.add(follow)
                 db.session.commit()
-                flash("{} followed!".format(channelData['channel_name']))
+                flash(f"{channelData['channel_name']} followed!")
                 return True
             else:
                 return False
@@ -388,8 +387,8 @@ def followYoutubeChannel(channelId):
             print(e)
             return False
     except KeyError as ke:
-        print("KeyError: {}:'{}' could not be found".format(ke, channelId))
-        flash("Youtube: ChannelId '{}' is not valid".format(channelId))
+        print(f"KeyError: {ke}:'{channelId}' could not be found")
+        flash(f"Youtube: ChannelId '{channelId}' is not valid")
         return False
 
 
@@ -410,7 +409,7 @@ def unfollowYoutubeChannel(channelId):
         if channel:
             db.session.delete(channel)
             db.session.commit()
-        flash("{} unfollowed!".format(name))
+        flash(f"{name} unfollowed!")
     except:
         flash("There was an error unfollowing the user. Try again.")
 
@@ -435,22 +434,22 @@ def channel(id):
     for video in data['items']:
         if config['isInstance']:
             hostName = urllib.parse.urlparse(video['thumbnail'][1:]).netloc
-            video['thumbnail'] = video['thumbnail'].replace("https://{}".format(hostName), "")[1:].replace("hqdefault",
-                                                                                                           "mqdefault") + "&host=" + hostName
+            video['thumbnail'] = video['thumbnail'].replace(f"https://{hostName}", "")[1:].replace("hqdefault",
+                                                                                                   "mqdefault") + "&host=" + hostName
         else:
             video['thumbnail'] = video['thumbnail'].replace('/', '~')
 
     if config['isInstance']:
         hostName = urllib.parse.urlparse(data['avatar'][1:]).netloc
-        data['avatar'] = data['avatar'].replace("https://{}".format(hostName), "")[1:] + "?host=" + hostName
+        data['avatar'] = data['avatar'].replace(f"https://{hostName}", "")[1:] + "?host=" + hostName
     else:
         data['avatar'] = data['avatar'].replace('/', '~')
 
-    next_page = "/channel/{q}?s={s}&p={p}".format(q=id, s=sort, p=int(page) + 1)
+    next_page = f"/channel/{id}?s={sort}&p={int(page)+1}"
     if int(page) == 1:
-        prev_page = "/channel/{q}?s={s}&p={p}".format(q=id, s=sort, p=1)
+        prev_page = f"/channel/{id}?s={sort}&p={1}"
     else:
-        prev_page = "/channel/{q}?s={s}&p={p}".format(q=id, s=sort, p=int(page) - 1)
+        prev_page = f"/channel/{id}?s={sort}&p={int(page)-1}"
 
     return render_template('channel.html', form=form, btform=button_form, data=data,
                            restricted=config['restrictPublicUsage'], config=config, next_page=next_page,
@@ -488,11 +487,11 @@ def watch():
     if info['error'] == False:
         for format in info['formats']:
             hostName = urllib.parse.urlparse(format['url']).netloc
-            format['url'] = format['url'].replace("https://{}".format(hostName), "") + "&host=" + hostName
+            format['url'] = format['url'].replace(f"https://{hostName}", "") + "&host=" + hostName
 
         for format in info['audio_formats']:
             hostName = urllib.parse.urlparse(format['url']).netloc
-            format['url'] = format['url'].replace("https://{}".format(hostName), "") + "&host=" + hostName
+            format['url'] = format['url'].replace(f"https://{hostName}", "") + "&host=" + hostName
 
         # Markup description
         try:
@@ -804,7 +803,7 @@ def status():
 
 @app.route('/error/<errno>')
 def error(errno):
-    return render_template('{}.html'.format(str(errno)), config=config)
+    return render_template(f'{str(errno)}.html', config=config)
 
 
 def getTimeDiff(t):
@@ -812,24 +811,26 @@ def getTimeDiff(t):
 
     if diff.days == 0:
         if diff.seconds > 3599:
-            timeString = "{}h".format(int((diff.seconds / 60) / 60))
+            num = int((diff.seconds / 60) / 60)
+            timeString = f"{num}h"
         else:
-            timeString = "{}m".format(int(diff.seconds / 60))
+            num = int(diff.seconds / 60)
+            timeString = f"{num}m"
     else:
-        timeString = "{}d".format(diff.days)
+        timeString = f"{diff.days}d"
     return timeString
 
 
 def isTwitterUser(username):
-    response = requests.get('{instance}{user}/rss'.format(instance=NITTERINSTANCE, user=username))
+    response = requests.get(f'{NITTERINSTANCE}{username}/rss')
     if response.status_code == 404:
         return False
     return True
 
 
 def twitterUserSearch(terms):
-    response = urllib.request.urlopen(
-        '{instance}search?f=users&q={user}'.format(instance=NITTERINSTANCE, user=urllib.parse.quote(terms))).read()
+    url = f'{NITTERINSTANCE}search?f=users&q={urllib.parse.quote(terms)}'
+    response = urllib.request.urlopen(url).read()
     html = BeautifulSoup(str(response), "lxml")
 
     results = []
@@ -843,14 +844,14 @@ def twitterUserSearch(terms):
                     'unicode_escape').encode('latin_1').decode('utf8'),
                 "username": item.find('a', attrs={'class': 'username'}).getText().encode('latin_1').decode(
                     'unicode_escape').encode('latin_1').decode('utf8'),
-                'avatar': "{i}{s}".format(i=NITTERINSTANCE, s=item.find('img', attrs={'class': 'avatar'})['src'][1:])
+                'avatar': NITTERINSTANCE + item.find('img', attrs={'class': 'avatar'})['src'][1:],
             }
             results.append(user)
         return results
 
 
 def getTwitterUserInfo(username):
-    response = urllib.request.urlopen('{instance}{user}'.format(instance=NITTERINSTANCE, user=username)).read()
+    response = urllib.request.urlopen('{NITTERINSTANCE}{username}').read()
     # rssFeed = feedparser.parse(response.content)
 
     html = BeautifulSoup(str(response), "lxml")
@@ -881,9 +882,7 @@ def getTwitterUserInfo(username):
             "followers": numerize.numerize(
                 int(html.find_all('span', attrs={'class': 'profile-stat-num'})[2].string.replace(",", ""))),
             "likes": html.find_all('span', attrs={'class': 'profile-stat-num'})[3].string,
-            "profilePic": "{instance}{pic}".format(instance=NITTERINSTANCE,
-                                                   pic=html.find('a', attrs={'class': 'profile-card-avatar'})['href'][
-                                                       1:])
+            "profilePic": NITTERINSTANCE + html.find('a', attrs={'class': 'profile-card-avatar'})['href'][1:],
         }
         return user
 
@@ -891,7 +890,7 @@ def getTwitterUserInfo(username):
 def getFeed(urls):
     feedPosts = []
     with FuturesSession() as session:
-        futures = [session.get('{instance}{user}'.format(instance=NITTERINSTANCE, user=u.username)) for u in urls]
+        futures = [session.get(f'{NITTERINSTANCE}{u.username}') for u in urls]
         for future in as_completed(futures):
             res= future.result().content
             html = BeautifulSoup(res, "html.parser")
@@ -960,7 +959,7 @@ def getPosts(account):
     feedPosts = []
 
     # Gather profile info.
-    rssFeed = urllib.request.urlopen('{instance}{user}'.format(instance=NITTERINSTANCE, user=account)).read()
+    rssFeed = urllib.request.urlopen(f'{NITTERINSTANCE}{account}').read()
     # Gather feedPosts
     res = rssFeed.decode('utf-8')
     html = BeautifulSoup(res, "html.parser")
@@ -1018,8 +1017,7 @@ def getPosts(account):
 def getYoutubePosts(ids):
     videos = []
     with FuturesSession() as session:
-        futures = [session.get('https://www.youtube.com/feeds/videos.xml?channel_id={id}'.format(id=id.channelId)) for
-                   id in ids]
+        futures = [session.get(f'https://www.youtube.com/feeds/videos.xml?channel_id={id.channelId}') for id in ids]
         for future in as_completed(futures):
             resp = future.result()
             rssFeed = feedparser.parse(resp.content)
@@ -1050,7 +1048,7 @@ def getYoutubePosts(ids):
                     video.timeStamp = getTimeDiff(vid.published_parsed)
                 except:
                     if time != 0:
-                        video.timeStamp = "{} days".format(str(time.days))
+                        video.timeStamp = f"{str(time.days)} days"
                     else:
                         video.timeStamp = "Unknown"
 
@@ -1061,7 +1059,7 @@ def getYoutubePosts(ids):
                 video.videoTitle = vid.title
                 if config['isInstance']:
                     hostName = urllib.parse.urlparse(vid.media_thumbnail[0]['url']).netloc
-                    video.videoThumb = vid.media_thumbnail[0]['url'].replace("https://{}".format(hostName), "").replace(
+                    video.videoThumb = vid.media_thumbnail[0]['url'].replace(f"https://{hostName}", "").replace(
                         "hqdefault", "mqdefault") + "?host=" + hostName
                 else:
                     video.videoThumb = vid.media_thumbnail[0]['url'].replace('/', '~')

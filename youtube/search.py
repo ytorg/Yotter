@@ -61,7 +61,7 @@ def get_channel_renderer_item_info(item):
         suscribers = item['subscriberCountText']['simpleText'].split(" ")[0]
     except:
         suscribers = "?"
-    
+
     try:
         description = utils.get_description_snippet_text(item['descriptionSnippet']['runs'])
     except KeyError:
@@ -159,10 +159,9 @@ def get_video_renderer_item_info(item):
         'authorUrl':"/channel/{}".format(item['ownerText']['runs'][0]['navigationEndpoint']['browseEndpoint']['browseId']),
         'channelId':item['ownerText']['runs'][0]['navigationEndpoint']['browseEndpoint']['browseId'],
         'id':item['videoId'],
-        'videoUrl':"/watch?v={}".format(item['videoId']),
+        'videoUrl':f"/watch?v={item['videoId']}",
         'isLive':isLive,
         'isUpcoming':isUpcoming,
-        'videoThumb':item['thumbnail']['thumbnails'][0]['url']
+        'videoThumb':item['thumbnail']['thumbnails'][0]['url'],
     }
     return video
-

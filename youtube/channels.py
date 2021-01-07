@@ -155,13 +155,13 @@ def get_info_grid_video_item(item, channel=None):
         'timeStamp':published,
         'duration':duration,
         'channelName':channel['username'],
-        'authorUrl':"/channel/{}".format(channel['channelId']),
+        'authorUrl':f"/channel/{channel['channelId']}",
         'channelId':channel['channelId'],
         'id':item['videoId'],
-        'videoUrl':"/watch?v={}".format(item['videoId']),
+        'videoUrl':f"/watch?v={item['videoId']}",
         'isLive':isLive,
         'isUpcoming':isUpcoming,
-        'videoThumb':item['thumbnail']['thumbnails'][0]['url']
+        'videoThumb':item['thumbnail']['thumbnails'][0]['url'],
     }
     return video
 
@@ -172,18 +172,18 @@ def get_author_info_from_channel(content):
     channel = {
         "channelId": cmd['channelId'],
         "username": cmd['title'],
-        "thumbnail": "https:{}".format(cmd['avatar']['thumbnails'][0]['url'].replace("/", "~")),
+        "thumbnail": f"https:{cmd['avatar']['thumbnails'][0]['url'].replace('/', '~')}",
         "description":description,
         "suscribers": cmd['subscriberCountText']['runs'][0]['text'].split(" ")[0],
-        "banner": cmd['banner']['thumbnails'][0]['url']
+        "banner": cmd['banner']['thumbnails'][0]['url'],
     }
     return channel
 
 def get_channel_info(channelId, videos=True, page=1, sort=3):
     if id_or_username(channelId) == "channel":
         videos = []
-        ciUrl = "https://www.youtube.com/channel/{}".format(channelId)
-        mainUrl = "https://www.youtube.com/browse_ajax?ctoken={}".format(channel_ctoken_desktop(channelId, page, sort, "videos"))
+        ciUrl = f"https://www.youtube.com/channel/{channelId}"
+        mainUrl = f"https://www.youtube.com/browse_ajax?ctoken={channel_ctoken_desktop(channelId, page, sort, 'videos')}"
         content = json.loads(requests.get(mainUrl, headers=headers).text)
         req = requests.get(ciUrl, headers=headers).text
 
@@ -210,4 +210,4 @@ def get_channel_info(channelId, videos=True, page=1, sort=3):
             return {"channel":authorInfo}
 
     else:
-        baseUrl = "https://www.youtube.com/user/{}".format(channelId)
+        baseUrl = f"https://www.youtube.com/user/{channelId}"
