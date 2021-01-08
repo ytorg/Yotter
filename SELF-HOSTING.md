@@ -123,7 +123,7 @@ If after the MySQL-server installation you have not been prompted to create a pa
 * `pip install cryptography`
 * `pip install -r requirements.txt`
 
-> You can edit the `yotter-config.json` file. [Check out all the options here](https://github.com/ytorg/Yotter/blob/dev-indep/README.md#configure-the-server)
+> You can edit the `yotter-config.json` file. [Check out all the options here](#configure-the-server)
 
 5. Install gunicorn (production web server for Python apps) and pymysql:
 `pip install gunicorn pymysql`
