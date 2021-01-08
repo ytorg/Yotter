@@ -66,7 +66,7 @@ Admins are allowed to remove restrictions on any page they want. [Check this sec
 
 If you want to use Yotter, it is recommended to self-host your own instance. You can use it for personal use or open it to the world. Self-hosting makes Yotter stronger and gives you full power. See [self hosting guide](https://github.com/ytorg/Yotter/blob/dev-indep/SELF-HOSTING.md).
 
-### Will you ever implement video recomendations, trendig videos, etc?
+### Will you ever implement video recommendations, trending videos, etc?
 No. From my point of view, these are toxic features. I, and every user, should be using all *social media* to get the content **they** want. Recomendations, trending, autoplay next video, etc. are all features designed to trap users on using the app, to make them forget about the time spent there and to create an addiction to it. No, I won't implement any toxic features on Yotter. Yotter will keep the UI clean, fast and simple. 
 
 You get your feed from followed accounts and you can search for any video you like. Only thing I would consider implementing would be some kind of page where you can ask for recommendations for a particular video. This way the user would, voluntarily, ask for the recommendations rather than having a temptation to click on a new, youtube-bias-recommended video.
