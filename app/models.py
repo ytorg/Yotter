@@ -27,11 +27,11 @@ class User(UserMixin, db.Model):
     posts = db.relationship('Post', backref='author', lazy='dynamic')
 
     def __repr__(self):
-        return '<User {}>'.format(self.username)
+        return f'<User {self.username}>'
 
     def set_last_seen(self):
         self.last_seen = datetime.utcnow()
-    
+
     def set_admin_user(self):
         self.is_admin = True
 
@@ -40,7 +40,7 @@ class User(UserMixin, db.Model):
 
     def check_password(self, password):
         return check_password_hash(self.password_hash, password)
-    
+
     def follow(self, user):
         if not self.is_following(user):
             self.followed.append(user)
@@ -52,7 +52,7 @@ class User(UserMixin, db.Model):
     def is_following(self, user):
         return self.followed.filter(
             followers.c.followed_id == user.id).count() > 0
-    
+
     def following_list(self):
         return self.followed.all()
 
@@ -62,7 +62,7 @@ class User(UserMixin, db.Model):
     # TWITTER
     def twitter_following_list(self):
         return self.twitterFollowed.all()
-    
+
     def is_following_tw(self, uname):
         temp_cid = twitterFollow.query.filter_by(username = uname).first()
         if temp_cid is None:
@@ -73,11 +73,11 @@ class User(UserMixin, db.Model):
                 if f.username == uname:
                     return True
         return False
-    
+
     # YOUTUBE
     def youtube_following_list(self):
         return self.youtubeFollowed.all()
-    
+
     def is_following_yt(self, cid):
         temp_cid = youtubeFollow.query.filter_by(channelId = cid).first()
         if temp_cid is None:
@@ -88,7 +88,7 @@ class User(UserMixin, db.Model):
                 if f.channelId == cid:
                     return True
         return False
-        
+
     followed = db.relationship(
         'User', secondary=followers,
         primaryjoin=(followers.c.follower_id == id),
@@ -148,23 +148,23 @@ class youtubeFollow(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     channelId = db.Column(db.String(30), nullable=False)
     channelName = db.Column(db.String(100))
-    followers = db.relationship('User', 
+    followers = db.relationship('User',
                                 secondary=channel_association,
                                 back_populates="youtubeFollowed")
-    
+
     def __repr__(self):
-        return '<youtubeFollow {}>'.format(self.channelName)
+        return f'<youtubeFollow {self.channelName}>'
 
 class twitterFollow(db.Model):
     __tablename__ = 'twitterAccount'
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(100), nullable=False)
-    followers = db.relationship('User', 
+    followers = db.relationship('User',
                                 secondary=twitter_association,
                                 back_populates="twitterFollowed")
-    
+
     def __repr__(self):
-        return '<twitterFollow {}>'.format(self.username)
+        return f'<twitterFollow {self.username}>'
 
 class Post(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -175,5 +175,4 @@ class Post(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
 
     def __repr__(self):
-        return '<Post {}>'.format(self.body)
-        
+        return f'<Post {self.body}>'

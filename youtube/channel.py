@@ -258,5 +258,3 @@ def get_channel_page_general_url(base_url, tab, request, channel_id=None):
         parameters_dictionary = request.args,
         **info
     )
-
-

@@ -29,7 +29,7 @@ def parse_comment(raw_comment):
     cmnt = {}
     imgHostName = urllib.parse.urlparse(raw_comment['author_avatar'][1:]).netloc
     cmnt['author'] = raw_comment['author']
-    cmnt['thumbnail'] = raw_comment['author_avatar'].replace("https://{}".format(imgHostName),"")[1:] + "?host=" + imgHostName
+    cmnt['thumbnail'] = raw_comment['author_avatar'].replace(f"https://{imgHostName}","")[1:] + "?host=" + imgHostName
 
     print(cmnt['thumbnail'])
     cmnt['channel'] = raw_comment['author_url']
