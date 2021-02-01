@@ -304,7 +304,7 @@ def video_id(url):
 # default, sddefault, mqdefault, hqdefault, hq720
 def get_thumbnail_url(video_id):
     return "/i.ytimg.com/vi/" + video_id + "/mqdefault.jpg"
-    
+
 def seconds_to_timestamp(seconds):
     seconds = int(seconds)
     hours, seconds = divmod(seconds,3600)
@@ -394,4 +394,3 @@ def check_gevent_exceptions(*tasks):
     for task in tasks:
         if task.exception:
             raise task.exception
-

@@ -123,7 +123,7 @@ If after the MySQL-server installation you have not been prompted to create a pa
 * `pip install cryptography`
 * `pip install -r requirements.txt`
 
-> You can edit the `yotter-config.json` file. [Check out all the options here](https://github.com/ytorg/Yotter/blob/dev-indep/README.md#configure-the-server)
+> You can edit the `yotter-config.json` file. [Check out all the options here](#configure-the-server)
 
 5. Install gunicorn (production web server for Python apps) and pymysql:
 `pip install gunicorn pymysql`
@@ -203,8 +203,68 @@ killasgroup=true
 After you write this configuration file, you have to reload the supervisor service for it to be imported:
 `sudo supervisorctl reload`
 
-#### Step 4: Nginx set up and HTTPS
+#### Step 4: Set up Nginx, http3 proxy and HTTPS
 The Yotter application server powered by gunicorn is now running privately port 8000. Now we need to expose the application to the outside world by enabling public facing web server on ports 80 and 443, the two ports too need to be opened on the firewall to handle the web traffic of the application. I want this to be a secure deployment, so I'm going to configure port 80 to forward all traffic to port 443, which is going to be encrypted. [ref](https://blog.miguelgrinberg.com/post/the-flask-mega-tutorial-part-xvii-deployment-on-linux).
+
+First we will get and set up the `http3-ytproxy`. For this we will need to [install go](https://github.com/golang/go/wiki/Ubuntu) but if you are on Ubuntu 20.04 or you have `snap` installed you can just run `sudo snap install --classic go` to get `go` installed.
+
+Then you will need to run the following commands:
+```
+cd $HOME
+git clone https://github.com/FireMasterK/http3-ytproxy
+cd http3-ytproxy
+go build -ldflags "-s -w" main.go
+mv main http3-ytproxy
+mkdir socket
+chown -R www-data:www-data socket
+```
+
+Now we will configure a `systemd` service to run the http3-ytproxy. For this you will need to `sudo nano /lib/systemd/system/http3-ytproxy.service` to start a the `nano` text editor. Now copy and paste this and save:
+
+> IMPORTANT: You may need to change some paths to fit your system!
+
+```
+[Unit]
+Description=Sleep service
+ConditionPathExists=/home/ubuntu/http3-ytproxy/http3-ytproxy
+After=network.target
+ 
+[Service]
+Type=simple
+User=www-data
+Group=www-data
+LimitNOFILE=1024
+
+Restart=on-failure
+RestartSec=10
+
+WorkingDirectory=/home/ubuntu/http3-ytproxy
+ExecStart=/home/ubuntu/http3-ytproxy/http3-ytproxy
+
+# make sure log directory exists and owned by syslog
+PermissionsStartOnly=true
+ExecStartPre=/bin/mkdir -p /var/log/http3-ytproxy
+ExecStartPre=/bin/chown syslog:adm /var/log/http3-ytproxy
+ExecStartPre=/bin/chmod 755 /var/log/http3-ytproxy
+StandardOutput=syslog
+StandardError=syslog
+SyslogIdentifier=http3-ytproxy
+ 
+[Install]
+WantedBy=multi-user.target
+```
+
+> IMPORTANT NOTE: Some distros have the Nginx user as `nginx` instead of `www-data`, if this is the case you should change the `User=` and `Group=` variables from the service file.
+
+Now you are ready to enable and start the service:
+```
+sudo systemctl enable http3-ytproxy.service
+sudo systemctl start http3-ytproxy.service
+```
+
+If you did everything ok you should see no errors when running `sudo journalctl -f -u http3-ytproxy`.
+
+Now we will set up Nginx. To do so:
 
 * `sudo rm /etc/nginx/sites-enabled/default`
 
@@ -225,15 +285,21 @@ server {
         expires 30d;
     }
     
-    location ~ (/videoplayback|/vi/|/a/) {
-       proxy_buffering off;
-       resolver 1.1.1.1;
-       proxy_pass https://$arg_host;
-       proxy_set_header Host $arg_host;
-       add_header Access-Control-Allow-Origin *;
-     }
+    location ~ (^/videoplayback$|/videoplayback/|/vi/|/a/|/ytc/) {
+        proxy_pass http://unix:/home/ubuntu/http3-ytproxy/socket/http-proxy.sock;
+        add_header Access-Control-Allow-Origin *;
+        sendfile on;
+        tcp_nopush on;
+        aio_write on;
+        aio threads=default;
+        directio 512;
+        proxy_http_version 1.1;
+        proxy_set_header Connection "";
+    }
 }
 ```
+> Note: You may need to change the proxy-pass line to fit your system. It should point to the socket created on the `http3-ytproxy/socket` folder.
+
 Make sure to replace `<yourdomain>` by the domain you are willing to use for your instance (i.e example.com). You can now edit `yotter-config.json` and set `isInstance` to `true`.
 
 You will also need to change the `</path/to>` after `alias` to fit your system. You have to point to the Yotter folder, in this set up it would be `/home/ubuntu` as it is the location where we cloned the Yotter app. This alias is created to handle static files directly, without forwarding to the application.
@@ -250,6 +316,8 @@ Now we will run certbot and we need to tell that we run an nginx server. Here yo
 
 
 [Follow this instructions to install certbot and generate an ssl certificate so your server can use HTTPS](https://certbot.eff.org/lets-encrypt/ubuntufocal-nginx)
+
+Finally, once this is done, you should edit the `yotter` nginx config and change the `listen 443 ssl;` line to `listen 443 ssl http2;`
 
 #### Updating the server
 Updating the server should always be pretty easy. These steps need to be run on the Yotter folder and with the python virtual env activated.

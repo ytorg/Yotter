@@ -22,13 +22,13 @@ def get_feed(usernames, daysMaxOld=10, includeRT=True):
     '''
     feedTweets = []
     with FuturesSession() as session:
-        futures = [session.get('{instance}{user}'.format(instance=config['nitterInstance'], user=u)) for u in usernames]
+        futures = [session.get(f'{config["nitterInstance"]}{u}') for u in usernames]
         for future in as_completed(futures):
             res = future.result().content.decode('utf-8')
             html = BeautifulSoup(res, "html.parser")
             feedPosts = user.get_feed_tweets(html)
             feedTweets.append(feedPosts)
-    
+
     userFeed = []
     for feed in feedTweets:
         if not includeRT:

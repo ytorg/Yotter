@@ -32,7 +32,7 @@ def get_info(url):
         video['subtitles'] = info['subtitles']
         video['duration'] = info['duration']
         video['view_count'] = info['view_count']
-        
+
         if(info['like_count'] is None):
             video['like_count'] = 0
         else:
