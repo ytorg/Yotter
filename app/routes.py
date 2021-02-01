@@ -97,8 +97,8 @@ def twitter(page=0):
     else:
         time_diff = 999
 
-    # If cache file is more than 1 minute old
-    if page == 0 and time_diff > 60:
+    # If cache file is older than 30 minute old
+    if page == 0 and time_diff > 30:
         if cache_file:
             for f in cache_file:
                 os.remove(f)
