@@ -39,10 +39,12 @@ def get_feed(usernames, daysMaxOld=10, includeRT=True):
                     userFeed.append(tweet)
         else:
             userFeed+=feed
-
-    for uf in userFeed:
-        if uf == 'emptyFeed':
-            userFeed.remove(uf)
-    userFeed.sort(key=lambda item:item['timeStamp'], reverse=True)
-    
+    try:
+        for uf in userFeed:
+            if uf == 'emptyFeed':
+                userFeed.remove(uf)
+        userFeed.sort(key=lambda item:item['timeStamp'], reverse=True)
+    except:
+        print("Error sorting feed - nitter/feed.py")
+        return userFeed
     return userFeed
