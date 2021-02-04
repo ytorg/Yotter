@@ -41,9 +41,9 @@
     <div class="text container ui">
         <div class="ui warning message">
             <div class="header">
-                {{config.admin_message_title}}
+                {{config.admin_message_title|safe}}
             </div>
-                {{config.admin_message}}
+                {{config.admin_message|safe}}
         </div>
     </div>
 {% endif %}
