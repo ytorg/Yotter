@@ -32,14 +32,14 @@
         <form action="{{ url_for('ytfollow', channelId=data.channel_id) }}" method="post">
             <button type="submit" value="Submit" class="ui red button">
                 <i class="user icon"></i>
-                Suscribe
+                Subscribe
             </button>
         </form>
     {% else %}
         <form action="{{ url_for('ytunfollow', channelId=data.channel_id) }}" method="post">
             <button type="submit" value="Submit" class="ui red active button">
                 <i class="user icon"></i>
-                Unsuscribe
+                Unsubscribe
             </button>
         </form>
     {%endif%}
