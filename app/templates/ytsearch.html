@@ -4,7 +4,7 @@
 <div class="ui center aligned text container">
     <form action="{{url_for('ytsearch', _method='GET')}}">
     <div class="ui search">
-            <input class="prompt" name="q" type="text" placeholder="Search...">
+            <input class="prompt" name="q" type="text" placeholder="Search..." autofocus>
             <select name="s" id="sort">
                 <option value="0">Relevance</option>
                 <option value="3">Views</option>
@@ -19,13 +19,13 @@
     {% if results.channels %}
         <h3 class="ui dividing header">Users</h3>
     {% endif %}
-    <div class="ui relaxed divided list">        
+    <div class="ui relaxed divided list">
             {% for res in results.channels %}
                     <div class="item">
                         <div class="image">
                             {% if config.isInstance %}
                                 <img src="{{res.thumbnail}}" alt="Avatar">
-                            {% else %}    
+                            {% else %}
                                 <img alt="Avatar" src="{{ url_for('img', url=res.thumbnail) }}">
                             {% endif %}
                         </div>
@@ -45,7 +45,7 @@
                             <div class="ui label">
                                 <i class="video icon"></i> {{res.videos}}
                             </div>
-                            
+
                             {% if restricted or current_user.is_authenticated %}
                                 <div class="right floated content">
                                 {% if not current_user.is_following_yt(res.channelId) %}
@@ -59,7 +59,7 @@
                                         {{ btform.submit(value='Unfollow') }}
                                     </form>
                                 {% endif %}
-                                </div>  
+                                </div>
                             {% endif %}
                           </div>
                         </div>
