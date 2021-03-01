@@ -13,6 +13,7 @@ Yotter is possible thanks to several open-source projects that are listed on the
 # Index:
 * [Why](#why)
 * [Features](#features)
+   * [Roadmap](#roadmap)
 * [FAQ](#FAQ)
 * [Privacy and Security](#privacy)
 * [Public instances](#public-instances)
@@ -48,6 +49,19 @@ So we need platforms and spaces where we can freely watch and listen content wit
 - [x] Fair non-adictive UX - No recommendations, no trending, no tops. Just your feed and your searches.
 
 *Video player is VideoJS, which uses JavaScript. But if JavaScript is disabled Yotter still works perfectly and uses the default HTML video player.
+
+### Roadmap
+The following features are planned to be implemented in the near future:
+* [ ] Improve performance and efficiency
+
+#### Youtube specific:
+* [ ] Subtitles
+* [ ] > 720p Quality
+* [ ] Save youtube videos
+* [ ] Support for live streams
+
+#### Twitter specific:
+* [ ] Translations
 
 # FAQ
 ### What's the difference between this and Invidious?
