@@ -31,6 +31,10 @@ services:
     volumes:
       - migrations:/usr/src/app/migrations
       - ./yotter-config.json:/usr/src/app/yotter-config.json
+    healthcheck:
+      test: ["CMD", "wget" ,"--no-verbose", "--tries=1", "--spider", "http://localhost:5000"]
+      interval: 1m
+      timeout: 3s
 volumes:
   mysql:
   migrations:
