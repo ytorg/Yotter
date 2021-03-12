@@ -370,7 +370,7 @@ def followYoutubeChannel(channelId):
     try:
         try:
             if not current_user.is_following_yt(channelId):
-                channelData = ytch.get_channel_tab_info(channelId, tab='about')
+                channelData = ytch.get_channel_tab(channelId, tab='about')
                 if channelData == False:
                     return False
                 follow = youtubeFollow()
