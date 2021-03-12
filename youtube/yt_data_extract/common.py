@@ -290,7 +290,7 @@ def extract_item_info(item, additional_info={}):
         info['duration'] = extract_str(item.get('lengthText'))
 
         # if it's an item in a playlist, get its index
-        if 'index' in item: # url has wrong index on playlist page 
+        if 'index' in item: # url has wrong index on playlist page
             info['index'] = extract_int(item.get('index'))
         elif 'indexText' in item:
             # Current item in playlist has ▶ instead of the actual index, must
@@ -329,6 +329,11 @@ def extract_item_info(item, additional_info={}):
 
 def extract_response(polymer_json):
     '''return response, error'''
+    # /youtubei/v1/browse endpoint returns response directly
+    if isinstance(polymer_json, dict) and 'responseContext' in polymer_json:
+        # this is the response
+        return polymer_json, None
+
     response = multi_deep_get(polymer_json, [1, 'response'], ['response'])
     if response is None:
         return None, 'Failed to extract response'

@@ -105,25 +105,36 @@ def channel_ctoken_v1(channel_id, page, sort, tab, view=1):
 
     return base64.urlsafe_b64encode(pointless_nest).decode('ascii')
 
-def get_channel_tab_info(channel_id, page="1", sort=3, tab='videos', view=1, print_status=True):
+def get_channel_tab(channel_id, page="1", sort=3, tab='videos', view=1,
+                    ctoken=None, print_status=True):
     message = 'Got channel tab' if print_status else None
 
-    if int(sort) == 2 and int(page) > 1:
-        ctoken = channel_ctoken_v1(channel_id, page, sort, tab, view)
-        ctoken = ctoken.replace('=', '%3D')
-        url = ('https://www.youtube.com/channel/' + channel_id + '/' + tab
-            + '?action_continuation=1&continuation=' + ctoken
-            + '&pbj=1')
-        content = util.fetch_url(url, headers_desktop + real_cookie,
-            debug_name='channel_tab', report_text=message)
-    else:
+    if not ctoken:
         ctoken = channel_ctoken_v3(channel_id, page, sort, tab, view)
         ctoken = ctoken.replace('=', '%3D')
-        url = 'https://www.youtube.com/browse_ajax?ctoken=' + ctoken
-        content = util.fetch_url(url,
-            headers_desktop + generic_cookie,
-            debug_name='channel_tab', report_text=message)
 
+    # Not sure what the purpose of the key is or whether it will change
+    # For now it seems to be constant for the API endpoint, not dependent
+    # on the browsing session or channel
+    key = 'AIzaSyAO_FJ2SlqU8Q4STEHLGCilw_Y9_11qcW8'
+    url = 'https://www.youtube.com/youtubei/v1/browse?key=' + key
+
+    data = {
+        'context': {
+            'client': {
+                'hl': 'en',
+                'gl': 'US',
+                'clientName': 'WEB',
+                'clientVersion': '2.20180830',
+            },
+        },
+        'continuation': ctoken,
+    }
+
+    content_type_header = (('Content-Type', 'application/json'),)
+    content = util.fetch_url(
+        url, headers_desktop + content_type_header,
+        data=json.dumps(data), debug_name='channel_tab', report_text=message)
     info = yt_data_extract.extract_channel_info(json.loads(content), tab)
     if info['error'] is not None:
         return False
@@ -174,12 +185,31 @@ def get_number_of_videos_general(base_url):
     return get_number_of_videos_channel(get_channel_id(base_url))
 
 def get_channel_search_json(channel_id, query, page):
-    params = proto.string(2, 'search') + proto.string(15, str(page))
+    offset = proto.unpadded_b64encode(proto.uint(3, (page-1)*30))
+    params = proto.string(2, 'search') + proto.string(15, offset)
     params = proto.percent_b64encode(params)
     ctoken = proto.string(2, channel_id) + proto.string(3, params) + proto.string(11, query)
     ctoken = base64.urlsafe_b64encode(proto.nested(80226972, ctoken)).decode('ascii')
 
-    polymer_json = util.fetch_url("https://www.youtube.com/browse_ajax?ctoken=" + ctoken, headers_desktop, debug_name='channel_search')
+    key = 'AIzaSyAO_FJ2SlqU8Q4STEHLGCilw_Y9_11qcW8'
+    url = 'https://www.youtube.com/youtubei/v1/browse?key=' + key
+
+    data = {
+        'context': {
+            'client': {
+                'hl': 'en',
+                'gl': 'US',
+                'clientName': 'WEB',
+                'clientVersion': '2.20180830',
+            },
+        },
+        'continuation': ctoken,
+    }
+
+    content_type_header = (('Content-Type', 'application/json'),)
+    polymer_json = util.fetch_url(
+        url, headers_desktop + content_type_header,
+        data=json.dumps(data), debug_name='channel_search')
 
     return polymer_json
 

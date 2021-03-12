@@ -1,7 +1,7 @@
 {
 	"serverName": "yotter.xyz",
-	"nitterInstance": "https://nitter.net/",
-	"maxInstanceUsers": 120,
+	"nitterInstance": "https://nitter.mastodont.cat/",
+	"maxInstanceUsers": 200,
 	"serverLocation": "Germany",
 	"restrictPublicUsage":true,
 	"isInstance":true,

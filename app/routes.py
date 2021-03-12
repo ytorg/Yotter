@@ -429,8 +429,7 @@ def channel(id):
     if sort is None:
         sort = 3
 
-    data = ytch.get_channel_tab_info(id, page, sort)
-
+    data = ytch.get_channel_tab(id, page, sort)
     for video in data['items']:
         if config['isInstance']:
             hostName = urllib.parse.urlparse(video['thumbnail'][1:]).netloc

@@ -172,14 +172,13 @@ def _extract_watch_info_mobile(top_level):
         else:
             info['playlist'] = {}
             info['playlist']['title'] = playlist.get('title')
-            info['playlist']['author'] = extract_str(multi_get(playlist, 
+            info['playlist']['author'] = extract_str(multi_get(playlist,
                 'ownerName', 'longBylineText', 'shortBylineText', 'ownerText'))
             author_id = deep_get(playlist, 'longBylineText', 'runs', 0,
                 'navigationEndpoint', 'browseEndpoint', 'browseId')
             info['playlist']['author_id'] = author_id
-            if author_id:
-                info['playlist']['author_url'] = concat_or_none(
-                    'https://www.youtube.com/channel/', author_id)
+            info['playlist']['author_url'] = concat_or_none(
+                'https://www.youtube.com/channel/', author_id)
             info['playlist']['id'] = playlist.get('playlistId')
             info['playlist']['url'] = concat_or_none(
                 'https://www.youtube.com/playlist?list=',
@@ -447,7 +446,8 @@ def _extract_playability_error(info, player_response, error_prefix=''):
 
 SUBTITLE_FORMATS = ('srv1', 'srv2', 'srv3', 'ttml', 'vtt')
 def extract_watch_info(polymer_json):
-    info = {'playability_error': None, 'error': None}
+    info = {'playability_error': None, 'error': None,
+        'player_response_missing': None}
 
     if isinstance(polymer_json, dict):
         top_level = polymer_json
@@ -509,6 +509,10 @@ def extract_watch_info(polymer_json):
     if not info['formats']:
         _extract_formats(info, player_response)
 
+    # see https://github.com/user234683/youtube-local/issues/22#issuecomment-706395160
+    info['player_urls_missing'] = (
+        not info['formats'] and not embedded_player_response)
+
     # playability errors
     _extract_playability_error(info, player_response)
 
@@ -565,6 +569,84 @@ def extract_watch_info(polymer_json):
     info['author_url'] = 'https://www.youtube.com/channel/' + info['author_id'] if info['author_id'] else None
     return info
 
+single_char_codes = {
+    'n': '\n',
+    '\\': '\\',
+    '"': '"',
+    "'": "'",
+    'b': '\b',
+    'f': '\f',
+    'n': '\n',
+    'r': '\r',
+    't': '\t',
+    'v': '\x0b',
+    '0': '\x00',
+    '\n': '', # backslash followed by literal newline joins lines
+}
+def js_escape_replace(match):
+    r'''Resolves javascript string escape sequences such as \x..'''
+    # some js-strings in the watch page html include them for no reason
+    # https://mathiasbynens.be/notes/javascript-escapes
+    escaped_sequence = match.group(1)
+    if escaped_sequence[0] in ('x', 'u'):
+        return chr(int(escaped_sequence[1:], base=16))
+
+    # In javascript, if it's not one of those escape codes, it's just the
+    # literal character. e.g., "\a" = "a"
+    return single_char_codes.get(escaped_sequence, escaped_sequence)
+
+# works but complicated and unsafe:
+#PLAYER_RESPONSE_RE = re.compile(r'<script[^>]*?>[^<]*?var ytInitialPlayerResponse = ({(?:"(?:[^"\\]|\\.)*?"|[^"])+?});')
+
+# Because there are sometimes additional statements after the json object
+# so we just capture all of those until end of script and tell json decoder
+# to ignore extra stuff after the json object
+PLAYER_RESPONSE_RE = re.compile(r'<script[^>]*?>[^<]*?var ytInitialPlayerResponse = ({.*?)</script>')
+INITIAL_DATA_RE = re.compile(r"<script[^>]*?>var ytInitialData = '(.+?[^\\])';")
+BASE_JS_RE = re.compile(r'jsUrl":\s*"([\w\-\./]+?/base.js)"')
+JS_STRING_ESCAPE_RE = re.compile(r'\\([^xu]|x..|u....)')
+def extract_watch_info_from_html(watch_html):
+    base_js_match = BASE_JS_RE.search(watch_html)
+    player_response_match = PLAYER_RESPONSE_RE.search(watch_html)
+    initial_data_match = INITIAL_DATA_RE.search(watch_html)
+
+    if base_js_match is not None:
+        base_js_url = base_js_match.group(1)
+    else:
+        base_js_url = None
+
+    if player_response_match is not None:
+        decoder = json.JSONDecoder()
+        # this will make it ignore extra stuff after end of object
+        player_response = decoder.raw_decode(player_response_match.group(1))[0]
+    else:
+        return {'error': 'Could not find ytInitialPlayerResponse'}
+        player_response = None
+
+    if initial_data_match is not None:
+        initial_data = initial_data_match.group(1)
+        initial_data = JS_STRING_ESCAPE_RE.sub(js_escape_replace, initial_data)
+        initial_data = json.loads(initial_data)
+    else:
+        print('extract_watch_info_from_html: failed to find initialData')
+        initial_data = None
+
+    # imitate old format expected by extract_watch_info
+    fake_polymer_json = {
+        'player': {
+            'args': {},
+            'assets': {
+                'js': base_js_url
+            }
+        },
+        'playerResponse': player_response,
+        'response': initial_data,
+    }
+
+    return extract_watch_info(fake_polymer_json)
+
+
+
 def get_caption_url(info, language, format, automatic=False, translation_language=None):
     '''Gets the url for captions with the given language and format. If automatic is True, get the automatic captions for that language. If translation_language is given, translate the captions from `language` to `translation_language`. If automatic is true and translation_language is given, the automatic captions will be translated.'''
     url = info['_captions_base_url']
@@ -580,7 +662,8 @@ def get_caption_url(info, language, format, automatic=False, translation_languag
     return url
 
 def update_with_age_restricted_info(info, video_info_page):
-    ERROR_PREFIX = 'Error bypassing age-restriction: '
+    '''Inserts urls from 'player_response' in get_video_info page'''
+    ERROR_PREFIX = 'Error getting missing player or bypassing age-restriction: '
 
     video_info = urllib.parse.parse_qs(video_info_page)
     player_response = deep_get(video_info, 'player_response', 0)
@@ -603,7 +686,9 @@ def requires_decryption(info):
 # adapted from youtube-dl and invidious:
 # https://github.com/omarroth/invidious/blob/master/src/invidious/helpers/signatures.cr
 decrypt_function_re = re.compile(r'function\(a\)\{(a=a\.split\(""\)[^\}{]+)return a\.join\(""\)\}')
-op_with_arg_re = re.compile(r'[^\.]+\.([^\(]+)\(a,(\d+)\)')
+# gives us e.g. rt, .xK, 5 from rt.xK(a,5) or rt, ["xK"], 5 from rt["xK"](a,5)
+# (var, operation, argument)
+var_op_arg_re = re.compile(r'(\w+)(\.\w+|\["[^"]+"\])\(a,(\d+)\)')
 def extract_decryption_function(info, base_js):
     '''Insert decryption function into info. Return error string if not successful.
     Decryption function is a list of list[2] of numbers.
@@ -617,10 +702,11 @@ def extract_decryption_function(info, base_js):
     if not function_body:
         return 'Empty decryption function body'
 
-    var_name = get(function_body[0].split('.'), 0)
-    if var_name is None:
+    var_with_operation_match = var_op_arg_re.fullmatch(function_body[0])
+    if var_with_operation_match is None:
         return 'Could not find var_name'
 
+    var_name = var_with_operation_match.group(1)
     var_body_match = re.search(r'var ' + re.escape(var_name) + r'=\{(.*?)\};', base_js, flags=re.DOTALL)
     if var_body_match is None:
         return 'Could not find var_body'
@@ -649,13 +735,13 @@ def extract_decryption_function(info, base_js):
 
     decryption_function = []
     for op_with_arg in function_body:
-        match = op_with_arg_re.fullmatch(op_with_arg)
+        match = var_op_arg_re.fullmatch(op_with_arg)
         if match is None:
             return 'Could not parse operation with arg'
-        op_name = match.group(1)
+        op_name = match.group(2).strip('[].')
         if op_name not in operation_definitions:
-            return 'Unknown op_name: ' + op_name
-        op_argument = match.group(2)
+            return 'Unknown op_name: ' + str(op_name)
+        op_argument = match.group(3)
         decryption_function.append([operation_definitions[op_name], int(op_argument)])
 
     info['decryption_function'] = decryption_function
