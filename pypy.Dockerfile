@@ -9,7 +9,7 @@ COPY ./requirements.txt /usr/src/app
 
 # Build Dependencies
 RUN apt-get update \
-    && apt-get install -yq build-essential libssl-dev libffi-dev libxml2-dev libxslt-dev zlib1g-dev \
+    && apt-get install -yq build-essential libssl-dev libffi-dev libxml2-dev libxslt-dev zlib1g-dev curl \
     && rm -rf /var/lib/apt/lists/* /etc/apt/sources.list.d/*
 
 # install rust toolchain
