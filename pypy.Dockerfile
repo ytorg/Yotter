@@ -12,6 +12,12 @@ RUN apt-get update \
     && apt-get install -yq build-essential libssl-dev libffi-dev libxml2-dev libxslt-dev zlib1g-dev \
     && rm -rf /var/lib/apt/lists/* /etc/apt/sources.list.d/*
 
+# install rust toolchain
+RUN curl https://sh.rustup.rs -sSf | \
+    sh -s -- --default-toolchain stable -y
+
+ENV PATH=/root/.cargo/bin:$PATH
+
 # Python Dependencies
 RUN pip install --no-warn-script-location --ignore-installed --no-cache-dir --prefix=/install wheel cryptography gunicorn pymysql
 RUN pip install --no-warn-script-location --ignore-installed --no-cache-dir --prefix=/install -r requirements.txt
