@@ -14,7 +14,7 @@ Flask-SQLAlchemy==2.4.4
 Flask-WTF==0.14.3
 gevent==20.9.0
 greenlet==0.4.17
-idna==2.10
+idna==3.1
 itsdangerous==1.1.0
 Jinja2==2.11.3
 lxml>=4.6.3
