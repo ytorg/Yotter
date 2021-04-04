@@ -1,0 +1,30 @@
+server {
+  listen ${HTTP_PORT};
+  server_name ${HOSTNAME};
+  access_log off;
+
+  location / {
+    proxy_pass ${YOTTER_ADDRESS};
+    proxy_set_header Host $host;
+    proxy_http_version 1.1;
+    proxy_set_header Connection "";
+  }
+
+  location /static/ {
+    root /var/www;
+    sendfile on;
+    aio threads=default;
+  }
+
+  location ~ (^/videoplayback$|/videoplayback/|/vi/|/a/|/ytc|/vi_webp/|/sb/) {
+    proxy_pass ${YTPROXY_ADDRESS};
+    add_header Access-Control-Allow-Origin *;
+    sendfile on;
+    tcp_nopush on;
+    aio_write on;
+    aio threads=default;
+    directio 512;
+    proxy_http_version 1.1;
+    proxy_set_header Connection "";
+  }
+}
