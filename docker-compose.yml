@@ -13,9 +13,7 @@ services:
     healthcheck:
       test: ["CMD", "mysqladmin", "ping", "--silent"]
   nginx:
-    build:
-      context: .
-      dockerfile: nginx.Dockerfile
+    image: ytorg/nginx:latest
     restart: unless-stopped
     environment:
       HOSTNAME: 'changeme.example.com'
