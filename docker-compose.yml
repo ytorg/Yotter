@@ -12,6 +12,18 @@ services:
       - mysql:/var/lib/mysql
     healthcheck:
       test: ["CMD", "mysqladmin", "ping", "--silent"]
+  nginx:
+    image: ytorg/nginx:latest
+    restart: unless-stopped
+    environment:
+      HOSTNAME: 'changeme.example.com'
+      HTTP_PORT: 8080
+      YOTTER_ADDRESS: 'http://yotter:5000'
+      YTPROXY_ADDRESS: 'http://unix:/var/run/ytproxy/http-proxy.sock'
+    ports:
+      - "127.0.0.1:8080:8080"
+    volumes:
+      - "/var/run/ytproxy:/app/socket/"
   ytproxy:
     image: 1337kavin/ytproxy:latest
     restart: unless-stopped
