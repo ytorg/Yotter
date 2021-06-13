@@ -32,7 +32,7 @@ With the *particular* data about you, they can get money from the highest bidder
 
 Further more, they don't care about **what you in particular watch**, this is only sold to the highest bidder who then may or may not do the harm. What they care more about is **what people watch** this is the important data and the one that allows to manipulate, bias, censor, etc.
 
-So we need platforms and spaces where we can freely watch and listen content without these watchful eyes upon us. Ideally, everyone would use a free (as in freedom) and decentralized platform like [Peertube](https://joinpeertube.org/), [LBRY](https://lbry.tv/), [Mastodon](https://joinmastodon.org/) or [Pleroma](https://pleroma.social/) but things are not like this. The main multimedia content factory is Youtube and the microblogging king is Twitter. So we will do whatever is possible to be able to watch and read the content and avoid the surveillance that seeks us these days. We will resist.
+So we need platforms and spaces where we can freely watch and listen content without these watchful eyes upon us. Ideally, everyone would use a free (as in freedom) and decentralized platform like [Peertube](https://joinpeertube.org/), [Odysee](https://odysee.com/), [Mastodon](https://joinmastodon.org/) or [Pleroma](https://pleroma.social/) but things are not like this. The main multimedia content factory is Youtube and the microblogging king is Twitter. So we will do whatever is possible to be able to watch and read the content and avoid the surveillance that seeks us these days. We will resist.
 
 # Features:
 - [x] No Ads.
@@ -66,9 +66,9 @@ The following features are planned to be implemented in the near future:
 
 # FAQ
 ### What's the difference between this and Invidious?
-At first I started working on this project as a solution for following Twitter accounts (a thing that can't be done with Nitter) and getting a Twitter-like feed. Weeks later the leader of Invidious, Omar Roth, announced that he was stepping away from the project. As an Invidious active user, this made me think that a new alternative was needed for the community and also an alternative with an easier programmin language for most people (as Invidious is written in Crystal). So I started developing a '*written-in-python Invidious alternative*' and it went quite well.
+At first I started working on this project as a solution for following Twitter accounts (a thing that can't be done with Nitter) and getting a Twitter-like feed. Weeks later the leader of Invidious, Omar Roth, announced that he was stepping away from the project. As an Invidious active user, this made me think that a new alternative was needed for the community and also an alternative with an easier programming language for most people (as Invidious is written in Crystal). So I started developing a '*written-in-python Invidious alternative*' and it went quite well.
 
-I hope that this project can prosperate, gain contributors, new instances and create a good community around it.
+I hope that this project can prosper, gain contributors, new instances and create a good community around it.
 
 ### Why do I have to register to use Yotter?
 
