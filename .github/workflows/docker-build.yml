@@ -1,4 +1,4 @@
-nme: Docker Multi-Architecture Build
+name: Docker Multi-Architecture Build
 
 on:
   push:
