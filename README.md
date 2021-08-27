@@ -1,3 +1,5 @@
+## This project is no longer maintained. Visit [this repo](https://github.com/TeamPiped/Piped) for an alternative.
+
 <p align="center"> <img width="700" src="app/static/img/banner.png"> </img></p> 
 <p align="center">
    <a href="https://www.gnu.org/licenses/gpl-3.0"><img alt="License: GPL v3" src="https://img.shields.io/badge/License-AGPLv3-blue.svg"></img></a>
