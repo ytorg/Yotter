@@ -26,7 +26,7 @@
         
         <div class="ui icon menu overflow-auto">
             <a href="{{ url_for('index') }}"><div class="item">
-                <img alt="Yotter simple logo" src="{{ url_for('static',filename='img/logo_simple.png') }}">
+                <img alt="Yotter simple logo" src="{{ url_for('static',filename='img/logo_white.png') }}">
             </div></a>
             {% if current_user.is_anonymous %}
             <a href="{{ url_for('login') }}" class="item">Login</a>
